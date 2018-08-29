@@ -298,7 +298,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-sm-3 control-label" for="eqType">{{Type d'équipement}}</label>
                                         <div class="col-sm-5">
                                             <select id="eqType" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="eqType">
-                                                <option value="externalInfo">{{Informations externes générales}}</option>
+                                                <option value="externalInfo">{{Informations externes}}</option>
                                                 <option value="heliotropeZone">{{Zone héliotrope}}</option>
                                                 <option value="shuttersGroup">{{Groupe de volets}}</option>
                                                 <option value="shutter">{{Volet}}</option>
@@ -321,6 +321,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
             </div>
             <div role="tabpanel" class="tab-pane" id="settingsTab">
                 <br/>
+                <div id="settingsPanels"></div>
             </div>
             <div role="tabpanel" class="tab-pane" id="commandTab">
                 <br/>
@@ -332,6 +333,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 <?php
 include_file('desktop', 'jcanvas.min', 'js', 'shutters');
 include_file('desktop', 'shutters', 'js', 'shutters');
+include_file('desktop', 'shutters-settingspanels', 'js', 'shutters');
 include_file('desktop', 'shutters-events', 'js', 'shutters');
 include_file('desktop', 'shutters-jcanvas', 'js', 'shutters');
 include_file('desktop', 'shutters-curve-jcanvas', 'js', 'shutters');
