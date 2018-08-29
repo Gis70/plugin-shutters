@@ -1,0 +1,136 @@
+{
+    "name": "shutter",
+    "commands": [
+        {
+            "name": "Statut du volet",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut du volet.",
+                "group": "shutterStatus"   
+            },
+            "logicalId": "shutter:shutterStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Fonction de gestion sélectionnée",
+            "type": "info",
+            "subType": "string",
+           "configuration": {
+                "eqType": "shutter",
+                "description": "Fonction de gestion du volet sélectionnée.",
+                "group": "shutterFunctions"   
+            },
+            "logicalId": "shutter:selectedShutterFunction",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction absence",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets sur absence.",
+                "group": "shutterFunctions",  
+                "shutterFunction": "absenceFunction",
+                "infoCmdConfigKey": "absenceInfoCmd"
+            },
+            "logicalId": "shutter:absenceFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction présence",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets sur présence.",
+                "group": "shutterFunctions",  
+                "shutterFunction": "presenceFunction",
+                "infoCmdConfigKey": "presenceInfoCmd"
+            },
+            "logicalId": "shutter:presenceFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction détection incendie",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets sur détection incendie.",
+                "group": "shutterFunctions",  
+                "shutterFunction": "fireFunction",
+                "infoCmdConfigKey": "fireDetectionCmd"
+            },
+            "logicalId": "shutter:fireFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction luminosité extérieure",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets en fonction de la luminosité extérieure.",
+                "group": "shutterFunctions",  
+                "shutterFunction": "outdoorLuminosityFunction",
+                "infoCmdConfigKey": "outdoorLuminosityCmd"
+            },
+            "logicalId": "shutter:outdoorLuminosityFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction température extérieure",
+            "type": "info",
+            "subType": "string",
+           "configuration": {
+                "eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets en fonction de la température extérieure.",
+                "group": "shutterFunctions",  
+                "shutterFunction": "outdoorTemperatureFunction",
+                "infoCmdConfigKey": "outdoorTemperatureCmd"
+            },
+            "logicalId": "shutter:outdoorTemperatureFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction nuit",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets sur passage en nuit.",   
+                "group": "shutterFunctions",  
+                "shutterFunction": "nightFunction",
+                "infoCmdConfigKey": ""
+            },
+            "logicalId": "shutter:nightFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut fonction jour",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "description": "Statut de la fonction de gestion des volets sur passage en jour.",   
+                "group": "shutterFunctions",  
+                "shutterFunction": "dayFunction",
+                "infoCmdConfigKey": ""
+            },
+            "logicalId": "shutter:dayFunctionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        }
+    ]
+}

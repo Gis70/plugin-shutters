@@ -1,0 +1,37 @@
+{
+    "name": "heliotropeZone",
+    "commands": [
+        {
+            "name": "Fonction nuit",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "heliotropeZone",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets sur passage en nuit.",   
+                "group": "shutterFunctions",  
+                "shutterFunction": "nightFunction",
+                "infoCmdConfigKey": ""
+            },
+            "logicalId": "heliotropeZone:nightFunction",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Fonction jour",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "heliotropeZone",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets sur passage en jour.",   
+                "group": "shutterFunctions",  
+                "shutterFunction": "dayFunction",
+                "infoCmdConfigKey": ""
+            },
+            "logicalId": "heliotropeZone:dayFunction",
+            "isVisible": false,
+            "isHistorized": false
+        }
+    ]
+}

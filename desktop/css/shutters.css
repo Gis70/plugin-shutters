@@ -1,0 +1,48 @@
+.cursor-tooltip {
+    position: absolute;
+    z-index: 1;
+    background-color: #000;
+    color: #fff;
+    padding: 3px 9px;
+    border-radius: 3px;
+    visibility: hidden;
+}
+.display-none {
+    display: none;
+}
+.panel-title > a:before {
+    font-family: FontAwesome;
+    content:"\f139";
+    padding-right: 5px;
+}
+.panel-title > a.collapsed:before {
+    content:"\f13a";
+}
+.panel-title > a:hover, 
+.panel-title > a:active, 
+.panel-title > a:focus  {
+    text-decoration:none;
+}
+.control-unit {
+    padding: 7px 0px;
+    margin-bottom: 0;
+    text-align: left;
+}
+.thumbnail {
+    width : 160px; height : 200px;     
+    background-color : #ffffff;
+    margin-left : 10px;    
+    margin-bottom : 10px;
+    padding : 5px;
+    border-radius: 2px;
+    text-align: center;
+}
+.input-range-value {
+    position: relative;
+    top: -5px;
+    z-index: 1;
+  }
+.input-group-addon { 
+    min-width:75px;
+} 
+  
