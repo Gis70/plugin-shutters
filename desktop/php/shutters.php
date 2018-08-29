@@ -297,14 +297,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label" for="eqType">{{Type d'équipement}}</label>
                                         <div class="col-sm-5">
-                                            <div class="input-group">
-                                                <select id="eqType" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="eqType">
-                                                    <option value="externalInfo">{{Informations externes générales}}</option>
-                                                    <option value="heliotropeZone">{{Zone héliotrope}}</option>
-                                                    <option value="shuttersGroup">{{Groupe de volets}}</option>
-                                                    <option value="shutter">{{Volet}}</option>
-                                                </select>
-                                            </div>
+                                            <select id="eqType" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="eqType">
+                                                <option value="externalInfo">{{Informations externes générales}}</option>
+                                                <option value="heliotropeZone">{{Zone héliotrope}}</option>
+                                                <option value="shuttersGroup">{{Groupe de volets}}</option>
+                                                <option value="shutter">{{Volet}}</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">

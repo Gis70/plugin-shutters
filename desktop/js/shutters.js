@@ -22,62 +22,21 @@ $(document).ready(function () {
 
     $("#cmdTable").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 
-    updateInputRangeMinMax();
-    drawHeliotropePlan();
-    drawWallPlan();
-    drawShutterClosingMvtTimeCurve();
 });
 
 function printEqLogic(_eqLogic) {
 
-    $(document).ready(function () {
-        console.log('printEqLogic');
+    console.log('printEqLogic()');
 
-        initDefaultValues(_eqLogic);
-
-        disableElement($('#eqType'));
-        displaySettingsPanel(_eqLogic.configuration.eqType);
-        $('input[data-settinggroup]').trigger('change');
-        $('input[type=range]').trigger('change');
-
-        switch (_eqLogic.configuration.eqType) {
-            case 'externalInfo':
-                updatePriorityFunction();
-                break;
-            case 'heliotropeZone':
-                refreshWallPlan();
-                displaySelectedDawnOrDusk(_eqLogic.configuration.dawnType);
-                displaySelectedDawnOrDusk(_eqLogic.configuration.duskType);
-                break;
-            case 'shuttersGroup':
-                updateEqLink(_eqLogic, listEqByType());
-                break;
-            case 'shutter':
-                updateEqLink(_eqLogic, listEqByType());
-                $('[data-l1key=configuration][data-l2key=shuttersGroupLink]').trigger('change');                
-                updateShutterMvtTimeCurve(_eqLogic.configuration.shutterMvtTimeCurve);
-                updateValuesTable(_eqLogic.configuration.shutterMvtTimeValues);
-                break;
-            default:
-        }
-    });
 }
 
 function saveEqLogic(_eqLogic) {
-    console.log('saveEqLogic');
-    switch (_eqLogic.configuration.eqType) {
-        case 'shutter':
-            if (_eqLogic.configuration.shuttersGroupLink !== 'none' && _eqLogic.configuration.shuttersGroupLink !== null) {
-                $eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupLink);
-                _eqLogic.configuration.shutterExternalInfoLink = $eqLogic.configuration.shuttersGroupExternalInfoLink;
-                _eqLogic.configuration.shutterHeliotropeZoneLink = $eqLogic.configuration.shuttersGroupHeliotropeZoneLink;
-            }
-            _eqLogic.configuration.shutterMvtTimeValues = new Object();
-            _eqLogic.configuration.shutterMvtTimeCurve = new Array();
-            _eqLogic.configuration.shutterMvtTimeValues = shutterMvtTimeValues;
-            _eqLogic.configuration.shutterMvtTimeCurve = shutterMvtTimeCurve;
-            break;
+    console.log('saveEqLogic()');
+
+    if ($('[data-l1key=configuration][data-l2key=eqType]').val() === null) {
+        $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
     }
+
    	return _eqLogic;
 }
 
@@ -133,20 +92,6 @@ function hideTooltip () {
 function displayTooltip (_message = '') {
     $('.cursor-tooltip').html(_message).css('visibility', 'visible');
 }
-
-/**
- * Disable an element if it's value different from null or ''
- * @param {element} _element element to disable
- */
-function disableElement (_element = null) {
-    if (_element.val() !== null) {
-        _element.attr('disabled', true);
-        _element.closest('div.input-group').find('i.fa-unlock').removeClass('fa-unlock').addClass("fa-lock");
-    } else {
-        _element.attr('disabled', false);
-        _element.closest('div.input-group').find('i.fa-lock').removeClass('fa-lock').addClass("fa-unlock");
-    }
-}  
 
 /**
  * Display setting panels corresponding to object type
