@@ -27,7 +27,7 @@ $(document).ready(function () {
 function printEqLogic(_eqLogic) {
     console.log('printEqLogic()');
 
-    if ($('[data-l1key=configuration][data-l2key=eqType]').val() === null) {
+    if ($('[data-l1key=configuration][data-l2key=eqType]').val() !== null) {
         $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
     }
 
