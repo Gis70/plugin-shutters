@@ -21,6 +21,19 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
+    if (init('action') === 'getCmdStatus') {
+        $cmdId = str_replace('#','',cmd::humanReadableToCmd(init('cmd')));
+        $cmd = cmd::byId($cmdId);
+        if (!is_object($cmd)) {
+            throw new Exception(__('La commande sélectionnée est inconnue : ', __FILE__) . init('cmd'));
+        }
+        if ($cmd->getType() !== 'info') {
+            throw new Exception(__('La commande sélectionnée n\'est pas de type [info] : ', __FILE__) . init('cmd'));
+        }
+        $cmdStatus = $cmd->execCmd();
+        ajax::success($cmdStatus);
+    }
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /***********Catch exception***************/
 } catch (Exception $e) {

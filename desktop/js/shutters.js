@@ -184,60 +184,6 @@ function updateInputRangeMinMax () {
 }
 
 /**
- * Initialize default values
- * @param {object} _eqLogic Shutters equipment
- */
-function initDefaultValues (_eqLogic) {
-    var element = new Object();
-    switch (_eqLogic.configuration.eqType) {
-        case 'externalInfo':
-            break;
-        case 'heliotropeZone':
-            if (_eqLogic.configuration.heliotrope === '') {
-                element = $('[data-l1key=configuration][data-l2key=heliotrope]');
-                element.val(element.children().first().attr('value'));
-            }
-            if (_eqLogic.configuration.dawnType === '') {
-                element = $('[data-l1key=configuration][data-l2key=dawnType]');
-                element.val(element.children().first().attr('value')).trigger('change');
-            }
-            if (_eqLogic.configuration.duskType === '') {
-                element = $('[data-l1key=configuration][data-l2key=duskType]');
-                element.val(element.children().first().attr('value')).trigger('change');
-            }
-            if (_eqLogic.configuration.wallAngle === '') {
-                element = $('[data-l1key=configuration][data-l2key=wallAngle]');
-                element.val(0).trigger('change');
-            }
-            if (_eqLogic.configuration.wallAngleUnit === '') {
-                element = $('[data-l1key=configuration][data-l2key=wallAngleUnit]');
-                element.val(element.children().first().attr('value')).trigger('change');
-            }
-            break;
-        case 'shuttersGroup':
-            break;
-        case 'shutter':
-            if (_eqLogic.configuration.openingType === '') {
-                element = $('[data-l1key=configuration][data-l2key=openingType]');
-                element.val(element.children().first().attr('value'));
-            }
-            if (_eqLogic.configuration.shutterPositionType === '') {
-                element = $('[data-l1key=configuration][data-l2key=shutterPositionType]');
-                element.val(element.children().first().attr('value')).trigger('change');
-            }
-            if (_eqLogic.configuration.positionSynchroType === '') {
-                element = $('[data-l1key=configuration][data-l2key=positionSynchroType]');
-                element.val(element.children().first().attr('value'));
-            }
-            if (_eqLogic.configuration.shutterCmdType === '') {
-                element = $('[data-l1key=configuration][data-l2key=shutterCmdType]');
-                element.val(element.children().first().attr('value')).trigger('change');
-            }
-            break;
-    }
-}
-
-/**
  * Get status from a command of type 'info'
  */
 function getCmdStatus(_cmd) {
