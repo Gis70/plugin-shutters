@@ -14,39 +14,37 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-$(document).ready(function () {
-    
-    console.log('document ready');
-
-    initEvents();
-
-    $("#cmdTable").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
-
-});
-
 function printEqLogic(_eqLogic) {
-    $(function(){
     
-        console.log('printEqLogic()');
+    console.log('printEqLogic()');
 
-        if ($('[data-l1key=configuration][data-l2key=eqType]').val() !== null) {
-            $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
-        }
+    if (!isset(_eqLogic)) {
+        var _eqLogic = {configuration: {}};
+    }
     
-        displaySettingsPanels(_eqLogic);
-        displayCommandsPanels(_eqLogic);
+    if (!isset(_eqLogic.configuration)) {
+        _eqLogic.configuration = {};
+    }
+
+    if ($('[data-l1key=configuration][data-l2key=eqType]').val() !== null) {
+        $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
+    }
+
+    displaySettingsPanels(_eqLogic);
+    displayCommandsPanels(_eqLogic);
+    
+    if (_eqLogic.configuration.eqType === 'externalConditions') {
+        displayPrimaryConditionsList(_eqLogic);
+    }
         
-        if (_eqLogic.configuration.eqType === 'externalConditions') {
-            displayPrimaryConditionsList(_eqLogic);
-        }
+    $("#cmdTable").sortable({items: ".cmd", axis: "y", tolerance: "intersect", containment: "#cmdTable", placeholder: "ui-state-highlight", forcePlaceholderSize: true, cursor: "move"});
         
-        
-        
-            
-    });
+    $('#settingsPanels').setValues(_eqLogic, '.eqLogicAttr'); 
+    initEvents();
 }
 
 function saveEqLogic(_eqLogic) {
+
     console.log('saveEqLogic()');
 
 
@@ -56,6 +54,9 @@ function saveEqLogic(_eqLogic) {
 function addCmdToTable(_cmd) {
     if (!isset(_cmd)) {
         var _cmd = {configuration: {}};
+    }
+    if (!isset(_cmd.configuration)) {
+        _cmd.configuration = {};
     }
 
     var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
@@ -78,12 +79,12 @@ function addCmdToTable(_cmd) {
     if (is_numeric(_cmd.id)) {
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fa fa-cogs"></i></a> ';
     }
-   if (init(_cmd.type) == 'info') {
+    if (init(_cmd.type) == 'info') {
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
     }
     tr += '</td>';
     tr += '<td>';
-    tr += '<i class="fa fa-minus-circle cmdAction cursor" data-action="remove"></i>';
+    tr += '<a class="btn btn-default btn-xs cmdAction" data-action="remove"><i class="fa fa-minus-circle"></i></a>';
     tr += '</td>';
     tr += '</tr>';
 
@@ -129,10 +130,14 @@ function displayPrimaryConditionsList(_eqLogic) {
 
     $('#primaryConditionsList').sortable({
         handle: ".fa",
-        distance: 10,
-        containment: ".conditionsList",
         items: "> li",
         axis: "x",
+        distance: 10,
+        tolerance: "intersect",
+        containment: ".conditionsList",
+        placeholder: "ui-state-highlight",
+        forcePlaceholderSize: true,
+        cursor: "move",
         stop: function(event, ui){
             $('[data-l1key=configuration][data-l2key=primaryConditionsPriority]').val($('#primaryConditionsList').sortable('toArray', {attribute: 'data-name'}));
         }

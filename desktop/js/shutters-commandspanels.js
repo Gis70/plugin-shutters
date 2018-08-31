@@ -3,7 +3,7 @@
  * @param {object} _eqLogic
  */
 function displayCommandsPanels(_eqLogic) {
-    var el = $('#scommandsPanels');
+    var el = $('#commandsPanels');
     el.empty();
     switch (_eqLogic.configuration.eqType) {
         case 'externalConditions':

@@ -333,7 +333,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 <?php
 include_file('desktop', 'jcanvas.min', 'js', 'shutters');
-include_file('desktop', 'jquery-ui.min', 'js', 'shutters');
 include_file('desktop', 'shutters', 'js', 'shutters');
 include_file('desktop', 'shutters-settingspanels', 'js', 'shutters');
 include_file('desktop', 'shutters-commandspanels', 'js', 'shutters');
