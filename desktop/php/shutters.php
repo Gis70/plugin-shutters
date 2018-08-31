@@ -69,12 +69,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#objectList" href="#externalInfoObjectList"> {{Mes informations externes}} </a>
+                        <a data-toggle="collapse" data-parent="#objectList" href="#externalInfoObjectList"> {{Mes conditions externes}} </a>
                         <span class="badge">
                             <?php
                                 $objectNumber =0;
                                 foreach ($eqLogics as $eqLogic) {
-                                    if ($eqLogic->getConfiguration('eqType') == 'externalInfo') {
+                                    if ($eqLogic->getConfiguration('eqType') == 'externalConditions') {
                                         ++$objectNumber;
                                     } 
                                 }
@@ -88,10 +88,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <div class="eqLogicThumbnailContainer">
                             <?php
                                 foreach ($eqLogics as $eqLogic) {
-                                    if ($eqLogic->getConfiguration('eqType') == 'externalInfo') {
+                                    if ($eqLogic->getConfiguration('eqType') == 'externalConditions') {
                                         $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
                                         echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="text-align: center; background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
-                                        echo '<img src="plugins/shutters/resources/images/externalInfo.png" height="100" width="100" />';
+                                        echo '<img src="plugins/shutters/resources/images/externalConditions.png" height="100" width="100" />';
                                         echo "<br>";
                                         echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">' . $eqLogic->getHumanName(true, true) . '</span>';
                                         echo '</div>';
@@ -256,7 +256,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label" for="objectName">{{Nom de l'équipement}}</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display:none" />
+                                            <input type="text" class="eqLogicAttr form-control display-none" data-l1key="id"/>
                                             <input id="objectName" type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}"/>
                                         </div>
                                     </div>
@@ -298,7 +298,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-sm-3 control-label" for="eqType">{{Type d'équipement}}</label>
                                         <div class="col-sm-5">
                                             <select id="eqType" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="eqType">
-                                                <option value="externalInfo">{{Informations externes}}</option>
+                                                <option value="externalConditions">{{Conditions externes}}</option>
                                                 <option value="heliotropeZone">{{Zone héliotrope}}</option>
                                                 <option value="shuttersGroup">{{Groupe de volets}}</option>
                                                 <option value="shutter">{{Volet}}</option>

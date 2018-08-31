@@ -14,6 +14,9 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+var primaryConditionsList =[['fireDetectionCondition', '{{Détection incendie}}'], [ 'absenceCondition','{{Absence}}'], [ 'firstUserCondition','{{Condition 1 utilisateur}}'], [ 'secondUserCondition','{{Condition 2 utilisateur}}']];
+var primaryConditionsPriority = ['fireDetectionCondition', 'absenceCondition', 'firstUserCondition', 'secondUserCondition'];
+
 $(document).ready(function () {
     
     console.log('document ready');
@@ -31,7 +34,9 @@ function printEqLogic(_eqLogic) {
         $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
     }
 
-    addSettingsPanels();
+    displaySettingsPanels(_eqLogic);
+    displayPrimaryConditionsList(_eqLogic);
+    
 }
 
 function saveEqLogic(_eqLogic) {
@@ -95,15 +100,33 @@ function displayTooltip (_message = '') {
 }
 
 /**
- * Display setting panels corresponding to object type
- * @param {string} _eqType 
+ * Display primary conditions list 
+ * @param {object} _eqLogic
  */
-function displaySettingsPanel (_eqType = null) {
-    if (_eqType !== null) {
-        $('.panel-group[data-paneltype=setting]').css('display', 'block');
-        $('.panel[data-paneltype=setting]').css('display', 'none');
-        $('.panel[data-objecttype=' + _eqType + ']').css('display', 'block');
-    }
+function displayPrimaryConditionsList(_eqLogic) {
+    if (_eqLogic.configuration.primaryConditionsPriority !== undefined && _eqLogic.configuration.primaryConditionsPriority !== null
+    && _eqLogic.configuration.primaryConditionsPriority !== '') {
+        primaryConditionsPriority = _eqLogic.configuration.primaryConditionsPriority.split(',');
+      } 
+
+    $('#primaryConditionsPriority').find('li').each(function(index){
+        for(i = 0; i<primaryConditionsPriority.length; i++){
+            if (primaryConditionsPriority[index] === primaryConditionsPriority[i][0]){
+                $(this).attr('data-name',primaryConditionsList[i][0]).append(primaryConditionsList[i][1]);
+            }
+        }
+    });
+
+    $('#primaryConditionsPriority').sortable({
+        handle: ".fa",
+        distance: 10,
+        containment: ".conditionPriority",
+        items: "> li",
+        axis: "x",
+        stop: function(event, ui){
+            $('[data-l1key=configuration][data-l2key=primaryConditionsPriority]').val($('#primaryConditionsPriority').sortable('toArray', {attribute: 'data-name'}));
+        }
+    });
 }
 
 /**
@@ -115,21 +138,6 @@ function displaySettings (_settingGroup = null, _settingType = null) {
     if (_settingGroup !== null && _settingType !== null) {
         $('fieldset[data-settinggroup=' + _settingGroup + ']').css('display', 'none');
         $('fieldset[data-settinggroup=' + _settingGroup + '][data-settingtype~=' + _settingType + ']').css('display', 'block');
-    }
-}
-
-/**
- * Selection of priority management (fire detection / absence)
- */
-function updatePriorityFunction () {
-    var priorityFunction = $('#priorityFunction');
-    if ($('[data-l1key=configuration][data-l2key=absenceInfoCmd]').val() !== '' && $('[data-l1key=configuration][data-l2key=fireDetectionCmd]').val() !== '') {
-        priorityFunction.prop('disabled', false);
-        if (priorityFunction.val() === null) {
-            priorityFunction.val('fireFunction');
-        }
-    } else {
-        priorityFunction.val(null).prop('disabled', true);
     }
 }
 
