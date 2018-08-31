@@ -6,7 +6,7 @@ function displaySettingsPanels(_eqLogic) {
     var el = $('#settingsPanels');
     el.empty();
     switch (_eqLogic.configuration.eqType) {
-        case 'externalInfo':
+        case 'externalConditions':
             var div = '<div id="objectSettings" class="panel-group">';
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
@@ -179,10 +179,10 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorLuminosityThreshold" type="number" min="-20" max="20" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityThreshold"/>';
+            div += '<input id="outdoorTemperatureThreshold" type="number" min="-20" max="20" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureThreshold"/>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorLuminosityHysteresis" type="number" min="1" max="5" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityHysteresis"/>';
+            div += '<input id="outdoorTemperatureHysteresis" type="number" min="1" max="5" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
             div += '</div>';
             div += '</div>';
             div += '</div>';
@@ -287,13 +287,13 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '<div class="form-group">';
             div += '<div class="col-sm-3">';
-            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="secondtUserConditionAction">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="secondUserConditionAction">';
             div += '<option value="closeShutter">{{Fermer les volets}}</option>';
             div += '<option value="openShutter">{{Ouvrir les volets}}</option>';
             div += '</select>';
             div += '</div>';
             div += '<div class="col-sm-3">';
-            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondtUserConditionName" placeholder="{{Nom de la condition}}"/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondUserConditionName" placeholder="{{Nom de la condition}}"/>';
             div += '</div>';
             div += '</div>';
             div += '</div>';
@@ -309,8 +309,8 @@ function displaySettingsPanels(_eqLogic) {
             div += '<input type="text" class="eqLogicAttr form-control display-none" data-l1key="configuration"  data-l2key="primaryConditionsPriority"/>';
             div += '<div class="form-group">';
             div += '<label class="col-sm-2 control-label">{{Priorité conditions primaires}}</label>';
-            div += '<div class="col-sm-6 conditionPriority">';
-            div += '<ul id="primaryConditionsPriority" class="list-inline sortable-list">';
+            div += '<div class="col-sm-6 conditionsList">';
+            div += '<ul id="primaryConditionsList" class="list-inline sortable-list">';
             div += '<li class="text-center" data-name=""><i class="cursor fa fa-arrows"></i> </li>';
             div += '<li class="text-center" data-name=""><i class="cursor fa fa-arrows"></i> </li>';
             div += '<li class="text-center" data-name=""><i class="cursor fa fa-arrows"></i> </li>';

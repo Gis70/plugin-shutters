@@ -14,9 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-var primaryConditionsList =[['fireDetectionCondition', '{{Détection incendie}}'], [ 'absenceCondition','{{Absence}}'], [ 'firstUserCondition','{{Condition 1 utilisateur}}'], [ 'secondUserCondition','{{Condition 2 utilisateur}}']];
-var primaryConditionsPriority = ['fireDetectionCondition', 'absenceCondition', 'firstUserCondition', 'secondUserCondition'];
-
 $(document).ready(function () {
     
     console.log('document ready');
@@ -104,27 +101,30 @@ function displayTooltip (_message = '') {
  * @param {object} _eqLogic
  */
 function displayPrimaryConditionsList(_eqLogic) {
+    var primaryConditionsList =[['fireDetectionCondition', '{{Détection incendie}}'], [ 'absenceCondition','{{Absence}}'], [ 'firstUserCondition','{{Condition 1 utilisateur}}'], [ 'secondUserCondition','{{Condition 2 utilisateur}}']];
+    var primaryConditionsPriority = ['fireDetectionCondition', 'absenceCondition', 'firstUserCondition', 'secondUserCondition'];
+
     if (_eqLogic.configuration.primaryConditionsPriority !== undefined && _eqLogic.configuration.primaryConditionsPriority !== null
     && _eqLogic.configuration.primaryConditionsPriority !== '') {
         primaryConditionsPriority = _eqLogic.configuration.primaryConditionsPriority.split(',');
       } 
 
-    $('#primaryConditionsPriority').find('li').each(function(index){
+    $('#primaryConditionsList').find('li').each(function(index){
         for(i = 0; i<primaryConditionsPriority.length; i++){
-            if (primaryConditionsPriority[index] === primaryConditionsPriority[i][0]){
+            if (primaryConditionsPriority[index] === primaryConditionsList[i][0]){
                 $(this).attr('data-name',primaryConditionsList[i][0]).append(primaryConditionsList[i][1]);
             }
         }
     });
 
-    $('#primaryConditionsPriority').sortable({
+    $('#primaryConditionsList').sortable({
         handle: ".fa",
         distance: 10,
-        containment: ".conditionPriority",
+        containment: ".conditionsList",
         items: "> li",
         axis: "x",
         stop: function(event, ui){
-            $('[data-l1key=configuration][data-l2key=primaryConditionsPriority]').val($('#primaryConditionsPriority').sortable('toArray', {attribute: 'data-name'}));
+            $('[data-l1key=configuration][data-l2key=primaryConditionsPriority]').val($('#primaryConditionsList').sortable('toArray', {attribute: 'data-name'}));
         }
     });
 }
