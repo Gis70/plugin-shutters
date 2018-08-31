@@ -1,5 +1,5 @@
 /**
- * Display settings panel for eqLogic
+ * Display settings panels for eqLogic
  * @param {object} _eqLogic
  */
 function displaySettingsPanels(_eqLogic) {
@@ -155,10 +155,10 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorLuminosityThreshold" type="number" min="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityThreshold"/>';
+            div += '<input id="outdoorLuminosityThreshold" type="number" min="0" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityThreshold"/>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorLuminosityHysteresis" type="number" min="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityHysteresis"/>';
+            div += '<input id="outdoorLuminosityHysteresis" type="number" min="0" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityHysteresis"/>';
             div += '</div>';
             div += '</div>';
             div += '<div class="form-group">';
@@ -179,10 +179,10 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorTemperatureThreshold" type="number" min="-20" max="20" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureThreshold"/>';
+            div += '<input id="outdoorTemperatureThreshold" type="number" min="-20" max="20" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureThreshold"/>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorTemperatureHysteresis" type="number" min="1" max="5" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
+            div += '<input id="outdoorTemperatureHysteresis" type="number" min="1" max="5" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
             div += '</div>';
             div += '</div>';
             div += '</div>';
@@ -282,7 +282,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</select>';
             div += '</div>';
             div += '<div class="col-sm-3">';
-            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="firstUserConditionName" placeholder="{{Nom de la condition}}"/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="firstUserConditionName" value="Condition 1" placeholder="{{Nom de la condition}}"/>';
             div += '</div>';
             div += '</div>';
             div += '<div class="form-group">';
@@ -293,7 +293,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</select>';
             div += '</div>';
             div += '<div class="col-sm-3">';
-            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondUserConditionName" placeholder="{{Nom de la condition}}"/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondUserConditionName" value="Condition 2" placeholder="{{Nom de la condition}}"/>';
             div += '</div>';
             div += '</div>';
             div += '</div>';

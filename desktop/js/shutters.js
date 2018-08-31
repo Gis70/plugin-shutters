@@ -25,15 +25,25 @@ $(document).ready(function () {
 });
 
 function printEqLogic(_eqLogic) {
-    console.log('printEqLogic()');
-
-    if ($('[data-l1key=configuration][data-l2key=eqType]').val() !== null) {
-        $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
-    }
-
-    displaySettingsPanels(_eqLogic);
-    displayPrimaryConditionsList(_eqLogic);
+    $(function(){
     
+        console.log('printEqLogic()');
+
+        if ($('[data-l1key=configuration][data-l2key=eqType]').val() !== null) {
+            $('[data-l1key=configuration][data-l2key=eqType]').attr('disabled', true);
+        }
+    
+        displaySettingsPanels(_eqLogic);
+        displayCommandsPanels(_eqLogic);
+        
+        if (_eqLogic.configuration.eqType === 'externalConditions') {
+            displayPrimaryConditionsList(_eqLogic);
+        }
+        
+        
+        
+            
+    });
 }
 
 function saveEqLogic(_eqLogic) {

@@ -325,6 +325,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
             </div>
             <div role="tabpanel" class="tab-pane" id="commandTab">
                 <br/>
+                <div id="commandsPanels"></div>
             </div>
         </div>
     </div>
@@ -335,6 +336,7 @@ include_file('desktop', 'jcanvas.min', 'js', 'shutters');
 include_file('desktop', 'jquery-ui.min', 'js', 'shutters');
 include_file('desktop', 'shutters', 'js', 'shutters');
 include_file('desktop', 'shutters-settingspanels', 'js', 'shutters');
+include_file('desktop', 'shutters-commandspanels', 'js', 'shutters');
 include_file('desktop', 'shutters-events', 'js', 'shutters');
 include_file('desktop', 'shutters-jcanvas', 'js', 'shutters');
 include_file('desktop', 'shutters-curve-jcanvas', 'js', 'shutters');

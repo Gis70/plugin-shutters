@@ -1,0 +1,103 @@
+{
+    "name": "externalConditions",
+    "commands": [
+        {
+            "name": "Condition incendie",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "externalConditions",
+                "listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets sur incendie.",
+                "condition": "fire"
+            },
+            "logicalId": "externalConditions:fireCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition absence",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "externalConditions",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets sur absence.",
+                "condition": "absence"
+            },
+            "logicalId": "externalConditions:absenceCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition présence",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "externalConditions",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets sur présence.",
+                "condition": "presence"
+            },
+            "logicalId": "externalConditions:presenceCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition luminosité extérieure",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "externalConditions",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets en fonction de la luminosité extérieure.",
+                "condition": "outdoorLuminosity"
+            },
+            "logicalId": "externalConditions:outdoorLuminosityCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition température extérieure",
+            "type": "action",
+            "subType": "select",
+           "configuration": {
+                "eqType": "externalConditions",
+                "listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets en fonction de la température extérieure.",
+                "condition": "outdoorTemperature"
+            },
+            "logicalId": "externalConditions:outdoorTemperatureCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition 1 utilisateur",
+            "type": "action",
+            "subType": "select",
+           "configuration": {
+                "eqType": "externalConditions",
+                "listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets en fonction de la condition 1 utilisateur.",
+                "condition": "firstUserCondition"
+            },
+            "logicalId": "externalConditions:firstUserCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition 2 utilisateur",
+            "type": "action",
+            "subType": "select",
+           "configuration": {
+                "eqType": "externalConditions",
+                "listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets en fonction de la condition 2 utilisateur.",
+                "condition": "secondUserCondition"
+            },
+            "logicalId": "externalConditions:secondUserCondition",
+            "isVisible": false,
+            "isHistorized": false
+        }
+    ]
+}
