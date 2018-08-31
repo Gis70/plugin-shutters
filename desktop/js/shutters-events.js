@@ -7,45 +7,44 @@ function initEvents () {
      * Select a command
      */
     $('.listCmd').on('click', function () {
-        var inputId = $(this).attr('data-inputid');
+        var l2key = $(this).attr('data-l2key');
         var dataType = $(this).attr('data-type');
         var dataSubType = $(this).attr('data-subtype');
         if (dataSubType === undefined) {
             dataSubType = '';
         }
-        var el = $(this).closest('div.input-group').find('input[data-l1key=configuration][data-l2key=' + inputId + ']');
+        var el = $('input[data-l1key=configuration][data-l2key=' + l2key + ']');
         jeedom.cmd.getSelectModal({cmd: {type: dataType, subType: dataSubType}}, function (result) {
-            console.log(result);
             el.val(result.human);
         });
     });
-
 
     /**
      * Delete a command and it's status
      */
     $('.delCmd').on('click', function () {
-        var inputId = $(this).attr('data-inputid');
-        var cmdElement = $(this).closest('div.input-group').find('input[data-l1key=configuration][data-l2key=' + inputId + ']');
-        var cmdStatusElement = $(this).closest('div.form-group').find('input[data-l1key=configuration][data-l2key=' + inputId + 'Status]');
-        var cmd = cmdElement.val();
+        var l2key = $(this).attr('data-l2key');
+        var cmd = $('input[data-l1key=configuration][data-l2key=' + l2key + ']').val();
+        var el = $(this).closest('div.form-group').find('input.eqLogicAttr');
         bootbox.confirm('{{Effacer la  commande }}' + cmd + '{{ peut engendrer une modification du fonctionnement de vos volets. Confirmez vous la suppression?}}', function (result) {
             if (result) {
-                cmdElement.val(null);
-                cmdStatusElement.val(null);
+                el.each(function( index ) {
+                    var value = $(this).attr('value');
+                    $(this).val(value);
+                });
             }
         }) 
     });
-
+  
     /**
      * Get status of a command 'info'
      */
     $('.getCmdStatus').on('click', function () {
-        var inputId = $(this).attr('data-inputid');
-        var cmdInputId = $(this).attr('data-cmdinputid');
-        var cmd = $('input[id=' + cmdInputId + ']').val();
-        var el = $(this).closest('div.input-group').find('input[data-l1key=configuration][data-l2key=' + inputId + ']');
-        if (cmd === null || cmd === '') {
+        var l2key = $(this).attr('data-l2key');
+        var cmdl2key = $(this).attr('data-cmdl2key');
+        var cmd = $('input[data-l1key=configuration][data-l2key=' + cmdl2key + ']').val();
+        var el = $('input[data-l1key=configuration][data-l2key=' + l2key + ']');
+        if (cmd.length === 0) {
             return;
         }
         bootbox.confirm('{{Avant de récupérer le statut de la condition }}' + cmd + '{{, êtes vous sûr que celle-ci est bien active?}}', function (result) {
