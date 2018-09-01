@@ -71,11 +71,11 @@ function initEvents () {
         displaySelectedDawnOrDusk($(this).val());
     });
     $('[data-l1key=configuration][data-l2key=wallAngle]').off('change').on('change', function () {
-        refreshWallPlan();
+        refreshWallPlan($('[data-l1key=configuration][data-l2key=wallAngle]').val(), $('[data-l1key=configuration][data-l2key=wallAngleUnit]').val());
     });
     $('[data-l1key=configuration][data-l2key=wallAngleUnit]').off('change').on('change', function () {
         updateAngleRange()
-        refreshWallPlan();
+        refreshWallPlan($('[data-l1key=configuration][data-l2key=wallAngle]').val(), $('[data-l1key=configuration][data-l2key=wallAngleUnit]').val());
     });
 
     // Shutters group settings events

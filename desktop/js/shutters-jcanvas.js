@@ -399,9 +399,9 @@ function drawHeliotropePlan()
 /**
  * Refresh wall plan
  */
-function refreshWallPlan() 
+function refreshWallPlan(_angle = 0, _unit = 'deg') 
 {
-    var angle = convertAngleToDegree($('#wallAngle').val(), $('#wallAngleUnit').val());
+    var angle = convertAngleToDegree(_angle, _unit);
     $('#wallPlan').setLayer('wall', {
             rotate: angle - 90
         })
@@ -409,7 +409,7 @@ function refreshWallPlan()
             a1: angle
         })
         .setLayer('arc', {
-            end:  convertAngleToDegree($('#wallAngle').val(), $('#wallAngleUnit').val())
+            end:  convertAngleToDegree(_angle, _unit)
         })
         .drawLayers();  
 }
@@ -418,8 +418,11 @@ function refreshWallPlan()
  * Update display of selected dawn or dusk
  * @param {*} _layerName Canvas layer name
  */
-function displaySelectedDawnOrDusk(_layerName) 
+function displaySelectedDawnOrDusk(_layerName = null) 
 {
+    if(_layerName === null) {
+        return;
+    }
     var element = $('#heliotropePlan');
     var deselectedGroupName = _layerName + 'DeselectedGroup';
     element.animateLayer(_layerName, {

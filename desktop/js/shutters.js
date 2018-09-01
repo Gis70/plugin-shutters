@@ -39,7 +39,10 @@ function printEqLogic(_eqLogic) {
             break;
         case 'heliotropeZone':
             drawHeliotropePlan();
+            displaySelectedDawnOrDusk(_eqLogic.configuration.dawnType);
+            displaySelectedDawnOrDusk(_eqLogic.configuration.duskType);
             drawWallPlan();
+            refreshWallPlan(_eqLogic.configuration.wallAngle, _eqLogic.configuration.wallAngleUnit);
             break;
         default:
             break;
