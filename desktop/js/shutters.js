@@ -47,6 +47,10 @@ function printEqLogic(_eqLogic) {
             break;
         case 'shuttersGroup':
             updateEqLogicLists(listEqLogicByType());
+            break;
+        case 'shutter':
+            updateEqLogicLists(listEqLogicByType());
+            break;
         default:
             break;
     }
@@ -60,6 +64,26 @@ function printEqLogic(_eqLogic) {
 function saveEqLogic(_eqLogic) {
 
     console.log('saveEqLogic()');
+
+    switch (_eqLogic.configuration.eqType) {
+        case 'externalConditions':
+            break;
+        case 'heliotropeZone':
+           break;
+        case 'shuttersGroup':
+            break;
+        case 'shutter':
+            if (_eqLogic.configuration.shuttersGroupId !== 'none' && _eqLogic.configuration.shuttersGroupId !== null) {
+                $eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
+                _eqLogic.configuration.externalConditionsId = $eqLogic.configuration.externalConditionsId;
+                _eqLogic.configuration.heliotropeZoneId = $eqLogic.configuration.heliotropeZoneId;
+            }
+           // _eqLogic.configuration.shutterMvtTimeValues = new Object();
+           // _eqLogic.configuration.shutterMvtTimeCurve = new Array();
+           // _eqLogic.configuration.shutterMvtTimeValues = shutterMvtTimeValues;
+           // _eqLogic.configuration.shutterMvtTimeCurve = shutterMvtTimeCurve;
+            break;
+    }
 
 
    	return _eqLogic;
@@ -301,7 +325,7 @@ function updateEqLogicLists(_listEqLogicByType) {
     var optionList =['<option value="none" selected>{{Non affectées}}</option>'];
     for (var i = 0; i < _listEqLogicByType.externalConditions.length; i++) {
         optionList.push('<option value="', _listEqLogicByType.externalConditions[i].id, '"');
-        if(!_listEqLogicByType.externalConditions[i].isEnable) {
+        if(_listEqLogicByType.externalConditions[i].isEnable === "0") {
             optionList.push(' disabled');
         }
         optionList.push('>', _listEqLogicByType.externalConditions[i].name, '</option>');
@@ -311,17 +335,17 @@ function updateEqLogicLists(_listEqLogicByType) {
     optionList =['<option value="none" selected>{{Non affectée}}</option>'];
     for (var i = 0; i < _listEqLogicByType.heliotropeZone.length; i++) {
         optionList.push('<option value="', _listEqLogicByType.heliotropeZone[i].id, '"');
-        if(!_listEqLogicByType.heliotropeZone[i].isEnable) {
+        if(_listEqLogicByType.heliotropeZone[i].isEnable === "0") {
             optionList.push(' disabled');
         }
         optionList.push('>', _listEqLogicByType.heliotropeZone[i].name, '</option>');
     }
-    $('[data-l1key=configuration][data-l2key=shutterHeliotropeId]').html(optionList.join(''));
+    $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').html(optionList.join(''));
     
     optionList =['<option value="none" selected>{{Non affecté}}</option>'];
     for (var i = 0; i < _listEqLogicByType.shuttersGroup.length; i++) {
         optionList.push('<option value="', _listEqLogicByType.shuttersGroup[i].id, '"');
-        if(!_listEqLogicByType.shuttersGroup[i].isEnable) {
+        if(_listEqLogicByType.shuttersGroup[i].isEnable === "0") {
             optionList.push(' disabled');
         }
         optionList.push('>', _listEqLogicByType.shuttersGroup[i].name, '</option>');

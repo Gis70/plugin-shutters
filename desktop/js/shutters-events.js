@@ -81,14 +81,14 @@ function initEvents () {
     /**
      *  Shutters group settings events
      */ 
-    $('[data-l1key=configuration][data-l2key=shuttersGroupLink]').off('change').on('change', function () {
+    $('[data-l1key=configuration][data-l2key=shuttersGroupId]').off('change').on('change', function () {
         var el = $(this);
         if (el.val() !== 'none' && el.val() !== null) {
-            $('[data-l1key=configuration][data-l2key=shutterExternalInfoLink]').attr('disabled', true);
-            $('[data-l1key=configuration][data-l2key=shutterHeliotropeZoneLink]').attr('disabled', true);
+            $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', true);
+            $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', true);
         } else {
-            $('[data-l1key=configuration][data-l2key=shutterExternalInfoLink]').attr('disabled', false);
-            $('[data-l1key=configuration][data-l2key=shutterHeliotropeZoneLink]').attr('disabled', false);
+            $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', false);
+            $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', false);
         }
     });
 
