@@ -92,6 +92,18 @@ class shutters extends eqLogic
         
     }
 
+
+    private function checkSettings()
+    {
+        $eqType = $this->getConfiguration('eqType', null);
+
+        if (empty($eqType)) {
+            throw new \Exception (__('Le type d\'équipement doit être renseigné!', __FILE__));
+            return;
+        }
+
+    }
+    
     /**
      * Load commands from JSON file
      */
@@ -124,7 +136,7 @@ class shutters extends eqLogic
             }
             if($this->getConfiguration('eqType', null) === 'externalConditions') {
                 if(isset($command['configuration']['condition']) && empty($this->getConfiguration($command['configuration']['condition'], null))) {
-                    if($cmd === $existingCmd) {
+                    if($cmd !== null || is_object($cmd)) {
                         $cmd->remove();
                         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully deleted for eqType => '. $_eqType);
                     }
@@ -142,6 +154,18 @@ class shutters extends eqLogic
         }
         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands import successful for eqType => '. $_eqType);
     }
+
+    private function isCmdExisting($_cmd = '')
+    {
+        $return = false;
+        $cmd = str_replace('#', '', $_cmd);
+        if (!empty($cmd)) {
+            $cmdId=cmd::byId($cmd);
+            $return = (is_object($cmdId)) ? true : false;
+        }
+        return $return;
+    }
+
     
     /*
      * Non obligatoire mais permet de modifier l'affichage du widget si vous 

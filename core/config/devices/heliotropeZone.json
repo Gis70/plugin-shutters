@@ -2,36 +2,50 @@
     "name": "heliotropeZone",
     "commands": [
         {
-            "name": "Fonction nuit",
+            "name": "Condition coucher du soleil",
             "type": "action",
             "subType": "select",
             "configuration": {
 				"eqType": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets sur passage en nuit.",   
-                "group": "shutterFunctions",  
-                "shutterFunction": "nightFunction",
-                "infoCmdConfigKey": ""
+                "description": "Activer ou désactiver la gestion des volets au coucher du soleil.",   
+                "condition": "sunsetCondition",
+                "usedBy": []
             },
-            "logicalId": "heliotropeZone:nightFunction",
+            "logicalId": "heliotropeZone:sunsetCondition",
             "isVisible": false,
             "isHistorized": false
         },
         {
-            "name": "Fonction jour",
+            "name": "Condition lever du jour",
             "type": "action",
             "subType": "select",
             "configuration": {
 				"eqType": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets sur passage en jour.",   
-                "group": "shutterFunctions",  
-                "shutterFunction": "dayFunction",
-                "infoCmdConfigKey": ""
+                "description": "Activer ou désactiver la gestion des volets au lever du jour.",   
+                "condition": "sunriseCondition",
+                "usedBy": []
             },
-            "logicalId": "heliotropeZone:dayFunction",
+            "logicalId": "heliotropeZone:sunriseCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Condition azimut (jour)",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "heliotropeZone",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets en fonction de l'azimut du soleil (jour).",   
+                "condition": "azimutCondition",
+                "usedBy": []
+            },
+            "logicalId": "heliotropeZone:azimutCondition",
             "isVisible": false,
             "isHistorized": false
         }
+
     ]
 }

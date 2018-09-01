@@ -55,3 +55,7 @@ ul.sortable-list li {
     border: 1px solid #CCC;
     border-radius: 4px;
 }
+
+canvas {
+    border:1px solid #CCC
+}

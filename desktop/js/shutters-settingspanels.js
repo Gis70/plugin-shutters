@@ -91,7 +91,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="col-sm-5">';
             div += '<h5 class="text-center"><span class="label label-default">{{Commande d\'information}}</span></h5>';  
             div += '</div>';
-            div += '<div class="col-sm-3">';
+            div += '<div class="col-sm-4">';
             div += '<h5 class="text-center"><span class="label label-default">{{Statut}}</span></h5>';
             div += '</div>';
             div += '</div>';
@@ -182,7 +182,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<input id="outdoorTemperatureThreshold" type="number" min="-20" max="20" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureThreshold"/>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorTemperatureHysteresis" type="number" min="1" max="5" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
+            div += '<input id="outdoorTemperatureHysteresis" type="number" min="1" max="5" value="1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
             div += '</div>';
             div += '</div>';
             div += '</div>';
@@ -323,11 +323,87 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
 
-            el.append(div);
             break;
     
+        case 'heliotropeZone':
+            var div = '<div id="objectSettings" class="panel-group">';
+            div += '<div class="panel panel-default">';
+            div += '<div class="panel-heading">';
+            div += '<h4 class="panel-title">{{Paramètres héliotrope}}</h4>';
+            div += '</div>';
+            div += '<div class="panel-body">'; 
+            div += '<form class="form-horizontal">';
+            div += '<div class="col-sm-6">';               
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Héliotrope}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select id="heliotrope" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="heliotrope">';
+            div += '<option value="none">{{Non affecté}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Lever du soleil}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select id="dawnType" type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="dawnType">';
+            div += '<option value="astronomicalDawn">{{Aube astronomique}}</option>';
+            div += '<option value="nauticalDawn">{{Aube nautique}}</option>';
+            div += '<option value="civilDawn">{{Aube civile}}</option>';
+            div += '<option value="sunrise" selected>{{Lever du soleil}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Coucher du soleil}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select id="duskType" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="duskType">';
+            div += '<option value="sunset" selected>{{Coucher du soleil}}</option>';
+            div += '<option value="civilDusk">{{Crépuscule civil}}</option>';
+            div += '<option value="nauticalDusk">{{Crépuscule nautique}}</option>';
+            div += '<option value="astronomicalDusk">{{Crépuscule astronomique}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<div class="col-sm-5 col-sm-offset-3">';
+            div += '<canvas id="heliotropePlan" width="400" height="400"></canvas>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-6">';               
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Angle façade / Nord}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<div class="input-group">';
+            div += '<span class="input-group-addon">0°</span>';
+            div += '<input id="wallAngle" type="number" min="0" max="360" value="0" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="wallAngle"/>';
+            div += '<span class="input-group-addon">360°</span>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-2">';
+            div += '<select id="wallAngleUnit" type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="wallAngleUnit">';
+            div += '<option value="deg" selected>{{degré}}</option>';
+            div += '<option value="gon">{{grade}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<div class="col-sm-5 col-sm-offset-3">';           
+            div += '<canvas id="wallPlan" width="400" height="400"></canvas>'; 
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            div += '</form>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+
+            break;
+
         default:
             break;
     }
+    el.append(div);
+
 }
 
