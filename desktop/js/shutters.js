@@ -45,6 +45,8 @@ function printEqLogic(_eqLogic) {
             refreshWallPlan(_eqLogic.configuration.wallAngle, _eqLogic.configuration.wallAngleUnit);
             updateAngleRange(_eqLogic.configuration.wallAngleUnit);
             break;
+        case 'shuttersGroup':
+            updateEqLogicLists(listEqLogicByType());
         default:
             break;
     }
@@ -230,14 +232,14 @@ function getCmdStatus(_cmd) {
 /**
  * List shutters equipment by type
  */
-function listEqByType() {
-    var listEqByType = new Object();
+function listEqLogicByType() {
+    var listEqLogicByType = new Object();
     $.ajax({
         type: 'POST',
         async: false,
         url: 'plugins/shutters/core/ajax/shutters.ajax.php',
         data: {
-            action: 'listEqByType'
+            action: 'listEqLogicByType'
         },
         dataType: 'json',
         global: false,
@@ -250,12 +252,11 @@ function listEqByType() {
                 return;
             }
             if (data.result.length != 0) {
-                listEqByType = data.result;
+                listEqLogicByType = data.result;
             }
         }
     });
-    console.log(listEqByType);
-    return listEqByType;
+    return listEqLogicByType;
 }
 
 /**
@@ -294,27 +295,36 @@ function getEqLogic(_eqLogicId) {
 
 /**
  * Update select by equipment type in shutter settings
- * @param {object} _eqLogic Shutters equipment
- * @param {object} _listEqByType List of shutters equipment by type
+ * @param {object} _listEqLogicByType List of shutters equipment by type
  */
-function updateEqLink(_eqLogic, _listEqByType) {
+function updateEqLogicLists(_listEqLogicByType) {
     var optionList =['<option value="none" selected>{{Non affectées}}</option>'];
-    for (var i = 0; i < _listEqByType.externalInfo.length; i++) {
-        optionList.push('<option value="', _listEqByType.externalInfo[i].id, '">', _listEqByType.externalInfo[i].name, '</option>');
+    for (var i = 0; i < _listEqLogicByType.externalConditions.length; i++) {
+        optionList.push('<option value="', _listEqLogicByType.externalConditions[i].id, '"');
+        if(!_listEqLogicByType.externalConditions[i].isEnable) {
+            optionList.push(' disabled');
+        }
+        optionList.push('>', _listEqLogicByType.externalConditions[i].name, '</option>');
     }
-    $('[data-l1key=configuration][data-l2key=shutterExternalInfoLink]').html(optionList.join('')).val(_eqLogic.configuration.shutterExternalInfoLink);
-    $('[data-l1key=configuration][data-l2key=shuttersGroupExternalInfoLink]').html(optionList.join('')).val(_eqLogic.configuration.shuttersGroupExternalInfoLink);
+    $('[data-l1key=configuration][data-l2key=externalConditionsId]').html(optionList.join(''));
     
     optionList =['<option value="none" selected>{{Non affectée}}</option>'];
-    for (var i = 0; i < _listEqByType.heliotropeZone.length; i++) {
-        optionList.push('<option value="', _listEqByType.heliotropeZone[i].id, '">', _listEqByType.heliotropeZone[i].name, '</option>');
+    for (var i = 0; i < _listEqLogicByType.heliotropeZone.length; i++) {
+        optionList.push('<option value="', _listEqLogicByType.heliotropeZone[i].id, '"');
+        if(!_listEqLogicByType.heliotropeZone[i].isEnable) {
+            optionList.push(' disabled');
+        }
+        optionList.push('>', _listEqLogicByType.heliotropeZone[i].name, '</option>');
     }
-    $('[data-l1key=configuration][data-l2key=shutterHeliotropeZoneLink]').html(optionList.join('')).val(_eqLogic.configuration.shutterHeliotropeZoneLink);
-    $('[data-l1key=configuration][data-l2key=shuttersGroupHeliotropeZoneLink]').html(optionList.join('')).val(_eqLogic.configuration.shuttersGroupHeliotropeZoneLink);
+    $('[data-l1key=configuration][data-l2key=shutterHeliotropeId]').html(optionList.join(''));
     
     optionList =['<option value="none" selected>{{Non affecté}}</option>'];
-    for (var i = 0; i < _listEqByType.shuttersGroup.length; i++) {
-        optionList.push('<option value="', _listEqByType.shuttersGroup[i].id, '">', _listEqByType.shuttersGroup[i].name, '</option>');
+    for (var i = 0; i < _listEqLogicByType.shuttersGroup.length; i++) {
+        optionList.push('<option value="', _listEqLogicByType.shuttersGroup[i].id, '"');
+        if(!_listEqLogicByType.shuttersGroup[i].isEnable) {
+            optionList.push(' disabled');
+        }
+        optionList.push('>', _listEqLogicByType.shuttersGroup[i].name, '</option>');
     }
-    $('[data-l1key=configuration][data-l2key=shuttersGroupLink]').html(optionList.join('')).val(_eqLogic.configuration.shuttersGroupLink);
+    $('[data-l1key=configuration][data-l2key=shuttersGroupId]').html(optionList.join(''));
 }

@@ -21,7 +21,7 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
-    if (init('action') === 'listEqByType') {
+    if (init('action') === 'listEqLogicByType') {
         $return['externalConditions'] = array();
         $return['heliotropeZone'] = array();
         $return['shuttersGroup'] = array();

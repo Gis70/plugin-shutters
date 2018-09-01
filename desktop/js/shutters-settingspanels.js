@@ -406,11 +406,11 @@ function displaySettingsPanels(_eqLogic) {
 
             break;
 
-        case 'shutterGroup':
+        case 'shuttersGroup':
             var div = '<div id="objectSettings" class="panel-group">';
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
-            div += '<h4 class="panel-title"> {{Liens vers informations externes et héliotrope}} </h4>';
+            div += '<h4 class="panel-title"> {{Liens vers conditions externes et héliotrope}} </h4>';
             div += '</div>';
             div += '<div class="panel-body">'; 
             div += '<form class="form-horizontal">';
@@ -435,6 +435,53 @@ function displaySettingsPanels(_eqLogic) {
             div += '</form>';
             div += '</div>';
             div += '</div>';
+            div += '</div>';
+
+            break;
+
+        case 'shutter':
+
+            var div = '<div id="objectSettings" class="panel-group">';
+
+            div += '<div class="panel panel-default">';
+            div += '<div class="panel-heading">';
+            div += '<h4 class="panel-title">';
+            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel1"> {{Liens vers conditions externes, héliotrope et groupe de volets}} </a>';
+            div += '</h4>';
+            div += '</div>';
+            div += '<div id="settingsPanel1" class="panel-collapse collapse in">';
+            div += '<div class="panel-body">';
+            div += '<form class="form-horizontal">';
+            div += '<div class="col-sm-6">';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Infos externes}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="externalConditionsId">';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Zone héliotrope}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="heliotropeZoneId">';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-6">';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Groupe de volets}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="shuttersGroupId">';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            div += '</form>';        
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';                          
+            
             div += '</div>';
 
             break;
