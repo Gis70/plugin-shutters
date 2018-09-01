@@ -43,6 +43,7 @@ function printEqLogic(_eqLogic) {
             displaySelectedDawnOrDusk(_eqLogic.configuration.duskType);
             drawWallPlan();
             refreshWallPlan(_eqLogic.configuration.wallAngle, _eqLogic.configuration.wallAngleUnit);
+            updateAngleRange(_eqLogic.configuration.wallAngleUnit);
             break;
         default:
             break;
@@ -158,9 +159,9 @@ function displayPrimaryConditionsList(_eqLogic) {
 /**
  * Update angle range according to angle unit
  */
-function updateAngleRange () {
+function updateAngleRange (_unit = 'deg') {
     var wallAngle = $('[data-l1key=configuration][data-l2key=wallAngle]');
-    if ($('[data-l1key=configuration][data-l2key=wallAngleUnit]').val() == 'gon') {
+    if (_unit === 'gon') {
         wallAngle.attr('max', 400);
         wallAngle.prev().html('0gon');
         wallAngle.next().html('400gon');

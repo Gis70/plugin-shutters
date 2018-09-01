@@ -74,7 +74,7 @@ function initEvents () {
         refreshWallPlan($('[data-l1key=configuration][data-l2key=wallAngle]').val(), $('[data-l1key=configuration][data-l2key=wallAngleUnit]').val());
     });
     $('[data-l1key=configuration][data-l2key=wallAngleUnit]').off('change').on('change', function () {
-        updateAngleRange()
+        updateAngleRange($('[data-l1key=configuration][data-l2key=wallAngleUnit]').val());
         refreshWallPlan($('[data-l1key=configuration][data-l2key=wallAngle]').val(), $('[data-l1key=configuration][data-l2key=wallAngleUnit]').val());
     });
 
