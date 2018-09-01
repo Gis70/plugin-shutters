@@ -1,4 +1,8 @@
-function drawWallPlan() {
+/**
+ * Draw wall plan
+ */
+function drawWallPlan()
+{
     var angle = convertAngleToDegree($('#wallAngle').val(), $('#wallAngleUnit').val());
     
     $('#wallPlan').addLayer({
@@ -59,7 +63,8 @@ function drawWallPlan() {
 /**
  * Draw heliotrope plan
  */
-function drawHeliotropePlan() {
+function drawHeliotropePlan() 
+{
     var dawnTypeElement = $('[data-l1key=configuration][data-l2key=dawnType]');
     var duskTypeElement = $('[data-l1key=configuration][data-l2key=duskType]');
     $('#heliotropePlan').addLayer({
@@ -394,7 +399,8 @@ function drawHeliotropePlan() {
 /**
  * Refresh wall plan
  */
-function refreshWallPlan() {
+function refreshWallPlan() 
+{
     var angle = convertAngleToDegree($('#wallAngle').val(), $('#wallAngleUnit').val());
     $('#wallPlan').setLayer('wall', {
             rotate: angle - 90
@@ -412,7 +418,8 @@ function refreshWallPlan() {
  * Update display of selected dawn or dusk
  * @param {*} _layerName Canvas layer name
  */
-function displaySelectedDawnOrDusk(_layerName) {
+function displaySelectedDawnOrDusk(_layerName) 
+{
     var element = $('#heliotropePlan');
     var deselectedGroupName = _layerName + 'DeselectedGroup';
     element.animateLayer(_layerName, {
@@ -422,12 +429,14 @@ function displaySelectedDawnOrDusk(_layerName) {
         fillStyle: '#FEE200'
     });
 }
+
 /**
  * Convert angle to Degree
  * @param {int} _angle Angle value
  * @param {string} _unit Unit angle
  */
-function convertAngleToDegree(_angle = 0, _unit = 'deg') {
+function convertAngleToDegree(_angle = 0, _unit = 'deg') 
+{
     switch (_unit) {
         case 'deg':
             return parseInt(_angle);

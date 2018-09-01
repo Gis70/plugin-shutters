@@ -33,8 +33,16 @@ function printEqLogic(_eqLogic) {
     displaySettingsPanels(_eqLogic);
     displayCommandsPanels(_eqLogic);
     
-    if (_eqLogic.configuration.eqType === 'externalConditions') {
-        displayPrimaryConditionsList(_eqLogic);
+    switch(_eqLogic.configuration.eqType) {
+        case 'externalConditions':
+            displayPrimaryConditionsList(_eqLogic);
+            break;
+        case 'heliotropeZone':
+            drawHeliotropePlan();
+            drawWallPlan();
+            break;
+        default:
+            break;
     }
         
     $("#cmdTable").sortable({items: ".cmd", axis: "y", tolerance: "intersect", containment: "#cmdTable", placeholder: "ui-state-highlight", forcePlaceholderSize: true, cursor: "move"});
@@ -145,18 +153,6 @@ function displayPrimaryConditionsList(_eqLogic) {
 }
 
 /**
- * Display setting fieldset corresponding to object type
- * @param {string} _settingGroup 
- * @param {string} _settingType
- */
-function displaySettings (_settingGroup = null, _settingType = null) {
-    if (_settingGroup !== null && _settingType !== null) {
-        $('fieldset[data-settinggroup=' + _settingGroup + ']').css('display', 'none');
-        $('fieldset[data-settinggroup=' + _settingGroup + '][data-settingtype~=' + _settingType + ']').css('display', 'block');
-    }
-}
-
-/**
  * Update angle range according to angle unit
  */
 function updateAngleRange () {
@@ -170,6 +166,18 @@ function updateAngleRange () {
         wallAngle.prev().html('0°');
         wallAngle.next().html('360°');
    }
+}
+
+/**
+ * Display setting fieldset corresponding to object type
+ * @param {string} _settingGroup 
+ * @param {string} _settingType
+ */
+function displaySettings (_settingGroup = null, _settingType = null) {
+    if (_settingGroup !== null && _settingType !== null) {
+        $('fieldset[data-settinggroup=' + _settingGroup + ']').css('display', 'none');
+        $('fieldset[data-settinggroup=' + _settingGroup + '][data-settingtype~=' + _settingType + ']').css('display', 'block');
+    }
 }
 
 /**

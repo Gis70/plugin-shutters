@@ -10,6 +10,9 @@
 .display-none {
     display: none !important
 }
+.invisible {
+    visibility: hidden !important
+  }
 .panel-title > a:before {
     font-family: FontAwesome;
     content:"\f139";
@@ -57,5 +60,8 @@ ul.sortable-list li {
 }
 
 canvas {
+    padding: 0;
+    margin: 0 0 0 -24px;
+    display: block;
     border:1px solid #CCC
 }

@@ -372,6 +372,12 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '<div class="col-sm-6">';               
             div += '<div class="form-group">';
+            div += '<input class="form-control invisible"/>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<input class="form-control invisible"/>';
+            div += '</div>';
+            div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Angle façade / Nord}}</label>';
             div += '<div class="col-sm-5">';
             div += '<div class="input-group">';

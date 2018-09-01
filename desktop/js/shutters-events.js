@@ -6,7 +6,7 @@ function initEvents () {
     /**
      * Select a command
      */
-    $('.listCmd').on('click', function () {
+    $('.listCmd').off('click').on('click', function () {
         var l2key = $(this).attr('data-l2key');
         var dataType = $(this).attr('data-type');
         var dataSubType = $(this).attr('data-subtype');
@@ -22,13 +22,13 @@ function initEvents () {
     /**
      * Delete a command
      */
-    $('.delCmd').on('click', function () {
+    $('.delCmd').off('click').on('click', function () {
         var l2key = $(this).attr('data-l2key');
         var cmd = $('input[data-l1key=configuration][data-l2key=' + l2key + ']').val();
         var el = $(this).closest('div.form-group').find('input.eqLogicAttr');
         bootbox.confirm('{{Effacer la  commande }}' + cmd + '{{ peut engendrer une modification du fonctionnement de vos volets. Confirmez vous la suppression?}}', function (result) {
             if (result) {
-                el.each(function( index ) {
+                el.each(function() {
                     var value = $(this).attr('value');
                     $(this).val(value);
                 });
@@ -39,7 +39,7 @@ function initEvents () {
     /**
      * Get status of a command 'info'
      */
-    $('.getCmdStatus').on('click', function () {
+    $('.getCmdStatus').off('click').on('click', function () {
         var l2key = $(this).attr('data-l2key');
         var cmdl2key = $(this).attr('data-cmdl2key');
         var cmd = $('input[data-l1key=configuration][data-l2key=' + cmdl2key + ']').val();
@@ -61,14 +61,14 @@ function initEvents () {
         $(this).parent().next('span.input-range-value').html($(this).val() + '%');
     });
 
-    // Heliotrope zone settings events
+    /**
+     *  Heliotrope zone settings events
+     */
     $('[data-l1key=configuration][data-l2key=dawnType]').off('change').on('change', function () {
-        var el = $(this);
-        displaySelectedDawnOrDusk(el.val());
+        displaySelectedDawnOrDusk($(this).val());
     });
     $('[data-l1key=configuration][data-l2key=duskType]').off('change').on('change', function () {
-        var el = $(this);
-        displaySelectedDawnOrDusk(el.val());
+        displaySelectedDawnOrDusk($(this).val());
     });
     $('[data-l1key=configuration][data-l2key=wallAngle]').off('change').on('change', function () {
         refreshWallPlan();
