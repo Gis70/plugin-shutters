@@ -121,15 +121,26 @@ class shutters extends eqLogic
                     $cmd = $existingCmd;
 					break;
 				}
-			}
+            }
+            if($this->getConfiguration('eqType', null) === 'externalConditions') {
+                if(isset($command['configuration']['condition']) && empty($this->getConfiguration($command['configuration']['condition'], null))) {
+                    if($cmd === $existingCmd) {
+                        $cmd->remove();
+                        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully deleted for eqType => '. $_eqType);
+                    }
+                    continue;
+                }
+            }
+        
 			if ($cmd === null || !is_object($cmd)) {
 				$cmd = new shuttersCmd();
 				$cmd->setEqLogic_id($this->getId());
 				utils::a2o($cmd, $command);
 				$cmd->save();
+                log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully added for eqType => '. $_eqType);
 			}
         }
-        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands successfully added for eqType => '. $_eqType);
+        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands import successful for eqType => '. $_eqType);
     }
     
     /*

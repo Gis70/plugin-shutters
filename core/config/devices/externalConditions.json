@@ -9,7 +9,7 @@
 				"eqType": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur incendie.",
-                "condition": "fire"
+                "condition": "fireCondition"
             },
             "logicalId": "externalConditions:fireCondition",
             "isVisible": false,
@@ -23,7 +23,7 @@
 				"eqType": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur absence.",
-                "condition": "absence"
+                "condition": "absenceCondition"
             },
             "logicalId": "externalConditions:absenceCondition",
             "isVisible": false,
@@ -37,7 +37,7 @@
 				"eqType": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur présence.",
-                "condition": "presence"
+                "condition": "presenceCondition"
             },
             "logicalId": "externalConditions:presenceCondition",
             "isVisible": false,
@@ -51,7 +51,7 @@
 				"eqType": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets en fonction de la luminosité extérieure.",
-                "condition": "outdoorLuminosity"
+                "condition": "outdoorLuminosityCondition"
             },
             "logicalId": "externalConditions:outdoorLuminosityCondition",
             "isVisible": false,
@@ -65,7 +65,7 @@
                 "eqType": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets en fonction de la température extérieure.",
-                "condition": "outdoorTemperature"
+                "condition": "outdoorTemperatureCondition"
             },
             "logicalId": "externalConditions:outdoorTemperatureCondition",
             "isVisible": false,

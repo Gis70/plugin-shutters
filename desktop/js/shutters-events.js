@@ -20,7 +20,7 @@ function initEvents () {
     });
 
     /**
-     * Delete a command and it's status
+     * Delete a command
      */
     $('.delCmd').on('click', function () {
         var l2key = $(this).attr('data-l2key');
