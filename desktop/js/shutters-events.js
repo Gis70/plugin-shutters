@@ -78,7 +78,9 @@ function initEvents () {
         refreshWallPlan($('[data-l1key=configuration][data-l2key=wallAngle]').val(), $('[data-l1key=configuration][data-l2key=wallAngleUnit]').val());
     });
 
-    // Shutters group settings events
+    /**
+     *  Shutters group settings events
+     */ 
     $('[data-l1key=configuration][data-l2key=shuttersGroupLink]').off('change').on('change', function () {
         var el = $(this);
         if (el.val() !== 'none' && el.val() !== null) {

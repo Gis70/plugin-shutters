@@ -21,6 +21,38 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
+    if (init('action') === 'listEqByType') {
+        $return['externalConditions'] = array();
+        $return['heliotropeZone'] = array();
+        $return['shuttersGroup'] = array();
+        $return['shutter'] = array();
+		foreach (eqLogic::byType('shutters') as $eqLogic) {
+            if (!is_object($eqLogic)) {
+                continue;
+            }
+            $eqLogicInfo = array(
+                'id' => $eqLogic->getId(),
+                'name' => $eqLogic->getName(),
+                'isEnable' => $eqLogic->getIsEnable(),
+            );
+            switch ($eqLogic->getConfiguration('eqType')) {
+                case 'externalConditions':
+                    $return['externalConditions'][] = $eqLogicInfo;
+                    break;
+                case 'heliotropeZone':
+                    $return['heliotropeZone'][] = $eqLogicInfo;
+                    break;
+                case 'shuttersGroup':
+                    $return['shuttersGroup'][] = $eqLogicInfo;
+                    break;
+                case 'shutter':
+                    $return['shutter'][] = $eqLogicInfo;
+                    break;
+            }
+        }
+        ajax::success($return);
+    }
+
     if (init('action') === 'getCmdStatus') {
         $cmdId = str_replace('#','',cmd::humanReadableToCmd(init('cmd')));
         $cmd = cmd::byId($cmdId);
