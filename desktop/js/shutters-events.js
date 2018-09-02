@@ -81,11 +81,26 @@ function initEvents () {
     /**
      *  Shutters group settings events
      */ 
-    $('[data-l1key=configuration][data-l2key=shuttersGroupId]').off('change').on('change', function () {
-        var el = $(this);
-        if (el.val() !== 'none' && el.val() !== null) {
-            $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', true);
-            $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', true);
+    $('[data-l1key=configuration][data-l2key=shuttersGroupId], [data-l1key=configuration][data-l2key=groupHeritage]').off('change').on('change', function () {
+        var shuttersGroupId = $('[data-l1key=configuration][data-l2key=shuttersGroupId]').val();
+        var groupHeritage = $('[data-l1key=configuration][data-l2key=groupHeritage]').val();
+        if (shuttersGroupId === null || shuttersGroupId === '' || shuttersGroupId === 'none') {
+            $('[data-l1key=configuration][data-l2key=groupHeritage]').attr('disabled', true).val('both');
+        } else {
+            $('[data-l1key=configuration][data-l2key=groupHeritage]').attr('disabled', false);
+        }
+        if (shuttersGroupId !== null && shuttersGroupId !== '' && shuttersGroupId !== 'none' 
+        && groupHeritage !== null && groupHeritage !== '' && groupHeritage !== 'none') {
+            if(groupHeritage === 'both' || groupHeritage === 'externalConditions') {
+                $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', true);
+            } else {
+                $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', false);
+            }
+            if(groupHeritage === 'both' || groupHeritage === 'heliotropeZone') {
+                $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', true);
+            } else {
+                $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', false);
+            }
         } else {
             $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', false);
             $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', false);

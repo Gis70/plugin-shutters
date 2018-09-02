@@ -3,8 +3,8 @@
  */
 function drawWallPlan()
 {
-    var angle = convertAngleToDegree($('#wallAngle').val(), $('#wallAngleUnit').val());
-    
+    var angle = 0;
+
     $('#wallPlan').addLayer({
         type: 'image',
         name: 'wall',
@@ -398,6 +398,8 @@ function drawHeliotropePlan()
 
 /**
  * Refresh wall plan
+ * @param {integer} _angle Angle between wall and north
+ * @param {string} _unit Angle unit
  */
 function refreshWallPlan(_angle = 0, _unit = 'deg') 
 {
@@ -416,7 +418,7 @@ function refreshWallPlan(_angle = 0, _unit = 'deg')
 
 /**
  * Update display of selected dawn or dusk
- * @param {*} _layerName Canvas layer name
+ * @param {String} _layerName Canvas layer name
  */
 function displaySelectedDawnOrDusk(_layerName = null) 
 {
@@ -435,7 +437,7 @@ function displaySelectedDawnOrDusk(_layerName = null)
 
 /**
  * Convert angle to Degree
- * @param {int} _angle Angle value
+ * @param {integer} _angle Angle value
  * @param {string} _unit Unit angle
  */
 function convertAngleToDegree(_angle = 0, _unit = 'deg') 

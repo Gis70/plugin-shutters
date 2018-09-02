@@ -39,11 +39,7 @@ function printEqLogic(_eqLogic) {
             break;
         case 'heliotropeZone':
             drawHeliotropePlan();
-            displaySelectedDawnOrDusk(_eqLogic.configuration.dawnType);
-            displaySelectedDawnOrDusk(_eqLogic.configuration.duskType);
             drawWallPlan();
-            refreshWallPlan(_eqLogic.configuration.wallAngle, _eqLogic.configuration.wallAngleUnit);
-            updateAngleRange(_eqLogic.configuration.wallAngleUnit);
             break;
         case 'shuttersGroup':
             updateEqLogicLists(listEqLogicByType());
@@ -56,9 +52,11 @@ function printEqLogic(_eqLogic) {
     }
         
     $("#cmdTable").sortable({items: ".cmd", axis: "y", tolerance: "intersect", containment: "#cmdTable", placeholder: "ui-state-highlight", forcePlaceholderSize: true, cursor: "move"});
-        
-    $('#settingsPanels').setValues(_eqLogic, '.eqLogicAttr'); 
+
     initEvents();
+
+    $('#settingsPanels').setValues(_eqLogic, '.eqLogicAttr'); 
+
 }
 
 function saveEqLogic(_eqLogic) {
@@ -73,8 +71,9 @@ function saveEqLogic(_eqLogic) {
         case 'shuttersGroup':
             break;
         case 'shutter':
-            if (_eqLogic.configuration.shuttersGroupId !== 'none' && _eqLogic.configuration.shuttersGroupId !== null) {
-                $eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
+        if (_eqLogic.configuration.shuttersGroupId !== null && _eqLogic.configuration.shuttersGroupId !== '' 
+        && _eqLogic.configuration.shuttersGroupId !== 'none') {
+            $eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
                 _eqLogic.configuration.externalConditionsId = $eqLogic.configuration.externalConditionsId;
                 _eqLogic.configuration.heliotropeZoneId = $eqLogic.configuration.heliotropeZoneId;
             }

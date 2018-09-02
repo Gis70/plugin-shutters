@@ -454,7 +454,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<form class="form-horizontal">';
             div += '<div class="col-sm-6">';
             div += '<div class="form-group">';
-            div += '<label class="col-sm-3 control-label">{{Infos externes}}</label>';
+            div += '<label class="col-sm-3 control-label">{{Conditions externes}}</label>';
             div += '<div class="col-sm-5">';
             div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="externalConditionsId">';
             div += '</select>';
@@ -473,6 +473,17 @@ function displaySettingsPanels(_eqLogic) {
             div += '<label class="col-sm-3 control-label">{{Groupe de volets}}</label>';
             div += '<div class="col-sm-5">';
             div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="shuttersGroupId">';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Héritage du groupe}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="groupHeritage">';
+            div += '<option value="both" selected>{{Conditions externes et heliotrope}}</option>';
+            div += '<option value="none">{{Rien}}</option>';
+            div += '<option value="externalConditions">{{Conditions externes}}</option>';
+            div += '<option value="heliotropeZone">{{Zone héliotrope}}</option>';
             div += '</select>';
             div += '</div>';
             div += '</div>';
