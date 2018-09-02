@@ -107,13 +107,13 @@ function initEvents () {
         }
     });
 
-    // Shutter settings events
+    /**
+     *  Shutter settings events
+     */ 
     $('[data-l1key=configuration][data-l2key=shutterPositionType]').off('change').on('change', function () {
-        var el = $(this);
-        displaySettings(el.attr('data-settinggroup'), el.val());
+        displaySettings($(this).attr('data-displaygroup'), $(this).val());
     });
     $('[data-l1key=configuration][data-l2key=shutterCmdType]').off('change').on('change', function () {
-        var el = $(this);
-        displaySettings(el.attr('data-settinggroup'), el.val());
+        displaySettings($(this).attr('data-displaygroup'), $(this).val());
     });
 }

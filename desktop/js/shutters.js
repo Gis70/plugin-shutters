@@ -199,13 +199,13 @@ function updateAngleRange (_unit = 'deg') {
 
 /**
  * Display setting fieldset corresponding to object type
- * @param {string} _settingGroup 
- * @param {string} _settingType
+ * @param {string} _displayGroup 
+ * @param {string} _displayValue
  */
-function displaySettings (_settingGroup = null, _settingType = null) {
-    if (_settingGroup !== null && _settingType !== null) {
-        $('fieldset[data-settinggroup=' + _settingGroup + ']').css('display', 'none');
-        $('fieldset[data-settinggroup=' + _settingGroup + '][data-settingtype~=' + _settingType + ']').css('display', 'block');
+function displaySettings (_displayGroup = null, _displayValue = null) {
+    if (_displayGroup !== null && _displayValue !== null) {
+        $('fieldset[data-displaygroup=' + _displayGroup + ']').css('display', 'none');
+        $('fieldset[data-displaygroup=' + _displayGroup + '][data-displayvalue~=' + _displayValue + ']').css('display', 'block');
     }
 }
 
