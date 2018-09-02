@@ -570,7 +570,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</select>';
             div += '</div>';
             div += '</div>';
-            div += '<fieldset class="display-none" data-displaygroup="shutterPositionType" data-displayvalue="analogPosition">  ';
+            div += '<fieldset data-displaygroup="shutterPositionType" data-displayvalue="analogPosition">  ';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Position du volet}}</label>';
             div += '<div class="col-sm-5">';
@@ -612,7 +612,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '</fieldset>';
-            div += '<fieldset class="display-none" data-displaygroup="shutterPositionType" data-displayvalue="closedOpenedPositions closedPosition">  ';
+            div += '<fieldset data-displaygroup="shutterPositionType" data-displayvalue="closedOpenedPositions closedPosition">  ';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Position volet fermé}}</label>';
             div += '<div class="col-sm-5">';
@@ -642,7 +642,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '</fieldset>';
-            div += '<fieldset class="display-none" data-displaygroup="shutterPositionType" data-displayvalue="closedOpenedPositions openedPosition">';
+            div += '<fieldset data-displaygroup="shutterPositionType" data-displayvalue="closedOpenedPositions openedPosition">';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Position volet ouvert}}</label>';
             div += '<div class="col-sm-5">';
@@ -672,7 +672,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '</fieldset>';
-            div += '<fieldset class="display-none" data-displaygroup="shutterPositionType" data-displayvalue="closedOpenedPositions closedPosition openedPosition">';
+            div += '<fieldset data-displaygroup="shutterPositionType" data-displayvalue="closedOpenedPositions closedPosition openedPosition">';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Synchro position virtuelle}}</label>';
             div += '<div class="col-sm-5">';
@@ -694,7 +694,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</select>';
             div += '</div>';
             div += '</div>';
-            div += '<fieldset class="display-none" data-displaygroup="shutterCmdType" data-displayvalue="analogPositionCmd">';
+            div += '<fieldset data-displaygroup="shutterCmdType" data-displayvalue="analogPositionCmd">';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Commande analogique}}</label>';
             div += '<div class="col-sm-5">';
@@ -736,7 +736,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '</fieldset>';
-            div += '<fieldset class="display-none" data-displaygroup="shutterCmdType" data-displayvalue="OpenCloseStopCmd">  ';
+            div += '<fieldset data-displaygroup="shutterCmdType" data-displayvalue="OpenCloseStopCmd">  ';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Commande fermeture}}</label>';
             div += '<div class="col-sm-5">';
