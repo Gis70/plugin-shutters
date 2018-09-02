@@ -35,7 +35,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="fireCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="fireCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="fireCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd" data-type="info" data-l2key="fireCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -44,7 +44,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-4">';
-            div += '<div id="fireConditionStatus" class="input-group">';
+            div += '<div class="input-group">';
             div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="fireConditionStatus" placeholder="{{Valider le statut}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default getCmdStatus cursor" data-l2key="fireConditionStatus" data-cmdl2key="fireCondition">';
@@ -63,7 +63,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="absenceCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="absenceCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="absenceCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="absenceCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -72,7 +72,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-4">';
-            div += '<div id="absenceConditionStatus" class="input-group">';
+            div += '<div class="input-group">';
             div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="absenceConditionStatus" placeholder="{{Valider le statut}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default getCmdStatus cursor" data-l2key="absenceConditionStatus" data-cmdl2key="absenceCondition">';
@@ -104,7 +104,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="presenceCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="presenceCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="presenceCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="presenceCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -113,7 +113,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-4">';
-            div += '<div id="presenceConditionStatus" class="input-group">';
+            div += '<div class="input-group">';
             div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="presenceConditionStatus" placeholder="{{Valider le statut}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default getCmdStatus cursor" data-l2key="presenceConditionStatus" data-cmdl2key="presenceCondition">';
@@ -146,7 +146,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="outdoorLuminosityCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="outdoorLuminosityCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -155,10 +155,10 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorLuminosityThreshold" type="number" min="0" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityThreshold"/>';
+            div += '<input type="number" min="0" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityThreshold"/>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorLuminosityHysteresis" type="number" min="0" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityHysteresis"/>';
+            div += '<input type="number" min="0" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorLuminosityHysteresis"/>';
             div += '</div>';
             div += '</div>';
             div += '<div class="form-group">';
@@ -170,7 +170,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="outdoorTemperatureCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="outdoorTemperatureCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -179,10 +179,10 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorTemperatureThreshold" type="number" min="-20" max="20" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureThreshold"/>';
+            div += '<input type="number" min="-20" max="20" value="0" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureThreshold"/>';
             div += '</div>';
             div += '<div class="col-sm-2">';
-            div += '<input id="outdoorTemperatureHysteresis" type="number" min="1" max="5" value="1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
+            div += '<input type="number" min="1" max="5" value="1" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="outdoorTemperatureHysteresis"/>';
             div += '</div>';
             div += '</div>';
             div += '</div>';
@@ -217,7 +217,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="firstUserCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="firstUserCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="firstUserCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="firstUserCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -226,7 +226,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-4">';
-            div += '<div id="firstUserConditionStatus" class="input-group">';
+            div += '<div class="input-group">';
             div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="firstUserConditionStatus" placeholder="{{Valider le statut}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default getCmdStatus cursor" data-l2key="firstUserConditionStatus" data-cmdl2key="firstUserCondition">';
@@ -245,7 +245,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<i class="fa fa-minus-circle"></i>';
             div += '</a>';
             div += '</span>';
-            div += '<input id="secondUserCondition" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondUserCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondUserCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="secondUserCondition">';
             div += '<i class="fa fa-list"></i>';
@@ -254,7 +254,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '<div class="col-sm-4">';
-            div += '<div id="secondUserConditionStatus" class="input-group">';
+            div += '<div class="input-group">';
             div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="secondUserConditionStatus" placeholder="{{Valider le statut}}" disabled/>';
             div += '<span class="input-group-btn">';
             div += '<a class="btn btn-default getCmdStatus cursor" data-l2key="secondUserConditionStatus" data-cmdl2key="secondUserCondition">';
@@ -493,6 +493,64 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';                          
             
+            div += '<div class="panel panel-default">';
+            div += '<div class="panel-heading">';
+            div += '<h4 class="panel-title">';
+            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel2"> {{Type d\'ouvrant}} </a>';
+            div += '</h4>';
+            div += '</div>';
+            div += '<div id="settingsPanel2" class="panel-collapse collapse">';
+            div += '<div class="panel-body"> ';
+            div += '<form class="form-horizontal">';
+            div += '<div class="col-sm-6">';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Type d\'ouvrant}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="openingType">';
+            div += '<option value="window" selected>{{Fenêtre}}</option>';
+            div += '<option value="door">{{Porte}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';  
+            div += '<div class="col-sm-6">';               
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Information ouvrant ouvert}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<div class="input-group">';
+            div += '<span class="input-group-btn">';
+            div += '<a class="btn btn-default delCmd cursor" data-l2key="openingCondition">';
+            div += '<i class="fa fa-minus-circle"></i>';
+            div += '</a>';
+            div += '</span>';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="openingCondition" placeholder="{{Sélectionner une commande}}" disabled/>';
+            div += '<span class="input-group-btn">';
+            div += '<a class="btn btn-default listCmd cursor" data-type="info" data-l2key="openingCondition">';
+            div += '<i class="fa fa-list"></i>';
+            div += '</a>';
+            div += '</span>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-4">';
+            div += '<div class="input-group">';
+            div += '<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="openingConditionStatus" placeholder="{{Valider le statut}}" disabled/>';
+            div += '<span class="input-group-btn">';
+            div += '<a class="btn btn-default getCmdStatus cursor" data-l2key="openingConditionStatus" data-cmdl2key="openingCondition">';
+            div += '<span class="fa fa-check-circle"></span>';
+            div += '</a>';
+            div += '</span>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            div += '</form>';   
+            div += '</div>';
+            div += '</div>';
+            div += '</div>';
+            
+
+
+
             div += '</div>';
 
             break;
