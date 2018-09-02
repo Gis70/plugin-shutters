@@ -31,6 +31,7 @@ function printEqLogic(_eqLogic) {
     }
 
     displaySettingsPanels(_eqLogic);
+    updateInputRangeMinMax ();
     displayCommandsPanels(_eqLogic);
     
     switch(_eqLogic.configuration.eqType) {
@@ -71,8 +72,8 @@ function saveEqLogic(_eqLogic) {
         case 'shuttersGroup':
             break;
         case 'shutter':
-        if (_eqLogic.configuration.shuttersGroupId !== null && _eqLogic.configuration.shuttersGroupId !== '' 
-        && _eqLogic.configuration.shuttersGroupId !== 'none') {
+        if (_eqLogic.configuration.shuttersGroupId !== undefined && _eqLogic.configuration.shuttersGroupId !== null
+        && _eqLogic.configuration.shuttersGroupId !== '' && _eqLogic.configuration.shuttersGroupId !== 'none') {
             $eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
                 _eqLogic.configuration.externalConditionsId = $eqLogic.configuration.externalConditionsId;
                 _eqLogic.configuration.heliotropeZoneId = $eqLogic.configuration.heliotropeZoneId;
@@ -214,9 +215,9 @@ function displaySettings (_displayGroup = null, _displayValue = null) {
  */
 function updateInputRangeMinMax () {
     $('input[type=range]').each(function () {
-        var element = $(this);
-        element.prev('span.input-group-addon').html(element.attr('min') + '%');
-        element.next('span.input-group-addon').html(element.attr('max') + '%');
+        var el = $(this);
+        el.prev('span.input-group-addon').html(el.attr('min') + '%');
+        el.next('span.input-group-addon').html(el.attr('max') + '%');
     })
 }
 
