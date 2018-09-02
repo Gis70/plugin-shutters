@@ -397,6 +397,94 @@ function drawHeliotropePlan()
 }
 
 /**
+ * Draw wall plan
+ */
+function drawAzimutPlan()
+{
+    var angle = 0;
+
+    $('#azimutPlan').addLayer({
+        type: 'image',
+        name: 'wall',
+        source: 'plugins/shutters/resources/images/window.png',
+        rotate: angle - 90,
+        x: 0, y: 0,
+        fromCenter: false
+    })
+    .addLayer({
+        type: 'line',
+        strokeStyle: '#d9534f',
+        strokeWidth: 5,
+        rounded: true,
+        endArrow: true,
+        arrowRadius: 15,
+        arrowAngle: 90,
+        x1: 200, y1: 200,
+        x2: 200, y2: 50
+    })
+    .addLayer({
+        type: 'text',
+        fillStyle: '#d9534f',
+        x: 200, y: 20,
+        fontSize: '20pt',
+        align: 'center',
+        text: 'Nord'
+    })
+    .addLayer({
+        type: 'vector',
+        name: 'axe',
+        strokeStyle: '#d9534f',
+        strokeWidth: 5,
+        strokeDash: [10],
+        strokeDashOffset: 0,
+        rounded: true,
+        x: 200, y: 200,
+        a1: angle,
+        l1: 150
+    })
+    .addLayer({
+        type: 'arc',
+        name: 'arc',
+        strokeStyle: '#d9534f',
+        strokeWidth: 1,
+        strokeDash: [4],
+        strokeDashOffset: 0,
+        rounded: true,
+        x: 200, y: 200,
+        radius: 50,
+        start: 0,
+        end:  angle
+    })
+        .addLayer({
+        type: 'vector',
+        name: 'incomingAngle',
+        strokeStyle: '#4773BB',
+        strokeWidth: 5,
+        rounded: true,
+        endArrow: true,
+        arrowRadius: 15,
+        arrowAngle: 90,
+        x: 200, y: 200,
+        a1: angle,
+        l1: 150
+    })
+    .addLayer({
+        type: 'vector',
+        name: 'outgoingAngle',
+        strokeStyle: '#4773BB',
+        strokeWidth: 5,
+        rounded: true,
+        endArrow: true,
+        arrowRadius: 15,
+        arrowAngle: 90,
+        x: 200, y: 200,
+        a1: angle,
+        l1: 150
+    })
+    .drawLayers();
+}
+
+/**
  * Refresh wall plan
  * @param {integer} _angle Angle between wall and north
  * @param {string} _unit Angle unit

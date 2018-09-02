@@ -46,6 +46,7 @@ function printEqLogic(_eqLogic) {
             updateEqLogicLists(listEqLogicByType());
             break;
         case 'shutter':
+            drawAzimutPlan();
             updateEqLogicLists(listEqLogicByType());
             break;
         default:

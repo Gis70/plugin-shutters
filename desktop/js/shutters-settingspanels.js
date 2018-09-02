@@ -802,10 +802,10 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">';
-            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel3"> {{Azimut - }} </a>';
+            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel4"> {{Azimut - }} </a>';
             div += '</h4>';
             div += '</div>';
-            div += '<div id="settingsPanel3" class="panel-collapse collapse">';
+            div += '<div id="settingsPanel4" class="panel-collapse collapse">';
             div += '<div class="panel-body">';
             div += '<form class="form-horizontal">';
             div += '<div class="col-sm-6">';
@@ -814,7 +814,11 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="col-sm-12">';
             div += '<h4 class="text-center">Courbe de réglage des temps de déplacement du volet</h4>  ';
             div += '</div>';
-            div += '<canvas id="azimut" width="400" height="400"></canvas> ';
+            div += '<div class="form-group">';
+            div += '<div class="col-sm-6 col-sm-offset-3">';
+            div += '<canvas id="azimutPlan" width="400" height="400"></canvas> ';
+            div += '</div>';
+            div += '</div>';
 
             div += '</div>';
 
@@ -822,9 +826,14 @@ function displaySettingsPanels(_eqLogic) {
 
             div += '<div class="col-sm-6">';
             div += '<div class="form-group">';
-            div += '<div class="col-sm-12">';
-            div += '<h4 class="text-center">Courbe de réglage des temps de déplacement du volet</h4>  ';
+            div += '<div class="col-sm-6">';
+            div += '<h5 class="text-center"><span class="label label-default">{{Courbe de réglages de la durée de mouvement du volet}}</span></h5>';  
             div += '</div>';
+            div += '<div class="col-sm-6">';
+            div += '<h5 class="text-center"><span class="label label-default">{{Valeur de réglages}}</span></h5>';  
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="form-group">';
             div += '<div class="col-sm-6">';
             div += '<canvas id="shutterClosingMvtTimeCurve" width="400" height="400"></canvas> ';
             div += '</div>';
