@@ -457,7 +457,33 @@ function drawAzimutPlan()
     })
         .addLayer({
         type: 'vector',
-        name: 'incomingAngle',
+        name: 'incomingAngleVector',
+        strokeStyle: '#4773BB',
+        strokeWidth: 5,
+        rounded: true,
+        endArrow: true,
+        arrowRadius: 15,
+        arrowAngle: 90,
+        x: 200, y: 200,
+        a1: angle + 180,
+        l1: 150
+    })
+    .addLayer({
+        type: 'arc',
+        name: 'incomingAngleArc',
+        strokeStyle: '#4773BB',
+        strokeWidth: 1,
+        strokeDash: [4],
+        strokeDashOffset: 0,
+        rounded: true,
+        x: 200, y: 200,
+        radius: 70,
+        start: angle + 180,
+        end:  angle
+    })
+      .addLayer({
+        type: 'vector',
+        name: 'outgoingAngleVector',
         strokeStyle: '#4773BB',
         strokeWidth: 5,
         rounded: true,
@@ -469,17 +495,17 @@ function drawAzimutPlan()
         l1: 150
     })
     .addLayer({
-        type: 'vector',
-        name: 'outgoingAngle',
+        type: 'arc',
+        name: 'outgoingAngleArc',
         strokeStyle: '#4773BB',
-        strokeWidth: 5,
+        strokeWidth: 1,
+        strokeDash: [4],
+        strokeDashOffset: 0,
         rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
         x: 200, y: 200,
-        a1: angle,
-        l1: 150
+        radius: 60,
+        start: angle,
+        end:  angle
     })
     .drawLayers();
 }
