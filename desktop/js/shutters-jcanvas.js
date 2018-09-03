@@ -13,30 +13,29 @@ function drawWallPlan()
         x: 0, y: 0,
         fromCenter: false
     })
+	.addLayer({
+        type: 'image',
+        name: 'compass',
+        source: 'plugins/shutters/resources/images/compass.png',
+        x: 30, y: 30,
+        fromCenter: true
+    })
     .addLayer({
         type: 'line',
         strokeStyle: '#d9534f',
-        strokeWidth: 5,
+        strokeWidth: 3,
         rounded: true,
         endArrow: true,
-        arrowRadius: 15,
+        arrowRadius: 10,
         arrowAngle: 90,
         x1: 200, y1: 200,
         x2: 200, y2: 50
     })
     .addLayer({
-        type: 'text',
-        fillStyle: '#d9534f',
-        x: 200, y: 20,
-        fontSize: '20pt',
-        align: 'center',
-        text: 'Nord'
-    })
-    .addLayer({
         type: 'vector',
         name: 'axe',
         strokeStyle: '#d9534f',
-        strokeWidth: 5,
+        strokeWidth: 3,
         strokeDash: [10],
         strokeDashOffset: 0,
         rounded: true,
@@ -58,6 +57,26 @@ function drawWallPlan()
         end:  angle
     })
     .drawLayers();
+}
+
+/**
+ * Refresh wall plan
+ * @param {integer} _angle Angle between wall and north
+ * @param {string} _unit Angle unit
+ */
+function refreshWallPlan(_angle = 0, _unit = 'deg') 
+{
+    var angle = convertAngleToDegree(_angle, _unit);
+    $('#wallPlan').setLayer('wall', {
+            rotate: angle - 90
+        })
+        .setLayer('axe', {
+            a1: angle
+        })
+        .setLayer('arc', {
+            end:  convertAngleToDegree(_angle, _unit)
+        })
+        .drawLayers();  
 }
 
 /**
@@ -397,140 +416,6 @@ function drawHeliotropePlan()
 }
 
 /**
- * Draw wall plan
- */
-function drawAzimutPlan()
-{
-    var angle = 0;
-
-    $('#azimutPlan').addLayer({
-        type: 'image',
-        name: 'wall',
-        source: 'plugins/shutters/resources/images/window.png',
-        rotate: angle - 90,
-        x: 0, y: 0,
-        fromCenter: false
-    })
-    .addLayer({
-        type: 'line',
-        strokeStyle: '#d9534f',
-        strokeWidth: 5,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x1: 200, y1: 200,
-        x2: 200, y2: 50
-    })
-    .addLayer({
-        type: 'text',
-        fillStyle: '#d9534f',
-        x: 200, y: 20,
-        fontSize: '20pt',
-        align: 'center',
-        text: 'Nord'
-    })
-    .addLayer({
-        type: 'vector',
-        name: 'axe',
-        strokeStyle: '#d9534f',
-        strokeWidth: 5,
-        strokeDash: [10],
-        strokeDashOffset: 0,
-        rounded: true,
-        x: 200, y: 200,
-        a1: angle,
-        l1: 150
-    })
-    .addLayer({
-        type: 'arc',
-        name: 'arc',
-        strokeStyle: '#d9534f',
-        strokeWidth: 1,
-        strokeDash: [4],
-        strokeDashOffset: 0,
-        rounded: true,
-        x: 200, y: 200,
-        radius: 50,
-        start: 0,
-        end:  angle
-    })
-        .addLayer({
-        type: 'vector',
-        name: 'incomingAngleVector',
-        strokeStyle: '#4773BB',
-        strokeWidth: 5,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 200, y: 200,
-        a1: angle + 180,
-        l1: 150
-    })
-    .addLayer({
-        type: 'arc',
-        name: 'incomingAngleArc',
-        strokeStyle: '#4773BB',
-        strokeWidth: 1,
-        strokeDash: [4],
-        strokeDashOffset: 0,
-        rounded: true,
-        x: 200, y: 200,
-        radius: 70,
-        start: angle + 180,
-        end:  angle
-    })
-      .addLayer({
-        type: 'vector',
-        name: 'outgoingAngleVector',
-        strokeStyle: '#4773BB',
-        strokeWidth: 5,
-        rounded: true,
-        endArrow: true,
-        arrowRadius: 15,
-        arrowAngle: 90,
-        x: 200, y: 200,
-        a1: angle,
-        l1: 150
-    })
-    .addLayer({
-        type: 'arc',
-        name: 'outgoingAngleArc',
-        strokeStyle: '#4773BB',
-        strokeWidth: 1,
-        strokeDash: [4],
-        strokeDashOffset: 0,
-        rounded: true,
-        x: 200, y: 200,
-        radius: 60,
-        start: angle,
-        end:  angle
-    })
-    .drawLayers();
-}
-
-/**
- * Refresh wall plan
- * @param {integer} _angle Angle between wall and north
- * @param {string} _unit Angle unit
- */
-function refreshWallPlan(_angle = 0, _unit = 'deg') 
-{
-    var angle = convertAngleToDegree(_angle, _unit);
-    $('#wallPlan').setLayer('wall', {
-            rotate: angle - 90
-        })
-        .setLayer('axe', {
-            a1: angle
-        })
-        .setLayer('arc', {
-            end:  convertAngleToDegree(_angle, _unit)
-        })
-        .drawLayers();  
-}
-
-/**
  * Update display of selected dawn or dusk
  * @param {String} _layerName Canvas layer name
  */
@@ -547,6 +432,62 @@ function displaySelectedDawnOrDusk(_layerName = null)
     element.animateLayerGroup(deselectedGroupName, {
         fillStyle: '#FEE200'
     });
+}
+
+/**
+ * Draw wall plan
+ */
+function drawAzimutPlan(_angle = 0)
+{
+    var angle = _angle;
+
+    $('#azimutPlan').addLayer({
+        type: 'image',
+        name: 'wall',
+        source: 'plugins/shutters/resources/images/window.png',
+        rotate: angle - 90,
+        x: 0, y: 0,
+        fromCenter: false
+    })
+	.addLayer({
+        type: 'image',
+        name: 'compass',
+        source: 'plugins/shutters/resources/images/compass.png',
+        x: 30, y: 30,
+        fromCenter: true
+    })
+    .addLayer({
+        type: 'image',
+		name: 'sun',
+        source: 'plugins/shutters/resources/images/sun1.png',
+        x: parseInt(200 - (150 * (Math.cos(angle * Math.PI / 180)))), 
+      	y: parseInt(200 - (150 * (Math.sin(angle * Math.PI / 180)))),
+        scale: 0.15,
+        fromCenter: true
+    })
+    .addLayer({
+        type: 'slice',
+        name: 'test',
+        fillStyle: '#FEE200',
+      	opacity: 0.5,
+        x: parseInt(200 - (12 * (Math.cos(angle * Math.PI / 180)))), 
+      	y: parseInt(200 - (12 * (Math.sin(angle * Math.PI / 180)))),
+        start: 180 + angle,
+      	end: 360 + angle,
+        radius: 100,
+        spread: 0 / 40
+    })
+    .drawLayers();
+}
+
+
+function refreshAzimutPlan(_incomingAngle = 0, _outgoingAngle = 0, _wallAngle = 0)
+{
+      $('#wallPlan').setLayer('azimutZone', {
+        start: _incomingAngle + _wallAngle,
+      	end: _outgoingAngle + _wallAngle
+        })
+        .drawLayers();  
 }
 
 /**

@@ -116,4 +116,11 @@ function initEvents () {
     $('[data-l1key=configuration][data-l2key=shutterCmdType]').off('change').on('change', function () {
         displaySettings($(this).attr('data-displaygroup'), $(this).val());
     });
+    $('[data-l1key=configuration][data-l2key=incomingAngle], [data-l1key=configuration][data-l2key=outgoingAngle]').off('change').on('change', function () {
+        var incomingAngle = $('[data-l1key=configuration][data-l2key=incomingAngle]').val();
+        var outgoingAngle = $('[data-l1key=configuration][data-l2key=outgoingAngle]').val();
+        var wallAngle = sessionStorage.getItem('wallAngle');
+        refreshAzimutPlan(incomingAngle, outgoingAngle, wallAngle);
+    });
+
 }
