@@ -84,25 +84,21 @@ function initEvents () {
     $('[data-l1key=configuration][data-l2key=shuttersGroupId], [data-l1key=configuration][data-l2key=groupHeritage]').off('change').on('change', function () {
         var shuttersGroupId = $('[data-l1key=configuration][data-l2key=shuttersGroupId]').val();
         var groupHeritage = $('[data-l1key=configuration][data-l2key=groupHeritage]').val();
-        if (shuttersGroupId === null || shuttersGroupId === '' || shuttersGroupId === 'none') {
+        if (!Number.isInteger(Number.parseInt(shuttersGroupId, 10))) {
             $('[data-l1key=configuration][data-l2key=groupHeritage]').attr('disabled', true).val('both');
         } else {
             $('[data-l1key=configuration][data-l2key=groupHeritage]').attr('disabled', false);
         }
-        if (shuttersGroupId !== null && shuttersGroupId !== '' && shuttersGroupId !== 'none' 
-        && groupHeritage !== null && groupHeritage !== '' && groupHeritage !== 'none') {
-            if(groupHeritage === 'both' || groupHeritage === 'externalConditions') {
-                $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', true);
-            } else {
-                $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', false);
-            }
-            if(groupHeritage === 'both' || groupHeritage === 'heliotropeZone') {
-                $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', true);
-            } else {
-                $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', false);
-            }
+        if(Number.isInteger(Number.parseInt(shuttersGroupId, 10))
+        && (groupHeritage === 'both' || groupHeritage === 'externalConditions')) {
+            $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', true);
         } else {
             $('[data-l1key=configuration][data-l2key=externalConditionsId]').attr('disabled', false);
+        }
+        if(Number.isInteger(Number.parseInt(shuttersGroupId, 10))
+        && (groupHeritage === 'both' || groupHeritage === 'heliotropeZone')) {
+            $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', true);
+        } else {
             $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').attr('disabled', false);
         }
     });
@@ -110,6 +106,13 @@ function initEvents () {
     /**
      *  Shutter settings events
      */ 
+    $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').off('change').on('change', function () {
+        if(Number.isInteger(Number.parseInt($(this).val(), 10))) {
+            $('fieldset[data-displaygroup=azimutPlan]').css('visibility', 'visible');
+        } else {
+            $('fieldset[data-displaygroup=azimutPlan]').css('visibility', 'hidden');
+        }
+    });
     $('[data-l1key=configuration][data-l2key=shutterPositionType]').off('change').on('change', function () {
         displaySettings($(this).attr('data-displaygroup'), $(this).val());
     });
@@ -117,9 +120,9 @@ function initEvents () {
         displaySettings($(this).attr('data-displaygroup'), $(this).val());
     });
     $('[data-l1key=configuration][data-l2key=incomingAngle], [data-l1key=configuration][data-l2key=outgoingAngle]').off('change').on('change', function () {
-        var incomingAngle = $('[data-l1key=configuration][data-l2key=incomingAngle]').val();
-        var outgoingAngle = $('[data-l1key=configuration][data-l2key=outgoingAngle]').val();
-        var wallAngle = parseInt(sessionStorage.getItem('wallAngle'));
+        var incomingAngle = Number.parseInt($('[data-l1key=configuration][data-l2key=incomingAngle]').val(), 10);
+        var outgoingAngle = Number.parseInt($('[data-l1key=configuration][data-l2key=outgoingAngle]').val(), 10);
+        var wallAngle = Number.parseInt(sessionStorage.getItem('wallAngle'), 10);
         refreshAzimutPlan(incomingAngle, outgoingAngle, wallAngle);
     });
 

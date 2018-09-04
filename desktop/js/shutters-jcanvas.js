@@ -267,8 +267,8 @@ function drawHeliotropePlan()
         strokeStyle: '#FEE200',
         strokeWidth: 1,
         fillStyle: '#FEE200',
-        x: parseInt(200 + (150 * (Math.cos(6 * Math.PI / 180)))),
-        y: parseInt(200 + (150 * (Math.sin(6 * Math.PI / 180)))),
+        x: Number.parseInt(200 + (150 * (Math.cos(6 * Math.PI / 180))), 10),
+        y: Number.parseInt(200 + (150 * (Math.sin(6 * Math.PI / 180))), 10),
         radius: 5,
         cursors: {mouseover: 'pointer'},
         click: function() {
@@ -288,8 +288,8 @@ function drawHeliotropePlan()
         strokeStyle: '#FEE200',
         strokeWidth: 1,
         fillStyle: '#FEE200',
-        x: parseInt(200 + (150 * (Math.cos(12 * Math.PI / 180)))),
-        y: parseInt(200 + (150 * (Math.sin(12 * Math.PI / 180)))),
+        x: Number.parseInt(200 + (150 * (Math.cos(12 * Math.PI / 180))), 10),
+        y: Number.parseInt(200 + (150 * (Math.sin(12 * Math.PI / 180))), 10),
         radius: 5,
         cursors: {mouseover: 'pointer'},
         click: function() {
@@ -309,8 +309,8 @@ function drawHeliotropePlan()
         strokeStyle: '#FEE200',
         strokeWidth: 1,
         fillStyle: '#FEE200',
-        x: parseInt(200 + (150 * (Math.cos(18 * Math.PI / 180)))),
-        y: parseInt(200 + (150 * (Math.sin(18 * Math.PI / 180)))),
+        x: Number.parseInt(200 + (150 * (Math.cos(18 * Math.PI / 180))), 10),
+        y: Number.parseInt(200 + (150 * (Math.sin(18 * Math.PI / 180))), 10),
         radius: 5,
         cursors: {mouseover: 'pointer'},
         click: function() {
@@ -350,8 +350,8 @@ function drawHeliotropePlan()
         strokeStyle: '#FEE200',
         strokeWidth: 1,
         fillStyle: '#FEE200',
-        x: parseInt(200 + (150 * (Math.cos(174 * Math.PI / 180)))),
-        y: parseInt(200 + (150 * (Math.sin(174 * Math.PI / 180)))),
+        x: Number.parseInt(200 + (150 * (Math.cos(174 * Math.PI / 180))), 10),
+        y: Number.parseInt(200 + (150 * (Math.sin(174 * Math.PI / 180))), 10),
         radius: 5,
         cursors: {mouseover: 'pointer'},
         click: function() {
@@ -371,8 +371,8 @@ function drawHeliotropePlan()
         strokeStyle: '#FEE200',
         strokeWidth: 1,
         fillStyle: '#FEE200',
-        x: parseInt(200 + (150 * (Math.cos(168 * Math.PI / 180)))),
-        y: parseInt(200 + (150 * (Math.sin(168 * Math.PI / 180)))),
+        x: Number.parseInt(200 + (150 * (Math.cos(168 * Math.PI / 180))), 10),
+        y: Number.parseInt(200 + (150 * (Math.sin(168 * Math.PI / 180))), 10),
         radius: 5,
         cursors: {mouseover: 'pointer'},
         click: function() {
@@ -392,8 +392,8 @@ function drawHeliotropePlan()
         strokeStyle: '#FEE200',
         strokeWidth: 1,
         fillStyle: '#FEE200',
-        x: parseInt(200 + (150 * (Math.cos(162 * Math.PI / 180)))),
-        y: parseInt(200 + (150 * (Math.sin(162 * Math.PI / 180)))),
+        x: Number.parseInt(200 + (150 * (Math.cos(162 * Math.PI / 180))), 10),
+        y: Number.parseInt(200 + (150 * (Math.sin(162 * Math.PI / 180))), 10),
         radius: 5,
         cursors: {mouseover: 'pointer'},
         click: function() {
@@ -460,8 +460,8 @@ function drawAzimutPlan(_angle = 0)
         type: 'image',
 		name: 'sun',
         source: 'plugins/shutters/resources/images/sun1.png',
-        x: parseInt(200 - (150 * (Math.cos(angle * Math.PI / 180)))), 
-      	y: parseInt(200 - (150 * (Math.sin(angle * Math.PI / 180)))),
+        x: Number.parseInt(200 - (150 * (Math.cos(angle * Math.PI / 180))), 10), 
+      	y: Number.parseInt(200 - (150 * (Math.sin(angle * Math.PI / 180))), 10),
         scale: 0.15,
         fromCenter: true
     })
@@ -470,8 +470,8 @@ function drawAzimutPlan(_angle = 0)
         name: 'azimutZone',
         fillStyle: '#FEE200',
       	opacity: 0.5,
-        x: parseInt(200 - (12 * (Math.cos(angle * Math.PI / 180)))), 
-      	y: parseInt(200 - (12 * (Math.sin(angle * Math.PI / 180)))),
+        x: Number.parseInt(200 - (12 * (Math.cos(angle * Math.PI / 180))), 10), 
+      	y: Number.parseInt(200 - (12 * (Math.sin(angle * Math.PI / 180))), 10),
         start: 180 + angle,
       	end: angle,
         radius: 100,
@@ -489,8 +489,8 @@ function drawAzimutPlan(_angle = 0)
 function refreshAzimutPlan(_incomingAngle = 0, _outgoingAngle = 0, _wallAngle = 0)
 {
       $('#azimutPlan').setLayer('azimutZone', {
-        start: _incomingAngle + _wallAngle + 180,
-      	end: _outgoingAngle + _wallAngle
+        start: _wallAngle + 180 + _incomingAngle,
+      	end: _wallAngle - _outgoingAngle 
         })
         .drawLayers();  
 }
@@ -504,9 +504,9 @@ function convertAngleToDegree(_angle = 0, _unit = 'deg')
 {
     switch (_unit) {
         case 'deg':
-            return parseInt(_angle);
+            return Number.parseInt(_angle, 10);
         case 'gon':
-            return parseInt(_angle) * 0.9;
+            return Number.parseInt(_angle, 10) * 0.9;
         default:
             return 0;
     }

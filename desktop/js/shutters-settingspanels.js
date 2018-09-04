@@ -808,44 +808,6 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div id="settingsPanel4" class="panel-collapse collapse">';
             div += '<div class="panel-body">';
             div += '<form class="form-horizontal">';
-            div += '<div class="col-sm-6">';
-
-            div += '<div class="form-group">';
-            div += '<div class="col-sm-6">';
-            div += '<div class="col-sm-offset-4">';
-            div += '<h5 class="text-center"><span class="label label-default">{{Angles azimut}}</span></h5>';  
-            div += '</div>';
-            div += '</div>';
-            div += '<div class="col-sm-6">';
-            div += '<h5 class="text-center"><span class="label label-default">{{Plan azimut}}</span></h5>';  
-            div += '</div>';
-            div += '</div>';
-
-
-            div += '<div class="form-group">';
-            div += '<div class="col-sm-6">';
-            div += '<label class="col-sm-4 control-label">{{Angle entrant}}</label>';
-            div += '<div class="input-group">';
-            div += '<span class="input-group-addon"></span>';
-            div += '<input type="number" min="0" max="60" value="0" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="incomingAngle"/>';
-            div += '<span class="input-group-addon"></span>';
-            div += '</div>';
-             div += '<br>';
-            div += '<label class="col-sm-4 control-label">{{Angle sortant}}</label>';
-            div += '<div class="input-group">';
-            div += '<span class="input-group-addon"></span>';
-            div += '<input type="number" min="0" max="60" value="0" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="outgoingAngle"/>';
-            div += '<span class="input-group-addon"></span>';
-            div += '</div>';
-           div += '</div>';
- 
-            div += '<div class="col-sm-6">';
-            div += '<canvas id="azimutPlan" width="400" height="400"></canvas> ';
-            div += '</div>';
-            div += '</div>';
-
-
-            div += '</div>';
 
             div += '<div class="col-sm-6">';
             div += '<div class="form-group">';
@@ -894,6 +856,49 @@ function displaySettingsPanels(_eqLogic) {
             div += '</div>';
             div += '</div>';
             div += '</div>';
+
+            div += '<div class="col-sm-6">';
+
+            div += '<fieldset data-displaygroup="azimutPlan">  ';
+
+            div += '<div class="form-group">';
+            div += '<div class="col-sm-6">';
+            div += '<div class="col-sm-offset-4">';
+            div += '<h5 class="text-center"><span class="label label-default">{{Angles azimut}}</span></h5>';  
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-6">';
+            div += '<h5 class="text-center"><span class="label label-default">{{Plan azimut}}</span></h5>';  
+            div += '</div>';
+            div += '</div>';
+
+
+            div += '<div class="form-group">';
+            div += '<div class="col-sm-6">';
+            div += '<label class="col-sm-4 control-label">{{Angle entrant}}</label>';
+            div += '<div class="input-group">';
+            div += '<span class="input-group-addon"></span>';
+            div += '<input type="number" min="0" max="60" value="0" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="incomingAngle"/>';
+            div += '<span class="input-group-addon"></span>';
+            div += '</div>';
+             div += '<br>';
+            div += '<label class="col-sm-4 control-label">{{Angle sortant}}</label>';
+            div += '<div class="input-group">';
+            div += '<span class="input-group-addon"></span>';
+            div += '<input type="number" min="0" max="60" value="0" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="outgoingAngle"/>';
+            div += '<span class="input-group-addon"></span>';
+            div += '</div>';
+           div += '</div>';
+ 
+            div += '<div class="col-sm-6">';
+            div += '<canvas id="azimutPlan" width="400" height="400"></canvas> ';
+            div += '</div>';
+            div += '</div>';
+
+            div += '</fieldset>';
+
+            div += '</div>';
+
 
             div += '</form>';
             div += '</div>';

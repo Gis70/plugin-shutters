@@ -49,8 +49,7 @@ function printEqLogic(_eqLogic) {
             break;
         case 'shutter':
             updateEqLogicLists(listEqLogicByType());
-            if (_eqLogic.configuration.heliotropeZoneId !== undefined && _eqLogic.configuration.heliotropeZoneId !== null
-            && _eqLogic.configuration.heliotropeZoneId !== '' && _eqLogic.configuration.heliotropeZoneId !== 'none') {
+            if (Number.isInteger(Number.parseInt(_eqLogic.configuration.heliotropeZoneId, 10))) {
                 var eqLogic = getEqLogic(_eqLogic.configuration.heliotropeZoneId);
                 var wallAngle = convertAngleToDegree(eqLogic.configuration.wallAngle, eqLogic.configuration.wallAngleUnit);
                 sessionStorage.setItem('wallAngle', wallAngle);
@@ -81,8 +80,7 @@ function saveEqLogic(_eqLogic) {
         case 'shuttersGroup':
             break;
         case 'shutter':
-            if (_eqLogic.configuration.shuttersGroupId !== undefined && _eqLogic.configuration.shuttersGroupId !== null
-            && _eqLogic.configuration.shuttersGroupId !== '' && _eqLogic.configuration.shuttersGroupId !== 'none') {
+            if (Number.isInteger(Number.parseInt(_eqLogic.configuration.shuttersGroupId, 10))) {
                 var eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
                 _eqLogic.configuration.externalConditionsId = eqLogic.configuration.externalConditionsId;
                 _eqLogic.configuration.heliotropeZoneId = eqLogic.configuration.heliotropeZoneId;
