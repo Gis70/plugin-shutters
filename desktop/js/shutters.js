@@ -50,8 +50,10 @@ function printEqLogic(_eqLogic) {
         case 'shutter':
             updateEqLogicLists(listEqLogicByType());
             drawShutterClosingMvtTimeCurve();
-            updateShutterMvtTimeCurve(_eqLogic.configuration.shutterMvtTimeCurve);
-            updateValuesTable(_eqLogic.configuration.shutterMvtTimeValues);
+        	if(Array.isArray(_eqLogic.configuration.shutterMvtTimeCurve) && Array.isArray(_eqLogic.configuration.shutterMvtTimeValues)) {
+                updateShutterMvtTimeCurve(_eqLogic.configuration.shutterMvtTimeCurve);
+                updateValuesTable(_eqLogic.configuration.shutterMvtTimeValues);
+            }
             drawAzimutPlan();
             break;
         default:
