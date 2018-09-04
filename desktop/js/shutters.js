@@ -49,6 +49,9 @@ function printEqLogic(_eqLogic) {
             break;
         case 'shutter':
             updateEqLogicLists(listEqLogicByType());
+            drawShutterClosingMvtTimeCurve();
+            updateShutterMvtTimeCurve(_eqLogic.configuration.shutterMvtTimeCurve);
+            updateValuesTable(_eqLogic.configuration.shutterMvtTimeValues);
             drawAzimutPlan();
             break;
         default:
