@@ -467,24 +467,29 @@ function drawAzimutPlan(_angle = 0)
     })
     .addLayer({
         type: 'slice',
-        name: 'test',
+        name: 'azimutZone',
         fillStyle: '#FEE200',
       	opacity: 0.5,
         x: parseInt(200 - (12 * (Math.cos(angle * Math.PI / 180)))), 
       	y: parseInt(200 - (12 * (Math.sin(angle * Math.PI / 180)))),
         start: 180 + angle,
-      	end: 360 + angle,
+      	end: angle,
         radius: 100,
         spread: 0 / 40
     })
     .drawLayers();
 }
 
-
+/**
+ * Update display of azimut plan
+ * @param {integer} _incomingAngle 
+ * @param {integer} _outgoingAngle 
+ * @param {integer} _wallAngle 
+ */
 function refreshAzimutPlan(_incomingAngle = 0, _outgoingAngle = 0, _wallAngle = 0)
 {
-      $('#wallPlan').setLayer('azimutZone', {
-        start: _incomingAngle + _wallAngle,
+      $('#azimutPlan').setLayer('azimutZone', {
+        start: _incomingAngle + _wallAngle + 180,
       	end: _outgoingAngle + _wallAngle
         })
         .drawLayers();  

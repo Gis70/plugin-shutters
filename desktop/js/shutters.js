@@ -48,12 +48,11 @@ function printEqLogic(_eqLogic) {
             updateEqLogicLists(listEqLogicByType());
             break;
         case 'shutter':
-            drawAzimutPlan();
             updateEqLogicLists(listEqLogicByType());
             if (_eqLogic.configuration.heliotropeZoneId !== undefined && _eqLogic.configuration.heliotropeZoneId !== null
-            && _eqLogic.configuration.heliotropeZoneId !== '') {
-                $eqLogic = getEqLogic(_eqLogic.configuration.heliotropeZoneId);
-                $wallAngle = convertAngleToDegree(eqLogic.configuration.wall, $eqLogic.configuration.wallAngleUnit);
+            && _eqLogic.configuration.heliotropeZoneId !== '' && _eqLogic.configuration.heliotropeZoneId !== 'none') {
+                var eqLogic = getEqLogic(_eqLogic.configuration.heliotropeZoneId);
+                var wallAngle = convertAngleToDegree(eqLogic.configuration.wallAngle, eqLogic.configuration.wallAngleUnit);
                 sessionStorage.setItem('wallAngle', wallAngle);
             }
             drawAzimutPlan(wallAngle);
@@ -84,9 +83,9 @@ function saveEqLogic(_eqLogic) {
         case 'shutter':
             if (_eqLogic.configuration.shuttersGroupId !== undefined && _eqLogic.configuration.shuttersGroupId !== null
             && _eqLogic.configuration.shuttersGroupId !== '' && _eqLogic.configuration.shuttersGroupId !== 'none') {
-                $eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
-                _eqLogic.configuration.externalConditionsId = $eqLogic.configuration.externalConditionsId;
-                _eqLogic.configuration.heliotropeZoneId = $eqLogic.configuration.heliotropeZoneId;
+                var eqLogic = getEqLogic(_eqLogic.configuration.shuttersGroupId);
+                _eqLogic.configuration.externalConditionsId = eqLogic.configuration.externalConditionsId;
+                _eqLogic.configuration.heliotropeZoneId = eqLogic.configuration.heliotropeZoneId;
             }
            // _eqLogic.configuration.shutterMvtTimeValues = new Object();
            // _eqLogic.configuration.shutterMvtTimeCurve = new Array();
