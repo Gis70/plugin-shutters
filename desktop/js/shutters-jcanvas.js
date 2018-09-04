@@ -437,9 +437,9 @@ function displaySelectedDawnOrDusk(_layerName = null)
 /**
  * Draw wall plan
  */
-function drawAzimutPlan(_angle = 0)
+function drawAzimutPlan()
 {
-    var angle = _angle;
+    var angle = 0;
 
     $('#azimutPlan').addLayer({
         type: 'image',
@@ -472,7 +472,7 @@ function drawAzimutPlan(_angle = 0)
       	opacity: 0.5,
         x: Number.parseInt(200 - (12 * (Math.cos(angle * Math.PI / 180))), 10), 
       	y: Number.parseInt(200 - (12 * (Math.sin(angle * Math.PI / 180))), 10),
-        start: 180 + angle,
+        start: angle + 180,
       	end: angle,
         radius: 100,
         spread: 0 / 40
@@ -488,7 +488,16 @@ function drawAzimutPlan(_angle = 0)
  */
 function refreshAzimutPlan(_incomingAngle = 0, _outgoingAngle = 0, _wallAngle = 0)
 {
-      $('#azimutPlan').setLayer('azimutZone', {
+      $('#azimutPlan').setLayer('wall', {
+        rotate: _wallAngle - 90
+      })
+      .setLayer('sun', {
+        x: Number.parseInt(200 - (150 * (Math.cos(_wallAngle * Math.PI / 180))), 10), 
+      	y: Number.parseInt(200 - (150 * (Math.sin(_wallAngle * Math.PI / 180))), 10)
+      })
+      .setLayer('azimutZone', {
+        x: Number.parseInt(200 - (12 * (Math.cos(_wallAngle * Math.PI / 180))), 10), 
+      	y: Number.parseInt(200 - (12 * (Math.sin(_wallAngle * Math.PI / 180))), 10),
         start: _wallAngle + 180 + _incomingAngle,
       	end: _wallAngle - _outgoingAngle 
         })

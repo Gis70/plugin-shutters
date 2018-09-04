@@ -49,12 +49,7 @@ function printEqLogic(_eqLogic) {
             break;
         case 'shutter':
             updateEqLogicLists(listEqLogicByType());
-            if (Number.isInteger(Number.parseInt(_eqLogic.configuration.heliotropeZoneId, 10))) {
-                var eqLogic = getEqLogic(_eqLogic.configuration.heliotropeZoneId);
-                var wallAngle = convertAngleToDegree(eqLogic.configuration.wallAngle, eqLogic.configuration.wallAngleUnit);
-                sessionStorage.setItem('wallAngle', wallAngle);
-            }
-            drawAzimutPlan(wallAngle);
+            drawAzimutPlan();
             break;
         default:
             break;

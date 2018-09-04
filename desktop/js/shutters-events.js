@@ -107,8 +107,15 @@ function initEvents () {
      *  Shutter settings events
      */ 
     $('[data-l1key=configuration][data-l2key=heliotropeZoneId]').off('change').on('change', function () {
-        if(Number.isInteger(Number.parseInt($(this).val(), 10))) {
+        var heliotropeZoneId = $(this).val();
+        if(Number.isInteger(Number.parseInt(heliotropeZoneId, 10))) {
             $('fieldset[data-displaygroup=azimutPlan]').css('visibility', 'visible');
+            var eqLogic = getEqLogic(heliotropeZoneId);
+            var wallAngle = convertAngleToDegree(eqLogic.configuration.wallAngle, eqLogic.configuration.wallAngleUnit);
+            var incomingAngle = Number.parseInt($('[data-l1key=configuration][data-l2key=incomingAngle]').val(), 10);
+            var outgoingAngle = Number.parseInt($('[data-l1key=configuration][data-l2key=outgoingAngle]').val(), 10);
+            sessionStorage.setItem('wallAngle', wallAngle);
+            refreshAzimutPlan(incomingAngle, outgoingAngle, wallAngle);
         } else {
             $('fieldset[data-displaygroup=azimutPlan]').css('visibility', 'hidden');
         }
