@@ -52,11 +52,22 @@
         strokeWidth: 2
     };
 
+    var regex1 = new RegExp(/^[xy]\d{1,2}$/);
+
     var myGraph = $('#shutterClosingMvtTimeCurve');
+
     var shutterMvtTimeValues = {};
     var shutterMvtTimeCurve = [];
+	var retrieveCurveValues = true;
 
-function drawShutterClosingMvtTimeCurve () {
+/**
+ * Draw shutter mvt time curve
+ * @param {string} xAxisPointNumber 
+ */
+function drawShutterClosingMvtTimeCurve (xAxisPointNumber = '4') {
+    var myGraph = $('#shutterClosingMvtTimeCurve');
+    graph.xAxisPointNumber = Number.parseInt(xAxisPointNumber);
+
     graph.xUnitLength = Math.round(graph.xAxisLength / (graph.xMaxScale - graph.xMinScale));
     graph.xStepValue = Math.round((graph.xMaxScale - graph.xMinScale) / graph.xAxisPointNumber);
     graph.xStepLength = graph.xStepValue * graph.xUnitLength;
@@ -67,14 +78,26 @@ function drawShutterClosingMvtTimeCurve () {
     graph.xAxisEndPoint = graph.xOrigin + (graph.xMaxScale * graph.xUnitLength);
     graph.yAxisStartPoint = graph.yOrigin - (graph.yMinScale * graph.yUnitLength);
     graph.yAxisEndPoint = graph.yOrigin - (graph.yMaxScale * graph.yUnitLength);
-    for (var i = 0; i <= graph.xAxisPointNumber; i++) {
-        curve['x' + (i + 1)] = graph.xAxisStartPoint + (i * graph.xStepLength);
-        curve['y' + (i + 1)] = graph.yOrigin;
-        shutterMvtTimeCurve.push(graph.yOrigin);
-        shutterMvtTimeValues['x' + (i + 1)] = graph.xMinScale + (i * graph.xStepValue);
-        shutterMvtTimeValues['y' + (i + 1)] = 0;
+    retrieveCurveValues = true;
+    if(((Object.keys(shutterMvtTimeValues).length / 2) - 1 )!= graph.xAxisPointNumber) {
+        for (prop in curve){
+            if(curve.hasOwnProperty(prop) && regex1.test(prop)) {
+                delete curve[prop];
+            }  
+        };
+        shutterMvtTimeValues = {};
+        shutterMvtTimeCurve = [];
+        for (var i = 0; i <= graph.xAxisPointNumber; i++) {
+            curve['x' + (i + 1)] = graph.xAxisStartPoint + (i * graph.xStepLength);
+            curve['y' + (i + 1)] = graph.yOrigin;
+            shutterMvtTimeCurve.push(graph.yOrigin);
+            shutterMvtTimeValues['x' + (i + 1)] = graph.xMinScale + (i * graph.xStepValue);
+            shutterMvtTimeValues['y' + (i + 1)] = 0;
+        }
+        retrieveCurveValues = false;
     }
-
+    updateValuesTable(shutterMvtTimeValues);
+  
     myGraph.addLayer({
         type: 'line',
         name: 'xAxis',
@@ -212,20 +235,22 @@ function drawShutterClosingMvtTimeCurve () {
     myGraph.drawLayers();
 }
 
-function updateShutterMvtTimeCurve (curvePoints) {
+function updateShutterMvtTimeCurve (curvePoints = {}) {
+    var myGraph = $('#shutterClosingMvtTimeCurve');
     for (var i = 0; i < curvePoints.length; i++) {
         myGraph.setLayer('point' + (i + 1), {
-            y: parseInt(curvePoints[i])
+        y: Number.parseInt(curvePoints[i], 10)
         });
-        curve[ 'y' + (i + 1)] = parseInt(curvePoints[i]);
+        curve[ 'y' + (i + 1)] = Number.parseInt(curvePoints[i], 10);
         }
        myGraph.setLayer('curve', curve).drawLayers();
     }
 
-function calculateYValue(layer, y) {
+function calculateYValue(layer = '', y = 0) {
+    var myGraph = $('#shutterClosingMvtTimeCurve');
     var yMin = 0;
     var yMax = 0;
-    var pointIndex = parseInt(layer.name.match(/\d+/));
+    var pointIndex = Number.parseInt(layer.name.match(/\d+/), 10);
     var yStep = graph.yValueStepPoint * graph.yUnitLength;
     var offset = Math.ceil(yStep / 2);
     var yValue = Math.round(y / yStep) * yStep - offset;
@@ -267,38 +292,51 @@ function calculateYValue(layer, y) {
     return yValue;
 }
 
-function updateCurve(layer) {
-    var pointIndex = parseInt(layer.name.match(/\d+/));
+/**
+ * Update curve
+ * @param {string} layer 
+ */
+function updateCurve(layer = '') {
+    var myGraph = $('#shutterClosingMvtTimeCurve');
+    var pointIndex = Number.parseInt(layer.name.match(/\d+/), 10);
     curve[ 'y' + pointIndex] = shutterMvtTimeCurve[pointIndex -1 ] = layer.y;
     shutterMvtTimeValues[ 'y' + pointIndex] = scaleValue(layer.y);
     myGraph.setLayer('curve', curve).drawLayers();
     updateValuesTable(shutterMvtTimeValues);
 }
 
-function updateValuesTable(valuesArray) {
+/**
+ * Update values in table
+ * @param {array} valuesArray 
+ */
+function updateValuesTable(valuesArray = []) {
     $("#shutterMvtTimeTable > tbody > tr").each(function(i, item){
         $(item).find("td:eq(0)").text(valuesArray['x' + (i + 1)]);
         $(item).find("td:eq(1)").text(valuesArray['y' + (i + 1)]);
     });
 }
 
-
-function scaleValue(value) {
+/**
+ * Scale cursor position to time value
+ * @param {integer} value 
+ */
+function scaleValue(value = 0) {
     var scaledValue = Math.round((graph.yOrigin - value) * (graph.yMaxScale - graph.yMinScale) / graph.yAxisLength);
     return scaledValue;
 }
 
+/**
+ * Hide tooltip
+ */
 function hideTooltip() {
     $('.cursor-tooltip').css('visibility', 'hidden');
 }
 
+/**
+ * Display message in tooltip
+ * @param {string*} message 
+ */
 function displayTooltip(message = '') {
     $('.cursor-tooltip').html(message).css('visibility', 'visible');
 }
 
-myGraph.on('mousemove', function(event) {
-    $('.cursor-tooltip').css({
-        top: event.pageY + 20,
-        left: event.pageX
-    });
-})

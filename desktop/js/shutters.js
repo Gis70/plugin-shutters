@@ -49,12 +49,12 @@ function printEqLogic(_eqLogic) {
             break;
         case 'shutter':
             updateEqLogicLists(listEqLogicByType());
-            drawShutterClosingMvtTimeCurve();
-        	if(Array.isArray(_eqLogic.configuration.shutterMvtTimeCurve) && Array.isArray(_eqLogic.configuration.shutterMvtTimeValues)) {
+            drawShutterClosingMvtTimeCurve(_eqLogic.configuration.xAxisPointNumber);
+        	if(retrieveCurveValues) {
                 updateShutterMvtTimeCurve(_eqLogic.configuration.shutterMvtTimeCurve);
                 updateValuesTable(_eqLogic.configuration.shutterMvtTimeValues);
             }
-            drawAzimutPlan();
+              drawAzimutPlan();
             break;
         default:
             break;
@@ -85,10 +85,10 @@ function saveEqLogic(_eqLogic) {
                 _eqLogic.configuration.externalConditionsId = eqLogic.configuration.externalConditionsId;
                 _eqLogic.configuration.heliotropeZoneId = eqLogic.configuration.heliotropeZoneId;
             }
-           // _eqLogic.configuration.shutterMvtTimeValues = new Object();
-           // _eqLogic.configuration.shutterMvtTimeCurve = new Array();
-           // _eqLogic.configuration.shutterMvtTimeValues = shutterMvtTimeValues;
-           // _eqLogic.configuration.shutterMvtTimeCurve = shutterMvtTimeCurve;
+            _eqLogic.configuration.shutterMvtTimeValues = new Object();
+            _eqLogic.configuration.shutterMvtTimeCurve = new Array();
+            _eqLogic.configuration.shutterMvtTimeValues = shutterMvtTimeValues;
+            _eqLogic.configuration.shutterMvtTimeCurve = shutterMvtTimeCurve;
             break;
     }
 

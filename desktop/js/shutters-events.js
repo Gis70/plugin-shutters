@@ -132,5 +132,11 @@ function initEvents () {
         var wallAngle = Number.parseInt(sessionStorage.getItem('wallAngle'), 10);
         refreshAzimutPlan(incomingAngle, outgoingAngle, wallAngle);
     });
-
+    $('#shutterClosingMvtTimeCurve').on('mousemove', function(event) {
+        $('.cursor-tooltip').css({
+            top: event.pageY + 20,
+            left: event.pageX
+        });
+    })
+    
 }

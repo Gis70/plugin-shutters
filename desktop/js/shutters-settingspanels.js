@@ -823,6 +823,21 @@ function displaySettingsPanels(_eqLogic) {
             div += '<canvas id="shutterClosingMvtTimeCurve" width="400" height="400"></canvas> ';
             div += '</div>';
             div += '<div class="col-sm-6">';
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-6 control-label">{{Nombre de points}}</label>';
+            div += '<div class="col-sm-6">';
+            div += '<select type="number" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="xAxisPointNumber">';
+            div += '<option value="2">2</option>';
+            div += '<option value="4" selected>4</option>';
+            div += '<option value="5">5</option>';
+            div += '<option value="10">10</option>';
+           div += '</select>';
+            div += '</div>';
+            div += '</div>';
+
+        
+                    div += '<div class="form-group">';
+       
             div += '<table id="shutterMvtTimeTable" class="table table-bordered">';
             div += '<thead>';
             div += '<tr>';
