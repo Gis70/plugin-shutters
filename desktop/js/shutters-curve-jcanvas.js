@@ -52,21 +52,18 @@
         strokeWidth: 2
     };
 
-    var regex1 = new RegExp(/^[xy]\d{1,2}$/);
-
-    var myGraph = $('#shutterClosingMvtTimeCurve');
+    var keyRegex = new RegExp(/^[xy]\d{1,2}$/);
 
     var shutterMvtTimeValues = {};
-    var shutterMvtTimeCurve = [];
-	var retrieveCurveValues = true;
+    var timeCurveYValues = [];
 
 /**
- * Draw shutter mvt time curve
- * @param {string} xAxisPointNumber 
+ * Draw graph
+ * @param {string} _xAxisPointNumber 
  */
-function drawShutterClosingMvtTimeCurve (xAxisPointNumber = '4') {
-    var myGraph = $('#shutterClosingMvtTimeCurve');
-    graph.xAxisPointNumber = Number.parseInt(xAxisPointNumber);
+function drawTimeGraph (_xAxisPointNumber = '4') {
+    var myGraph = $('#timeGraph');
+    graph.xAxisPointNumber = Number.parseInt(_xAxisPointNumber);
 
     graph.xUnitLength = Math.round(graph.xAxisLength / (graph.xMaxScale - graph.xMinScale));
     graph.xStepValue = Math.round((graph.xMaxScale - graph.xMinScale) / graph.xAxisPointNumber);
@@ -78,25 +75,24 @@ function drawShutterClosingMvtTimeCurve (xAxisPointNumber = '4') {
     graph.xAxisEndPoint = graph.xOrigin + (graph.xMaxScale * graph.xUnitLength);
     graph.yAxisStartPoint = graph.yOrigin - (graph.yMinScale * graph.yUnitLength);
     graph.yAxisEndPoint = graph.yOrigin - (graph.yMaxScale * graph.yUnitLength);
-    retrieveCurveValues = true;
     if(((Object.keys(shutterMvtTimeValues).length / 2) - 1 )!= graph.xAxisPointNumber) {
         for (prop in curve){
-            if(curve.hasOwnProperty(prop) && regex1.test(prop)) {
+            if(curve.hasOwnProperty(prop) && keyRegex.test(prop)) {
                 delete curve[prop];
             }  
         };
         shutterMvtTimeValues = {};
-        shutterMvtTimeCurve = [];
+        timeCurveYValues = [];
         for (var i = 0; i <= graph.xAxisPointNumber; i++) {
             curve['x' + (i + 1)] = graph.xAxisStartPoint + (i * graph.xStepLength);
             curve['y' + (i + 1)] = graph.yOrigin;
-            shutterMvtTimeCurve.push(graph.yOrigin);
+            timeCurveYValues.push(graph.yOrigin);
             shutterMvtTimeValues['x' + (i + 1)] = graph.xMinScale + (i * graph.xStepValue);
             shutterMvtTimeValues['y' + (i + 1)] = 0;
         }
-        retrieveCurveValues = false;
+        sessionStorage.setItem('retrieveCurveValues', false);
     }
-    updateValuesTable(shutterMvtTimeValues);
+    updateTimeTable(shutterMvtTimeValues);
   
     myGraph.addLayer({
         type: 'line',
@@ -215,7 +211,7 @@ function drawShutterClosingMvtTimeCurve (xAxisPointNumber = '4') {
                 return calculateYValue(layer, y);
             },
             drag: function(layer) {
-                updateCurve(layer);
+                updateTimeCurve(layer);
                 displayTooltip(scaleValue(layer.y));
             },
                 mouseover: function(layer) {
@@ -235,48 +231,57 @@ function drawShutterClosingMvtTimeCurve (xAxisPointNumber = '4') {
     myGraph.drawLayers();
 }
 
-function updateShutterMvtTimeCurve (curvePoints = {}) {
-    var myGraph = $('#shutterClosingMvtTimeCurve');
-    for (var i = 0; i < curvePoints.length; i++) {
+/**
+ * Redraw time curve
+ * @param {array} _timeValues 
+ */
+function redrawTimeCurve (_timeValues = []) {
+    var myGraph = $('#timeGraph');
+    for (var i = 0; i < _timeValues.length; i++) {
         myGraph.setLayer('point' + (i + 1), {
-        y: Number.parseInt(curvePoints[i], 10)
+        y: Number.parseInt(_timeValues[i], 10)
         });
-        curve[ 'y' + (i + 1)] = Number.parseInt(curvePoints[i], 10);
+        curve[ 'y' + (i + 1)] = Number.parseInt(_timeValues[i], 10);
         }
-       myGraph.setLayer('curve', curve).drawLayers();
-    }
+    myGraph.setLayer('curve', curve).drawLayers();
+}
 
-function calculateYValue(layer = '', y = 0) {
-    var myGraph = $('#shutterClosingMvtTimeCurve');
+/**
+ * Calculate Y value
+ * @param {*} _layer 
+ * @param {*} _y 
+ */
+function calculateYValue(_layer = {}, _y = 0) {
+    var myGraph = $('#timeGraph');
     var yMin = 0;
     var yMax = 0;
-    var pointIndex = Number.parseInt(layer.name.match(/\d+/), 10);
+    var pointIndex = Number.parseInt(_layer.name.match(/\d+/), 10);
     var yStep = graph.yValueStepPoint * graph.yUnitLength;
     var offset = Math.ceil(yStep / 2);
-    var yValue = Math.round(y / yStep) * yStep - offset;
+    var yValue = Math.round(_y / yStep) * yStep - offset;
     switch (graph.curveType) {
         case 'ascending':
             if (pointIndex == 1) {
-                yMin = myGraph.getLayer('point' + (pointIndex + 1)).y;
+                yMin = myGraph.getLayer('point' + (pointIndex + 1))._y;
                 yMax = graph.yAxisStartPoint;
             } else if (pointIndex == graph.xAxisPointNumber + 1) {
                 yMin = graph.yAxisEndPoint;
-                yMax = myGraph.getLayer('point' + (pointIndex - 1)).y;
+                yMax = myGraph.getLayer('point' + (pointIndex - 1))._y;
             } else {
-                yMin = myGraph.getLayer('point' + (pointIndex + 1)).y;
-                yMax = myGraph.getLayer('point' + (pointIndex - 1)).y;
+                yMin = myGraph.getLayer('point' + (pointIndex + 1))._y;
+                yMax = myGraph.getLayer('point' + (pointIndex - 1))._y;
             }
             break;
         case 'downward':
             if (pointIndex == 1) {
                 yMin = graph.yAxisEndPoint;
-                yMax = myGraph.getLayer('point' + (pointIndex + 1)).y;
+                yMax = myGraph.getLayer('point' + (pointIndex + 1))._y;
             } else if (pointIndex == graph.xAxisPointNumber + 1) {
-                yMin = myGraph.getLayer('point' + (pointIndex - 1)).y;
+                yMin = myGraph.getLayer('point' + (pointIndex - 1))._y;
                 yMax = graph.yAxisStartPoint;
             } else {
-                yMin = myGraph.getLayer('point' + (pointIndex - 1)).y;
-                yMax = myGraph.getLayer('point' + (pointIndex + 1)).y;
+                yMin = myGraph.getLayer('point' + (pointIndex - 1))._y;
+                yMax = myGraph.getLayer('point' + (pointIndex + 1))._y;
             }
             break;
         default:
@@ -293,35 +298,39 @@ function calculateYValue(layer = '', y = 0) {
 }
 
 /**
- * Update curve
- * @param {string} layer 
+ * Update time curve
+ * @param {string} _layer 
  */
-function updateCurve(layer = '') {
-    var myGraph = $('#shutterClosingMvtTimeCurve');
-    var pointIndex = Number.parseInt(layer.name.match(/\d+/), 10);
-    curve[ 'y' + pointIndex] = shutterMvtTimeCurve[pointIndex -1 ] = layer.y;
-    shutterMvtTimeValues[ 'y' + pointIndex] = scaleValue(layer.y);
+function updateTimeCurve(_layer = '') {
+    var myGraph = $('#timeGraph');
+    var pointIndex = Number.parseInt(_layer.name.match(/\d+/), 10);
+    curve[ 'y' + pointIndex] = timeCurveYValues[pointIndex -1 ] = _layer.y;
+    shutterMvtTimeValues[ 'y' + pointIndex] = scaleValue(_layer.y);
     myGraph.setLayer('curve', curve).drawLayers();
-    updateValuesTable(shutterMvtTimeValues);
+    updateTimeTable(shutterMvtTimeValues);
 }
 
 /**
- * Update values in table
- * @param {array} valuesArray 
+ * Update time table
+ * @param {object} _timeValues 
  */
-function updateValuesTable(valuesArray = []) {
-    $("#shutterMvtTimeTable > tbody > tr").each(function(i, item){
-        $(item).find("td:eq(0)").text(valuesArray['x' + (i + 1)]);
-        $(item).find("td:eq(1)").text(valuesArray['y' + (i + 1)]);
-    });
+function updateTimeTable(_timeValues = {}) {
+    var tr ='';
+    for(i = 1; i <= (Object.keys(shutterMvtTimeValues).length / 2); i++) {
+        tr += '<tr>';
+        tr += '<td class="text-center">' + _timeValues['x' + i] + '</td>';
+        tr += '<td class="text-center">' + _timeValues['y' + i] + '</td>';
+        tr += '</tr>';
+    }
+    $('#shutterMvtTimeTable tbody').empty().append(tr);
 }
 
 /**
  * Scale cursor position to time value
- * @param {integer} value 
+ * @param {integer} _value 
  */
-function scaleValue(value = 0) {
-    var scaledValue = Math.round((graph.yOrigin - value) * (graph.yMaxScale - graph.yMinScale) / graph.yAxisLength);
+function scaleValue(_value = 0) {
+    var scaledValue = Math.round((graph.yOrigin - _value) * (graph.yMaxScale - graph.yMinScale) / graph.yAxisLength);
     return scaledValue;
 }
 

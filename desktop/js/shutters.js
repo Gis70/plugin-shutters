@@ -49,10 +49,11 @@ function printEqLogic(_eqLogic) {
             break;
         case 'shutter':
             updateEqLogicLists(listEqLogicByType());
-            drawShutterClosingMvtTimeCurve(_eqLogic.configuration.xAxisPointNumber);
-        	if(retrieveCurveValues) {
-                updateShutterMvtTimeCurve(_eqLogic.configuration.shutterMvtTimeCurve);
-                updateValuesTable(_eqLogic.configuration.shutterMvtTimeValues);
+            sessionStorage.setItem('retrieveCurveValues', true);
+            drawTimeGraph(_eqLogic.configuration.xAxisPointNumber);
+        	if(sessionStorage.getItem('retrieveCurveValues')) {
+                redrawTimeCurve(_eqLogic.configuration.timeCurveYValues);
+                updateTimeTable(_eqLogic.configuration.shutterMvtTimeValues);
             }
               drawAzimutPlan();
             break;
@@ -86,9 +87,9 @@ function saveEqLogic(_eqLogic) {
                 _eqLogic.configuration.heliotropeZoneId = eqLogic.configuration.heliotropeZoneId;
             }
             _eqLogic.configuration.shutterMvtTimeValues = new Object();
-            _eqLogic.configuration.shutterMvtTimeCurve = new Array();
+            _eqLogic.configuration.timeCurveYValues = new Array();
             _eqLogic.configuration.shutterMvtTimeValues = shutterMvtTimeValues;
-            _eqLogic.configuration.shutterMvtTimeCurve = shutterMvtTimeCurve;
+            _eqLogic.configuration.timeCurveYValues = timeCurveYValues;
             break;
     }
 
