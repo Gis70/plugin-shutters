@@ -51,7 +51,7 @@ function printEqLogic(_eqLogic) {
             updateEqLogicLists(listEqLogicByType());
             sessionStorage.setItem('retrieveCurveValues', true);
             drawTimeGraph(_eqLogic.configuration.xAxisPointNumber);
-        	if(sessionStorage.getItem('retrieveCurveValues')) {
+        	if(sessionStorage.getItem('retrieveCurveValues') == 'false') {
                 redrawTimeCurve(_eqLogic.configuration.timeCurveYValues);
                 updateTimeTable(_eqLogic.configuration.shutterMvtTimeValues);
             }

@@ -262,26 +262,26 @@ function calculateYValue(_layer = {}, _y = 0) {
     switch (graph.curveType) {
         case 'ascending':
             if (pointIndex == 1) {
-                yMin = myGraph.getLayer('point' + (pointIndex + 1))._y;
+                yMin = myGraph.getLayer('point' + (pointIndex + 1)).y;
                 yMax = graph.yAxisStartPoint;
             } else if (pointIndex == graph.xAxisPointNumber + 1) {
                 yMin = graph.yAxisEndPoint;
-                yMax = myGraph.getLayer('point' + (pointIndex - 1))._y;
+                yMax = myGraph.getLayer('point' + (pointIndex - 1)).y;
             } else {
-                yMin = myGraph.getLayer('point' + (pointIndex + 1))._y;
-                yMax = myGraph.getLayer('point' + (pointIndex - 1))._y;
+                yMin = myGraph.getLayer('point' + (pointIndex + 1)).y;
+                yMax = myGraph.getLayer('point' + (pointIndex - 1)).y;
             }
             break;
         case 'downward':
             if (pointIndex == 1) {
                 yMin = graph.yAxisEndPoint;
-                yMax = myGraph.getLayer('point' + (pointIndex + 1))._y;
+                yMax = myGraph.getLayer('point' + (pointIndex + 1)).y;
             } else if (pointIndex == graph.xAxisPointNumber + 1) {
-                yMin = myGraph.getLayer('point' + (pointIndex - 1))._y;
+                yMin = myGraph.getLayer('point' + (pointIndex - 1)).y;
                 yMax = graph.yAxisStartPoint;
             } else {
-                yMin = myGraph.getLayer('point' + (pointIndex - 1))._y;
-                yMax = myGraph.getLayer('point' + (pointIndex + 1))._y;
+                yMin = myGraph.getLayer('point' + (pointIndex - 1)).y;
+                yMax = myGraph.getLayer('point' + (pointIndex + 1)).y;
             }
             break;
         default:
