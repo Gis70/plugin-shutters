@@ -69,14 +69,16 @@ class shutters extends eqLogic
     public function postSave()
     {
         $eqType = $this->getConfiguration('eqType', null);
+        $eqLogicName = $this->getName();
+        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName . ' ; eqType =>' . $eqType);
 
         if(!empty($eqType)) {
             $this->loadCmdFromConfFile($eqType);
         }
 
         switch ($eqType) {
-            case 'externalInfo':
-                $this->addExternalInfoEvents();
+            case 'externalConditions':
+                $this->addExternalConditionsEvents();
                 break;
             case 'heliotropeZone':
                 # code...
@@ -108,10 +110,10 @@ class shutters extends eqLogic
     {
         $eqType = $this->getConfiguration('eqType', null);
         $eqLogicName = $this->getName();
-        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName);
+        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName . ' ; eqType =>' . $eqType);
 
         switch ($eqType) {
-            case 'externalInfo':
+            case 'externalConditions':
                 break;
             case 'heliotropeZone':
                 # code...
@@ -198,7 +200,7 @@ class shutters extends eqLogic
         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands imported successfully for => '. $eqLogicName);
     }
 
-    private function addExternalInfoEvents()
+    private function addExternalConditionsEvents()
     {
         foreach (eqLogic::byType('shutters', true) as $eqLogic) {
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
@@ -208,9 +210,9 @@ class shutters extends eqLogic
                 continue;
             }
             $eqLogicName = $eqLogic->getName();
-            $listener = listener::byClassAndFunction('shutters', 'externalInfoEvents', array('shutter' => $eqLogic->getId()));
+            $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutter' => $eqLogic->getId()));
             if (!is_object($listener)) {
-                log::add('shutters', 'debug', 'shutters::addExternalInfoEvents() : externalInfo events listener doesn\'t exist for shutter => ' . $eqLogicName);
+                log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter => ' . $eqLogicName);
                 continue;
             }
             $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
@@ -221,11 +223,11 @@ class shutters extends eqLogic
                 }
                 $cmd = cmd::byId($cmdId);
                 if (!is_object($cmd)) {
-                    log::add('shutters', 'debug', 'shutters::addExternalInfoEvents() : cmd => ' . $cmdId  . ' doesn\'t exist for externalInfo =>' . $this->getName());
+                    log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : cmd => ' . $cmdId  . ' doesn\'t exist for externalConditions =>' . $this->getName());
                     continue;
                 } else {
                     $listener->addEvent($cmdId);
-                    log::add('shutters', 'debug', 'shutters::addExternalInfoEvents() : cmd => ' . $cmdId  . ' successfully added to listener for shutter => ' . $eqLogicName);
+                    log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : cmd => ' . $cmdId  . ' successfully added to listener for shutter => ' . $eqLogicName);
                 }
             }
             $listener->save();
@@ -237,16 +239,16 @@ class shutters extends eqLogic
     {
         $eqLogicName = $this->getName();
         log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : eqLogic => ' . $eqLogicName);
-        $listener = listener::byClassAndFunction('shutters', 'externalInfoEvents', array('shutter' => $this->getId()));
+        $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutter' => $this->getId()));
         if (!is_object($listener)) {
             $listener = new listener();
         }
         $listener->setClass('shutters');
-        $listener->setFunction('externalInfoEvents');
+        $listener->setFunction('externalConditionsEvents');
         $listener->setOption(array('shutter' => $this->getId()));
         $listener->emptyEvent();
         $listener->save();
-        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : externalInfo events listener successfully added for => ' . $eqLogicName);
+        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : externalConditions events listener successfully added for => ' . $eqLogicName);
 
         $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutter' => $this->getId()));
         if (!is_object($listener)) {
@@ -275,10 +277,10 @@ class shutters extends eqLogic
     {
         $eqLogicName = $this->getName();
         log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : eqLogic => ' . $eqLogicName);
-        $listener = listener::byClassAndFunction('shutters', 'externalInfoEvents', array('shutter' => $this->getId()));
+        $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutter' => $this->getId()));
         if (is_object($listener)) {
             $listener->remove();
-            log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : externalInfo events listener successfully removed for => ' . $eqLogicName);
+            log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : externalConditions events listener successfully removed for => ' . $eqLogicName);
         }
 
         $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutter' => $this->getId()));
@@ -294,7 +296,7 @@ class shutters extends eqLogic
         }
     }
 
-    private function externalInfoEvents()
+    private function externalConditionsEvents()
     {
         # code...
     }
