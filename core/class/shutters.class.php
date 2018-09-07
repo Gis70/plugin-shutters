@@ -70,7 +70,7 @@ class shutters extends eqLogic
     {
         $eqType = $this->getConfiguration('eqType', null);
         $eqLogicName = $this->getName();
-        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName . ' ; eqType =>' . $eqType);
+        log::add('shutters', 'debug', 'shutters::postSave() : eqLogic => ' . $eqLogicName . ' ; eqType => ' . $eqType);
 
         if(!empty($eqType)) {
             $this->loadCmdFromConfFile($eqType);
@@ -110,10 +110,11 @@ class shutters extends eqLogic
     {
         $eqType = $this->getConfiguration('eqType', null);
         $eqLogicName = $this->getName();
-        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName . ' ; eqType =>' . $eqType);
+        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName . ' ; eqType => ' . $eqType);
 
         switch ($eqType) {
             case 'externalConditions':
+                $this->removeExternalConditionsEvents();
                 break;
             case 'heliotropeZone':
                 # code...
@@ -183,7 +184,7 @@ class shutters extends eqLogic
                 if(isset($command['configuration']['condition']) && empty($this->getConfiguration($command['configuration']['condition'], null))) {
                     if($cmd !== null || is_object($cmd)) {
                         $cmd->remove();
-                        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully deleted for => '. $eqLogicName);
+                        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully removed for => '. $eqLogicName);
                     }
                     continue;
                 }
@@ -215,9 +216,12 @@ class shutters extends eqLogic
                 log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter => ' . $eqLogicName);
                 continue;
             }
+
+            $listener->emptyEvent();
+
             $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
             foreach ($conditions as $condition) {
-                $cmdId = str_replace('#', '', $eqLogic->getConfiguration($condition));
+                $cmdId = str_replace('#', '', $this->getConfiguration($condition));
                 if (empty($cmdId)) {
                     continue;
                 }
@@ -227,13 +231,42 @@ class shutters extends eqLogic
                     continue;
                 } else {
                     $listener->addEvent($cmdId);
-                    log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : cmd => ' . $cmdId  . ' successfully added to listener for shutter => ' . $eqLogicName);
+                    log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : eqLogic => ' . $cmd->getEqLogic_id() . ' ; condition cmd => ' . $cmdId  . ' successfully added to listener for shutter => ' . $eqLogicName);
                 }
+            }
+
+            foreach (shutterCmd::byEqLogicId($this->getId(), 'action') as $cmd) {
+                if (!is_object($cmd)) {
+                    continue;
+                }
+                $cmdId = $cmd->getId();
+                $listener->addEvent($cmdId);
+                log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : externalConditions => ' . $this->getName() . ' ; action cmd => ' . $cmdId  . ' successfully added to listener for shutter => ' . $eqLogicName);
             }
             $listener->save();
         }
     }
     
+    private function removeExternalConditionsEvents()
+    {
+        foreach (eqLogic::byType('shutters', true) as $eqLogic) {
+            if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
+                continue;
+            }
+            if (empty($eqLogic->getConfiguration('externalConditionsId', null))) {
+                continue;
+            }
+            $eqLogicName = $eqLogic->getName();
+            $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutter' => $eqLogic->getId()));
+            if (!is_object($listener)) {
+                log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter => ' . $eqLogicName);
+                continue;
+            }
+            $listener->emptyEvent();
+            $listener->save();
+            log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions events successfully removed for shutter => ' . $eqLogicName);
+        }
+    }
 
     private function updateShutterEventsListener() 
     {
