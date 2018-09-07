@@ -49,6 +49,17 @@ class shutters extends eqLogic
 
     }
     */
+    public static function start()
+    {
+        log::add('shutters', 'debug', 'shutters::start()');
+
+    }
+
+    public static function stop()
+    {
+        log::add('shutters', 'debug', 'shutters::stop()');
+    }
+
 
     /*     * *********************Méthodes d'instance************************* */
 
