@@ -316,18 +316,24 @@ class shutters extends eqLogic
         log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : eqLogic => ' . $eqLogicName);
         $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutterId' => $this->getId()));
         if (is_object($listener)) {
+            $listener->emptyEvent();
+            $listener->save();
             $listener->remove();
             log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : externalConditions events listener successfully removed for => ' . $eqLogicName);
         }
 
         $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutterId' => $this->getId()));
         if (is_object($listener)) {
+            $listener->emptyEvent();
+            $listener->save();
             $listener->remove();
             log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : heliotropeZone events listener successfully removed for => ' . $eqLogicName);
         }
 
         $listener = listener::byClassAndFunction('shutters', 'shuttersGroupEvents', array('shutterId' => $this->getId()));
         if (is_object($listener)) {
+            $listener->emptyEvent();
+            $listener->save();
             $listener->remove();
             log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : shuttersGroup events listener successfully removed for => ' . $eqLogicName);
         }
@@ -339,7 +345,9 @@ class shutters extends eqLogic
         $cmdId = $_option['event_id'];
         $cmdValue = $_option['value'];
         $shutterId = $_option['shutterId'];
-        log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : event for => ' . $shutterId->getName() . ' from eqLogic => ' . $eqLogicId->getName() . ' ; cmd Id => ' . $cmdId . ' ; cmd value => ' . $cmdValue);
+        log::add('shutters', 'debug', print_r($_option, true));
+
+        //log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : event for => ' . $shutterId . ' from eqLogic => ' . $eqLogicId . ' ; cmd Id => ' . $cmdId . ' ; cmd value => ' . $cmdValue);
     
     }
 
