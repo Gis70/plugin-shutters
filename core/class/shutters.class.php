@@ -193,10 +193,10 @@ class shutters extends eqLogic
 				$cmd->setEqLogic_id($this->getId());
 				utils::a2o($cmd, $command);
 				$cmd->save();
-                log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully added for eqType => '. $_eqType);
+                log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : command => ' . $command['logicalId'] . ' successfully added for => '. $eqLogicName);
 			}
         }
-        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands import successful for eqType => '. $_eqType);
+        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands import successful for => '. $eqLogicName);
     }
 
     private function updateShutterEventsListener(string $_eqType = '') 
@@ -242,22 +242,22 @@ class shutters extends eqLogic
     private function removeShutterEventsListener(string $_eqType = '')
     {
         $eqLogicName = $this->getName();
-        log::add('shutters', 'debug', 'shutters::preRemove() : eqLogic => ' . $eqLogicName);
+        log::add('shutters', 'debug', 'shutters::removeShutterEventsListener() : eqLogic => ' . $eqLogicName);
         if($_eqType === 'shutter') {
             $listener = listener::byClassAndFunction('shutters', 'externalInfoEvents', array('shutter' => $this->getId()));
-            if (!is_object($listener)) {
+            if (is_object($listener)) {
                 $listener->remove();
                 log::add('shutters', 'debug', 'shutters::preRemove() : externalInfo events listener successfully removed for => ' . $eqLogicName);
             }
 
             $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutter' => $this->getId()));
-            if (!is_object($listener)) {
+            if (is_object($listener)) {
                 $listener->remove();
                 log::add('shutters', 'debug', 'shutters::postInsert() : heliotropeZone events listener successfully removed for => ' . $eqLogicName);
             }
 
             $listener = listener::byClassAndFunction('shutters', 'shuttersGroupEvents', array('shutter' => $this->getId()));
-            if (!is_object($listener)) {
+            if (is_object($listener)) {
                 $listener->remove();
                 log::add('shutters', 'debug', 'shutters::postInsert() : shuttersGroup events listener successfully removed for => ' . $eqLogicName);
             }
