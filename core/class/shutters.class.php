@@ -72,13 +72,22 @@ class shutters extends eqLogic
     
     }
 
-    public static function heliotropeZoneEvents()
+    public static function heliotropeZoneEvents($_option)
     {
-        # code...
+		$eqLogicId = shuttersCmd::byId($_option['event_id'])->getEqLogic()->getId();
+        $cmdId = $_option['event_id'];
+        $cmdValue = $_option['value'];
+        $shutterId = $_option['shutterId'];
+        log::add('shutters', 'debug', print_r($_option, true));
     }
 
-    public static function shuttersGroupEvents()
+    public static function shuttersGroupEvents($_option)
     {
+		$eqLogicId = shuttersCmd::byId($_option['event_id'])->getEqLogic()->getId();
+        $cmdId = $_option['event_id'];
+        $cmdValue = $_option['value'];
+        $shutterId = $_option['shutterId'];
+        log::add('shutters', 'debug', print_r($_option, true));
 
     }
 
@@ -118,7 +127,11 @@ class shutters extends eqLogic
                 }
                 break;
             case 'heliotropeZone':
-                # code...
+                if($this->getIsEnable()) {
+                    $this->addHeliotropeZoneEvents();
+                } else {
+                    $this->removeHeliotropeZoneEvents();
+                }
                 break;
             case 'shuttersGroup':
                 # code...
@@ -154,7 +167,7 @@ class shutters extends eqLogic
                 $this->removeExternalConditionsEvents();
                 break;
             case 'heliotropeZone':
-                # code...
+                $this->removeHeliotropeZoneEvents();
                 break;
             case 'shuttersGroup':
                 # code...
@@ -245,7 +258,8 @@ class shutters extends eqLogic
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
-            if (empty($eqLogic->getConfiguration('externalConditionsId', null))) {
+            $heliotropeZoneId = $eqLogic->getConfiguration('externalConditionsId', null);
+            if (empty($heliotropeZoneId) || $heliotropeZoneId === 'none') {
                 continue;
             }
             $eqLogicName = $eqLogic->getName();
@@ -307,7 +321,8 @@ class shutters extends eqLogic
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
-            if (empty($eqLogic->getConfiguration('externalConditionsId', null))) {
+            $heliotropeZoneId = $eqLogic->getConfiguration('externalConditionsId', null);
+            if (empty($heliotropeZoneId) || $heliotropeZoneId === 'none') {
                 continue;
             }
             $eqLogicName = $eqLogic->getName();
@@ -343,7 +358,8 @@ class shutters extends eqLogic
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
-            if (empty($eqLogic->getConfiguration('heliotropeZoneId', null))) {
+            $heliotropeZoneId = $eqLogic->getConfiguration('heliotropeZoneId', null);
+            if (empty($heliotropeZoneId) || $heliotropeZoneId === 'none') {
                 continue;
             }
             $eqLogicName = $eqLogic->getName();
@@ -357,7 +373,7 @@ class shutters extends eqLogic
             $listener->emptyEvent();
 
             $heliotropeId = $eqLogic->getConfiguration('heliotropeZoneId', null);
-            if(empty($heliotropeId)){
+            if(empty($heliotropeId) || $heliotropeId === 'none'){
                 log::add('shutters', 'debug', 'shutters::addHeliotropeZoneEvents() : no heliotrope configured in heliotropeZone [' . $this->getName() . '] for shutter [' . $eqLogicName . ']');
                 continue;
             }
@@ -396,7 +412,8 @@ class shutters extends eqLogic
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
-            if (empty($eqLogic->getConfiguration('heliotropeZoneId', null))) {
+            $heliotropeZoneId = $eqLogic->getConfiguration('heliotropeZoneId', null);
+            if (empty($heliotropeZoneId) || $heliotropeZoneId === 'none') {
                 continue;
             }
             $eqLogicName = $eqLogic->getName();
