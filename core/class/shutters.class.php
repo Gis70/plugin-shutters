@@ -356,7 +356,26 @@ class shutters extends eqLogic
             $listenerId = $listener->getId(); 
             $listener->emptyEvent();
 
-            
+            $heliotropeId = $eqLogic->getConfiguration('heliotropeZoneId', null);
+            if(empty($heliotropeId)){
+                log::add('shutters', 'debug', 'shutters::addHeliotropeZoneEvents() : no heliotrope configured in heliotropeZone [' . $this->getName() . '] for shutter [' . $eqLogicName . ']');
+                continue;
+            }
+            $heliotrope=eqlogic::byId($heliotropeId);
+            if(!is_object($heliotrope)) {
+                log::add('shutters', 'debug', 'shutters::addHeliotropeZoneEvents() : heliotrope configured in heliotropeZone [' . $this->getName() . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
+                continue;
+            }
+            $heliotropeCmdLogicalId = ['altitude', 'azimuth360'];
+            foreach ($heliotropeCmdLogicalId as $cmdLogicalId) {
+                $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, $cmdLogicalId);
+                if(!is_object($cmd)) {
+                    continue;
+                }
+                $cmdId = $cmd->getId();
+                $listener->addEvent($cmdId);
+                log::add('shutters', 'debug', 'shutters::addHeliotropeZoneEvents() : heliotrope [' . $heliotrope->getName() . '] : cmd [' . $cmdId  . '] successfully added to listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
+            }
 
             foreach (shuttersCmd::byEqLogicId($this->getId(), 'action') as $cmd) {
                 if (!is_object($cmd)) {

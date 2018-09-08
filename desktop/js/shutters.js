@@ -364,7 +364,7 @@ function updateHeliotropeEqLogicList(_listHeliotropeEqLogic) {
         if(_listHeliotropeEqLogic[i].isEnable === "0") {
             optionList.push(' disabled');
         }
-        optionList.push('>', _listEqLogicByType[i].name, '</option>');
+        optionList.push('>', _listHeliotropeEqLogic[i].name, '</option>');
     }
     $('[data-l1key=configuration][data-l2key=heliotrope]').html(optionList.join(''));
 }
