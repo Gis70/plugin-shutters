@@ -337,6 +337,7 @@ class shutters extends eqLogic
             log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions [' . $this->getName() . '] events successfully removed from listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
 
             $eqLogic->setConfiguration('externalConditionsId', 'none');
+            $eqLogic->save();
             log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions [' . $this->getName() . '] successfully removed from shutter [' . $eqLogicName . ']');
 
             $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
@@ -428,6 +429,7 @@ class shutters extends eqLogic
             log::add('shutters', 'debug', 'shutters::removeHeliotropeZoneEvents() : heliotropeZone [' . $this->getName() . '] events successfully removed from listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
 
             $eqLogic->setConfiguration('heliotropeZoneId', 'none');
+            $eqLogic->save();
             log::add('shutters', 'debug', 'shutters::removeHeliotropeZoneEvents() : heliotropeZone [' . $this->getName() . '] successfully removed from shutter [' . $eqLogicName . ']');
 
             $conditions = ['sunsetCondition', 'sunriseCondition', 'azimutCondition'];

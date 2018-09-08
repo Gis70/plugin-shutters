@@ -131,7 +131,7 @@ function displayCommandsPanels(_eqLogic) {
             div += '<a data-toggle="collapse" data-parent="#cmdPanel" href="#cmdPanel3"> {{Commandes de gestion conditions héliotrope}} </a>';
             div += '</h4>';
             div += '</div>';
-            div += '<div id="cmdPanel3" class="panel-collapse collapse in">';
+            div += '<div id="cmdPanel3" class="panel-collapse collapse">';
             div += '<div class="panel-body">';
             div += '<table class="table table-bordered" data-cmdgroup="heliotropeZone" data-cmdtype="action">';
             div += '<thead>';
