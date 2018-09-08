@@ -43,12 +43,13 @@ function printEqLogic(_eqLogic) {
         case 'heliotropeZone':
             drawHeliotropePlan();
             drawWallPlan();
+            updateHeliotropeEqLogicList(getHeliotropeEqLogicList());
             break;
         case 'shuttersGroup':
-            updateEqLogicLists(listEqLogicByType());
+            updateShutterEqLogicList(getShutterEqLogicByType());
             break;
         case 'shutter':
-            updateEqLogicLists(listEqLogicByType());
+            updateShutterEqLogicList(getShutterEqLogicByType());
             sessionStorage.setItem('retrieveCurveValues', true);
             drawTimeGraph(_eqLogic.configuration.xAxisPointNumber);
         	if(sessionStorage.getItem('retrieveCurveValues') == 'false') {
@@ -260,16 +261,16 @@ function getCmdStatus(_cmd) {
 }
 
 /**
- * List shutters equipment by type
+ * Get shutters eqLogic list by type
  */
-function listEqLogicByType() {
-    var listEqLogicByType = new Object();
+function getShutterEqLogicByType() {
+    var eqLogic = new Object();
     $.ajax({
         type: 'POST',
         async: false,
         url: 'plugins/shutters/core/ajax/shutters.ajax.php',
         data: {
-            action: 'listEqLogicByType'
+            action: 'getShutterEqLogicByType'
         },
         dataType: 'json',
         global: false,
@@ -282,11 +283,11 @@ function listEqLogicByType() {
                 return;
             }
             if (data.result.length != 0) {
-                listEqLogicByType = data.result;
+                eqLogic = data.result;
             }
         }
     });
-    return listEqLogicByType;
+    return eqLogic;
 }
 
 /**
@@ -319,15 +320,60 @@ function getEqLogic(_eqLogicId) {
             }
         }
     });
-    console.log(eqLogic);
     return eqLogic;
 }
 
 /**
- * Update select by equipment type in shutter settings
- * @param {object} _listEqLogicByType List of shutters equipment by type
+ * Get heliotrope eqLogic
  */
-function updateEqLogicLists(_listEqLogicByType) {
+function getHeliotropeEqLogicList() {
+    var eqLogic = new Object();
+    $.ajax({
+        type: 'POST',
+        async: false,
+        url: 'plugins/shutters/core/ajax/shutters.ajax.php',
+        data: {
+            action: 'getHeliotropeEqLogic'
+        },
+        dataType: 'json',
+        global: false,
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state != 'ok') {
+                $('#div_alert').showAlert({message: data.result, level: 'danger'});
+                return;
+            }
+            if (data.result.length != 0) {
+                eqLogic = data.result;
+            }
+        }
+    });
+    return eqLogic;
+}
+
+/**
+ * Update list of heliotrope eqLogic
+ * @param {object} _listHeliotropeEqLogic Heliotrope eqLogic list
+ */
+function updateHeliotropeEqLogicList(_listHeliotropeEqLogic) {
+    var optionList =['<option value="none" selected>{{Non affecté}}</option>'];
+    for (var i = 0; i < _listHeliotropeEqLogic.length; i++) {
+        optionList.push('<option value="', _listHeliotropeEqLogic[i].id, '"');
+        if(_listHeliotropeEqLogic[i].isEnable === "0") {
+            optionList.push(' disabled');
+        }
+        optionList.push('>', _listEqLogicByType[i].name, '</option>');
+    }
+    $('[data-l1key=configuration][data-l2key=heliotrope]').html(optionList.join(''));
+}
+
+/**
+ * Update list of shutter eqLogic
+ * @param {object} _listEqLogicByType Shutters eqLogic list by type
+ */
+function updateShutterEqLogicList(_listEqLogicByType) {
     var optionList =['<option value="none" selected>{{Non affectées}}</option>'];
     for (var i = 0; i < _listEqLogicByType.externalConditions.length; i++) {
         optionList.push('<option value="', _listEqLogicByType.externalConditions[i].id, '"');

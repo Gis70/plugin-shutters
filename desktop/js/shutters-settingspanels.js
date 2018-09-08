@@ -338,7 +338,6 @@ function displaySettingsPanels(_eqLogic) {
             div += '<label class="col-sm-3 control-label">{{Héliotrope}}</label>';
             div += '<div class="col-sm-5">';
             div += '<select class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="heliotrope">';
-            div += '<option value="none">{{Non affecté}}</option>';
             div += '</select>';
             div += '</div>';
             div += '</div>';

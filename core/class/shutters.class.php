@@ -91,6 +91,7 @@ class shutters extends eqLogic
 
     public function postInsert()
     {
+
     }
 
     public function preSave()
@@ -250,7 +251,7 @@ class shutters extends eqLogic
             $eqLogicName = $eqLogic->getName();
             $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutterId' => $eqLogic->getId()));
             if (!is_object($listener)) {
-                log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter [' . $eqLogicName .']');
+                log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter [' . $eqLogicName . ']');
                 continue;
             }
 
@@ -259,25 +260,30 @@ class shutters extends eqLogic
 
             $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
             foreach ($conditions as $condition) {
+                $statusCmdLogicalId = 'shutter:' . $condition . 'Status';
+                $statusCmd = shuttersCmd::byEqLogicIdAndLogicalId($eqLogic->getId(), $statusCmdLogicalId);
                 $cmdId = str_replace('#', '', $this->getConfiguration($condition, null));
                 if (empty($cmdId)) {
+                    if(is_object($statusCmd)) {
+                        $eqLogic->checkAndUpdateCmd($statusCmdLogicalId, 'inhibited');
+                        log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : update cmd  [' . $statusCmd->getId()  . '] status to [inhibited] for shutter [' . $eqLogicName . ']');
+                    }
                     continue;
                 }
-                $statusCmd = shuttersCmd::byEqLogicIdAndLogicalId($eqLogic->getId(), 'shutter:' . $condition . 'Status');
                 $cmd = cmd::byId($cmdId);
                 if (!is_object($cmd)) {
                     log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : cmd  [' . $cmdId  . '] doesn\'t exist for externalConditions [' . $this->getName() . ']');
                     if(is_object($statusCmd)) {
-                        $statusCmd->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'inhibited');
-                        log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : update cmd  [' . $cmdId  . '] status to [inhibited] for shutter [' . $eqLogicName . ']');
+                        $eqLogic->checkAndUpdateCmd($statusCmdLogicalId, 'inhibited');
+                        log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : update cmd  [' . $statusCmd->getId()  . '] status to [inhibited] for shutter [' . $eqLogicName . ']');
                     }
                     continue;
                 } else {
                     $listener->addEvent($cmdId);
                     log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : eqLogic [' . $cmd->getEqLogic_id() . '] : condition cmd [' . $cmdId  . '] successfully added to listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
                     if(is_object($statusCmd)) {
-                        $statusCmd->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'enabled');
-                        log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : update cmd  [' . $cmdId  . '] status to [enabled] for shutter [' . $eqLogicName .']');
+                        $eqLogic->checkAndUpdateCmd($statusCmdLogicalId, 'enabled');
+                        log::add('shutters', 'debug', 'shutters::addExternalConditionsEvents() : update cmd  [' . $statusCmd->getId()  . '] status to [enabled] for shutter [' . $eqLogicName . ']');
                     }
                 }
             }
@@ -307,18 +313,104 @@ class shutters extends eqLogic
             $eqLogicName = $eqLogic->getName();
             $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutterId' => $eqLogic->getId()));
             if (!is_object($listener)) {
-                log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter [' . $eqLogicName .']');
+                log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions events listener doesn\'t exist for shutter [' . $eqLogicName . ']');
                 continue;
             }
             $listenerId = $listener->getId(); 
             $listener->emptyEvent();
             $listener->save();
-            log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions [' . $this->getName() . '] events successfully removed from listener [' . $listenerId . '] shutter [' . $eqLogicName .']');
+            log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions [' . $this->getName() . '] events successfully removed from listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
 
             $eqLogic->setConfiguration('externalConditionsId', 'none');
-            log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions [' . $this->getName() . '] successfully removed from shutter => ' . $eqLogicName);
+            log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : externalConditions [' . $this->getName() . '] successfully removed from shutter [' . $eqLogicName . ']');
+
+            $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
+            foreach ($conditions as $condition) {
+                $statusCmdLogicalId = 'shutter:' . $condition . 'Status';
+                $statusCmd = shuttersCmd::byEqLogicIdAndLogicalId($eqLogic->getId(), $statusCmdLogicalId);
+                if(is_object($statusCmd)) {
+                    $eqLogic->checkAndUpdateCmd($statusCmdLogicalId, 'inhibited');
+                    log::add('shutters', 'debug', 'shutters::removeExternalConditionsEvents() : update cmd  [' . $statusCmd->getId()  . '] status to [inhibited] for shutter [' . $eqLogicName . ']');
+                }
+            }
         }
     }
+
+
+    private function addHeliotropeZoneEvents()
+    {
+        foreach (eqLogic::byType('shutters', true) as $eqLogic) {
+            if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
+                continue;
+            }
+            if (empty($eqLogic->getConfiguration('heliotropeZoneId', null))) {
+                continue;
+            }
+            $eqLogicName = $eqLogic->getName();
+            $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutterId' => $eqLogic->getId()));
+            if (!is_object($listener)) {
+                log::add('shutters', 'debug', 'shutters::addHeliotropeZoneEvents() : heliotropeZone events listener doesn\'t exist for shutter [' . $eqLogicName . ']');
+                continue;
+            }
+
+            $listenerId = $listener->getId(); 
+            $listener->emptyEvent();
+
+            
+
+            foreach (shuttersCmd::byEqLogicId($this->getId(), 'action') as $cmd) {
+                if (!is_object($cmd)) {
+                    continue;
+                }
+                $cmdId = $cmd->getId();
+                $listener->addEvent($cmdId);
+                log::add('shutters', 'debug', 'shutters::addHeliotropeZoneEvents() : heliotropeZone [' . $this->getName() . '] : action cmd [' . $cmdId  . '] successfully added to listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
+            }
+
+            $listener->save();
+        }
+    }
+    
+    private function removeHeliotropeZoneEvents()
+    {
+        foreach (eqLogic::byType('shutters', true) as $eqLogic) {
+            if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
+                continue;
+            }
+            if (empty($eqLogic->getConfiguration('heliotropeZoneId', null))) {
+                continue;
+            }
+            $eqLogicName = $eqLogic->getName();
+            $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutterId' => $eqLogic->getId()));
+            if (!is_object($listener)) {
+                log::add('shutters', 'debug', 'shutters::removeHeliotropeZoneEvents() : heliotropeZone events listener doesn\'t exist for shutter [' . $eqLogicName . ']');
+                continue;
+            }
+            $listenerId = $listener->getId(); 
+            $listener->emptyEvent();
+            $listener->save();
+            log::add('shutters', 'debug', 'shutters::removeHeliotropeZoneEvents() : heliotropeZone [' . $this->getName() . '] events successfully removed from listener [' . $listenerId . '] shutter [' . $eqLogicName . ']');
+
+            $eqLogic->setConfiguration('heliotropeZoneId', 'none');
+            log::add('shutters', 'debug', 'shutters::removeHeliotropeZoneEvents() : heliotropeZone [' . $this->getName() . '] successfully removed from shutter [' . $eqLogicName . ']');
+
+            $conditions = ['sunsetCondition', 'sunriseCondition', 'azimutCondition'];
+            foreach ($conditions as $condition) {
+                $statusCmdLogicalId = 'shutter:' . $condition . 'Status';
+                $statusCmd = shuttersCmd::byEqLogicIdAndLogicalId($eqLogic->getId(), $statusCmdLogicalId);
+                if(is_object($statusCmd)) {
+                    $eqLogic->checkAndUpdateCmd($statusCmdLogicalId, 'inhibited');
+                    log::add('shutters', 'debug', 'shutters::removeHeliotropeZoneEvents() : update cmd  [' . $statusCmd->getId()  . '] status to [inhibited] for shutter [' . $eqLogicName . ']');
+                }
+            }
+        }
+    }
+
+
+
+
+
+
 
     private function updateShutterEventsListener() 
     {
@@ -333,7 +425,7 @@ class shutters extends eqLogic
         $listener->setOption(array('shutterId' => $this->getId()));
         $listener->emptyEvent();
         $listener->save();
-        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : externalConditions events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName .']');
+        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : externalConditions events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
 
         $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutterId' => $this->getId()));
         if (!is_object($listener)) {
@@ -344,7 +436,7 @@ class shutters extends eqLogic
         $listener->setOption(array('shutterId' => $this->getId()));
         $listener->emptyEvent();
         $listener->save();
-        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : heliotropeZone events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName .']');
+        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : heliotropeZone events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
 
         $listener = listener::byClassAndFunction('shutters', 'shuttersGroupEvents', array('shutterId' => $this->getId()));
         if (!is_object($listener)) {
@@ -355,7 +447,7 @@ class shutters extends eqLogic
         $listener->setOption(array('shutterId' => $this->getId()));
         $listener->emptyEvent();
         $listener->save();
-        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : shuttersGroup events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName .']');
+        log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : shuttersGroup events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
     }
 
     private function removeShutterEventsListener()

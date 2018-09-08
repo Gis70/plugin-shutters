@@ -21,7 +21,7 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
-    if (init('action') === 'listEqLogicByType') {
+    if (init('action') === 'getShutterEqLogicByType') {
         $return['externalConditions'] = array();
         $return['heliotropeZone'] = array();
         $return['shuttersGroup'] = array();
@@ -53,6 +53,25 @@ try {
         ajax::success($return);
     }
 
+    if (init('action') === 'getHeliotropeEqLogic') {
+        $return = array();
+		if (!class_exists('heliotrope')) {
+			throw new Exception(__('Type eqLogic incorrect (classe équipement inexistante) : ', __FILE__) . $eqLogicType);
+		}
+        foreach (eqLogic::byType('heliotrope') as $eqLogic) {
+            if (!is_object($eqLogic)) {
+                continue;
+            }
+            $eqLogicInfo = array(
+                'id' => $eqLogic->getId(),
+                'name' => $eqLogic->getName(),
+                'isEnable' => $eqLogic->getIsEnable(),
+            );
+            $return[] = $eqLogicInfo;
+        }
+		ajax::success($return);
+	}
+    
     if (init('action') === 'getEqLogic') {
 		$eqLogicType = init('type');
 		if ($eqLogicType === '' || !class_exists($eqLogicType)) {
