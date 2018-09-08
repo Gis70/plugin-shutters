@@ -7,7 +7,7 @@ function displaySettingsPanels(_eqLogic) {
     el.empty();
     switch (_eqLogic.configuration.eqType) {
         case 'externalConditions':
-            var div = '<div id="objectSettings" class="panel-group">';
+            var div = '<div id="settingsPanel" class="panel-group">';
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">{{Conditions externes}}</h4>';
@@ -326,7 +326,7 @@ function displaySettingsPanels(_eqLogic) {
             break;
     
         case 'heliotropeZone':
-            var div = '<div id="objectSettings" class="panel-group">';
+            var div = '<div id="settingsPanel" class="panel-group">';
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">{{Paramètres héliotrope}}</h4>';
@@ -407,7 +407,7 @@ function displaySettingsPanels(_eqLogic) {
             break;
 
         case 'shuttersGroup':
-            var div = '<div id="objectSettings" class="panel-group">';
+            var div = '<div id="settingsPanel" class="panel-group">';
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title"> {{Liens vers conditions externes et héliotrope}} </h4>';
@@ -441,12 +441,12 @@ function displaySettingsPanels(_eqLogic) {
 
         case 'shutter':
 
-            var div = '<div id="objectSettings" class="panel-group">';
+            var div = '<div id="settingsPanel" class="panel-group">';
 
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">';
-            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel1"> {{Liens vers conditions externes, héliotrope et groupe de volets}} </a>';
+            div += '<a data-toggle="collapse" data-parent="#settingsPanel" href="#settingsPanel1"> {{Liens vers conditions externes, héliotrope et groupe de volets}} </a>';
             div += '</h4>';
             div += '</div>';
             div += '<div id="settingsPanel1" class="panel-collapse collapse in">';
@@ -496,7 +496,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">';
-            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel2"> {{Type d\'ouvrant}} </a>';
+            div += '<a data-toggle="collapse" data-parent="#settingsPanel" href="#settingsPanel2"> {{Type d\'ouvrant}} </a>';
             div += '</h4>';
             div += '</div>';
             div += '<div id="settingsPanel2" class="panel-collapse collapse">';
@@ -551,7 +551,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">';
-            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel3"> {{Retour de position et commandes du volet}} </a>';
+            div += '<a data-toggle="collapse" data-parent="#settingsPanel" href="#settingsPanel3"> {{Retour de position et commandes du volet}} </a>';
             div += '</h4>';
             div += '</div>';
             div += '<div id="settingsPanel3" class="panel-collapse collapse">';
@@ -802,7 +802,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="panel panel-default">';
             div += '<div class="panel-heading">';
             div += '<h4 class="panel-title">';
-            div += '<a data-toggle="collapse" data-parent="#objectSettings" href="#settingsPanel4"> {{Azimut - }} </a>';
+            div += '<a data-toggle="collapse" data-parent="#settingsPanel" href="#settingsPanel4"> {{Azimut - }} </a>';
             div += '</h4>';
             div += '</div>';
             div += '<div id="settingsPanel4" class="panel-collapse collapse">';

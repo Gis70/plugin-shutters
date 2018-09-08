@@ -61,8 +61,6 @@ function printEqLogic(_eqLogic) {
             break;
     }
         
-    $("#cmdTable").sortable({items: ".cmd", axis: "y", tolerance: "intersect", containment: "#cmdTable", placeholder: "ui-state-highlight", forcePlaceholderSize: true, cursor: "move"});
-
     initEvents();
 
     $('#settingsPanels').setValues(_eqLogic, '.eqLogicAttr'); 
@@ -134,8 +132,8 @@ function addCmdToTable(_cmd) {
     tr += '</td>';
     tr += '</tr>';
 
-    $('table[data-cmdgroup=]' + _cmd.configuration.cmdGroup + '[data-cmdtype=]' + _cmd.type + ' tbody').append(tr);
-    $('table[data-cmdgroup=]' + _cmd.configuration.cmdGroup + '[data-cmdtype=]' + _cmd.type + ' tbody tr:last').setValues(_cmd, '.cmdAttr');
+    $('table[data-cmdgroup=' + _cmd.configuration.cmdGroup + '][data-cmdtype=' + _cmd.type + '] tbody').append(tr);
+    $('table[data-cmdgroup=' + _cmd.configuration.cmdGroup + '][data-cmdtype=' + _cmd.type + '] tbody tr:last').setValues(_cmd, '.cmdAttr');
 }
 
 /**
