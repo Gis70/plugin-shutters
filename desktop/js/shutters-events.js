@@ -121,10 +121,10 @@ function initEvents () {
         }
     });
     $('[data-l1key=configuration][data-l2key=shutterPositionType]').off('change').on('change', function () {
-        displaySettings($(this).attr('data-displaygroup'), $(this).val());
+        displaySettingsFieldset($(this).attr('data-displaygroup'), $(this).val());
     });
     $('[data-l1key=configuration][data-l2key=shutterCmdType]').off('change').on('change', function () {
-        displaySettings($(this).attr('data-displaygroup'), $(this).val());
+        displaySettingsFieldset($(this).attr('data-displaygroup'), $(this).val());
     });
     $('[data-l1key=configuration][data-l2key=incomingAngle], [data-l1key=configuration][data-l2key=outgoingAngle]').off('change').on('change', function () {
         var incomingAngle = Number.parseInt($('[data-l1key=configuration][data-l2key=incomingAngle]').val(), 10);

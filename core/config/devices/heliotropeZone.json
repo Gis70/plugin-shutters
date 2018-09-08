@@ -2,13 +2,14 @@
     "name": "heliotropeZone",
     "commands": [
         {
-            "name": "Condition coucher du soleil",
+            "name": "Gestion condition coucher du soleil",
             "type": "action",
             "subType": "select",
             "configuration": {
 				"eqType": "heliotropeZone",
+                "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets au coucher du soleil.",   
+                "description": "Activer ou désactiver la gestion des volets sur condition coucher du soleil.",   
                 "condition": "sunsetCondition",
                 "usedBy": []
             },
@@ -17,13 +18,14 @@
             "isHistorized": false
         },
         {
-            "name": "Condition lever du jour",
+            "name": "Gestion condition lever du jour",
             "type": "action",
             "subType": "select",
             "configuration": {
 				"eqType": "heliotropeZone",
+                "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets au lever du jour.",   
+                "description": "Activer ou désactiver la gestion des volets sur condition lever du jour.",   
                 "condition": "sunriseCondition",
                 "usedBy": []
             },
@@ -32,13 +34,14 @@
             "isHistorized": false
         },
         {
-            "name": "Condition azimut (jour)",
+            "name": "Gestion condition azimut (jour)",
             "type": "action",
             "subType": "select",
             "configuration": {
 				"eqType": "heliotropeZone",
+                "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets en fonction de l'azimut du soleil (jour).",   
+                "description": "Activer ou désactiver la gestion des volets sur condition azimut (jour uniquement).",   
                 "condition": "azimutCondition",
                 "usedBy": []
             },

@@ -89,7 +89,11 @@ class shutters extends eqLogic
 
         switch ($eqType) {
             case 'externalConditions':
-                $this->addExternalConditionsEvents();
+                if($this->getIsEnable()) {
+                    $this->addExternalConditionsEvents();
+                } else {
+                    $this->removeExternalConditionsEvents();
+                }
                 break;
             case 'heliotropeZone':
                 # code...
@@ -191,6 +195,7 @@ class shutters extends eqLogic
 					break;
 				}
             }
+            /*
             if($this->getConfiguration('eqType', null) === 'externalConditions') {
                 if(isset($command['configuration']['condition']) && empty($this->getConfiguration($command['configuration']['condition'], null))) {
                     if($cmd !== null || is_object($cmd)) {
@@ -200,7 +205,7 @@ class shutters extends eqLogic
                     continue;
                 }
             }
-        
+            */
 			if ($cmd === null || !is_object($cmd)) {
 				$cmd = new shuttersCmd();
 				$cmd->setEqLogic_id($this->getId());
@@ -232,7 +237,7 @@ class shutters extends eqLogic
 
             $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
             foreach ($conditions as $condition) {
-                $cmdId = str_replace('#', '', $this->getConfiguration($condition));
+                $cmdId = str_replace('#', '', $this->getConfiguration($condition, null));
                 if (empty($cmdId)) {
                     continue;
                 }

@@ -134,8 +134,8 @@ function addCmdToTable(_cmd) {
     tr += '</td>';
     tr += '</tr>';
 
-    $('#cmdTable tbody').append(tr);
-    $('#cmdTable tbody tr:last').setValues(_cmd, '.cmdAttr');
+    $('table[data-cmdgroup=]' + _cmd.configuration.cmdGroup + '[data-cmdtype=]' + _cmd.type + ' tbody').append(tr);
+    $('table[data-cmdgroup=]' + _cmd.configuration.cmdGroup + '[data-cmdtype=]' + _cmd.type + ' tbody tr:last').setValues(_cmd, '.cmdAttr');
 }
 
 /**
@@ -211,7 +211,7 @@ function updateAngleRange (_unit = 'deg') {
  * @param {string} _displayGroup 
  * @param {string} _displayValue
  */
-function displaySettings (_displayGroup = null, _displayValue = null) {
+function displaySettingsFieldset (_displayGroup = null, _displayValue = null) {
     if (_displayGroup !== null && _displayValue !== null) {
         $('fieldset[data-displaygroup=' + _displayGroup + ']').css('display', 'none');
         $('fieldset[data-displaygroup=' + _displayGroup + '][data-displayvalue~=' + _displayValue + ']').css('display', 'block');
