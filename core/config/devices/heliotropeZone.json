@@ -11,7 +11,7 @@
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition coucher du soleil.",   
                 "condition": "sunsetCondition",
-                "usedBy": []
+                "withEvent": true
             },
             "logicalId": "heliotropeZone:sunsetCondition",
             "isVisible": false,
@@ -27,7 +27,7 @@
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition lever du jour.",   
                 "condition": "sunriseCondition",
-                "usedBy": []
+                "withEvent": true
             },
             "logicalId": "heliotropeZone:sunriseCondition",
             "isVisible": false,
@@ -43,7 +43,7 @@
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition azimut (jour uniquement).",   
                 "condition": "azimutCondition",
-                "usedBy": []
+                "withEvent": true
             },
             "logicalId": "heliotropeZone:azimutCondition",
             "isVisible": false,
