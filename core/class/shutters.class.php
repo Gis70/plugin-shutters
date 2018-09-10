@@ -127,8 +127,8 @@ class shutters extends eqLogic
 
     public function preInsert()
     {
-        $this->setConfiguration('withEventCmdList', []);
-        $this->setConfiguration('withEventConditionList', []);
+        $this->setConfiguration('commandsWithEvent', []);
+        $this->setConfiguration('conditionsWithEvent', []);
     }
 
     public function postInsert()
@@ -153,18 +153,9 @@ class shutters extends eqLogic
 
         switch ($eqType) {
             case 'externalConditions':
-                if($this->getIsEnable()) {
-                    $this->addExternalConditionsEvents();
-                } else {
-                    $this->removeExternalConditionsEvents();
-                }
+                $this->getConditionWithEvent();
                 break;
             case 'heliotropeZone':
-                if($this->getIsEnable()) {
-                    $this->addHeliotropeZoneEvents();
-                } else {
-                    $this->removeHeliotropeZoneEvents();
-                }
                 break;
             case 'shuttersGroup':
                 # code...
@@ -197,10 +188,8 @@ class shutters extends eqLogic
 
         switch ($eqType) {
             case 'externalConditions':
-                $this->removeExternalConditionsEvents();
                 break;
             case 'heliotropeZone':
-                $this->removeHeliotropeZoneEvents();
                 break;
             case 'shuttersGroup':
                 # code...
@@ -253,7 +242,13 @@ class shutters extends eqLogic
 			log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands configuration file isn\'t well formatted for ['. $eqLogicName . ']');
 			return;
 		}
-		foreach ($device['commands'] as $command) {
+
+        $commandsWithEvent = $this->getConfiguration('commandsWithEvent', null);
+        if (!is_array($commandsWithEvent)) {
+            $commandsWithEvent = [];
+        }
+
+        foreach ($device['commands'] as $command) {
 			$cmd = null;
 			foreach ($this->getCmd() as $existingCmd) {
 				if ((isset($command['logicalId']) && $existingCmd->getLogicalId() === $command['logicalId'])
@@ -282,18 +277,34 @@ class shutters extends eqLogic
                 log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmd [' . $command['logicalId'] . '] successfully added for ['. $eqLogicName . ']');
             }
 
-            $withEventCmdList = $this->getConfiguration('withEventCmdList', null);
             $cmdId = $cmd->getId();
-            if (!is_array($withEventCmdList)) {
-                $withEventCmdList = [];
+            if ($cmd->getConfiguration('withEvent', null) === true && !in_array($cmdId, $commandsWithEvent)) {
+                $commandsWithEvent[] = $cmdId;
             }
-            if ($cmd->getConfiguration('withEvent', null) === true && !in_array($cmdId, $withEventCmdList)) {
-                $withEventCmdList[] = $cmdId;
-            }
-            $this->setConfiguration('withEventCmdList', $withEventCmdList);
-            $this->save();
         }
+        $this->setConfiguration('commandsWithEvent', $commandsWithEvent);
         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmds successfully imported for ['. $eqLogicName . ']');
+    }
+
+    private function getConditionWithEvent() {
+        $conditionsWithEvent = $this->getConfiguration('conditionsWithEvent', null);
+        if (!is_array($conditionsWithEvent)) {
+            $conditionsWithEvent = [];
+        }
+        $conditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
+        foreach ($conditions as $condition) {
+            $cmdId = str_replace('#', '', $this->getConfiguration($condition, null));
+            if (empty($cmdId)) {
+                continue;
+            }
+            $cmd = cmd::byId($cmdId);
+            if (!is_object($cmd)) {
+                log::add('shutters', 'debug', 'shutters::getConditionWithEvent() : cmd  [' . $cmdId  . '] configured in externalConditions [' . $this->getName() . '][' . $condition . '] doesn\'t exist');
+                continue;
+            }
+            $conditionsWithEvent[] = $cmdId;
+        }
+        $this->setConfiguration('commandsWithEvent', $commandsWithEvent);
     }
 
     private function addExternalConditionsEvents()
