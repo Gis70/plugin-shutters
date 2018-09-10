@@ -138,14 +138,9 @@ class shutters extends eqLogic
 
     public function preSave()
     {
-
-    }
-
-    public function postSave()
-    {
         $eqType = $this->getConfiguration('eqType', null);
         $eqLogicName = $this->getName();
-        log::add('shutters', 'debug', 'shutters::postSave() : eqLogic[' . $eqLogicName . '] eqType [' . $eqType . ']');
+        log::add('shutters', 'debug', 'shutters::preSave() : eqLogic[' . $eqLogicName . '] eqType [' . $eqType . ']');
 
         if(!empty($eqType)) {
             $this->loadCmdFromConfFile($eqType);
@@ -168,6 +163,10 @@ class shutters extends eqLogic
                 # code...
                 break;
         }
+    }
+
+    public function postSave()
+    {
 
     }
 
@@ -286,6 +285,9 @@ class shutters extends eqLogic
         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmds successfully imported for ['. $eqLogicName . ']');
     }
 
+    /**
+     * 
+     */
     private function getConditionWithEvent() {
         $conditionsWithEvent = $this->getConfiguration('conditionsWithEvent', null);
         if (!is_array($conditionsWithEvent)) {
@@ -302,9 +304,11 @@ class shutters extends eqLogic
                 log::add('shutters', 'debug', 'shutters::getConditionWithEvent() : cmd  [' . $cmdId  . '] configured in externalConditions [' . $this->getName() . '][' . $condition . '] doesn\'t exist');
                 continue;
             }
-            $conditionsWithEvent[] = $cmdId;
+            if (!in_array($cmdId, $conditionsWithEvent)) {
+                $conditionsWithEvent[] = $cmdId;
+            }
         }
-        $this->setConfiguration('commandsWithEvent', $commandsWithEvent);
+        $this->setConfiguration('conditionsWithEvent', $conditionsWithEvent);
     }
 
     private function addExternalConditionsEvents()
