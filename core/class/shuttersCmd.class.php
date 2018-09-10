@@ -30,7 +30,7 @@ class shuttersCmd extends cmd
     
 	public function execute($_options = array())
 	{
-
+		log::add('shutters', 'debug', 'shuttersCmd::execute() : ' . print_r($_options, true));
 	}
 
     /*     * **********************Getteur Setteur*************************** */

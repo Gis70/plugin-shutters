@@ -104,16 +104,6 @@ class shutters extends eqLogic
         }
     }
 
-    public static function externalConditionsCmdEvents($_option)
-    {
-        $shutterId = $_option['shutterId'];
-        $shutter = eqlogic::byId($shutterId);
-        $cmdId = $_option['event_id'];
-        $cmdValue = $_option['value'];
-        log::add('shutters', 'debug', print_r($_option, true));
-        log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : event received for shutter [' . $shutterId . '] from cmd [' . $cmdId . '] cmd value => ' . $cmdValue);
-
-    }
 
     public static function heliotropeZoneEvents($_option)
     {
@@ -136,32 +126,26 @@ class shutters extends eqLogic
 
     private static function updateEventsListener() 
     {
+        $usedByShutters = [];
         foreach (eqLogic::byType('shutters', true) as $eqLogic) {
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
         
             $eqLogicName = $eqLogic->getName();
+            $eqLogicId = $eqLogic->getId();
 
-            $conditionsListener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutterId' => $eqLogic->getId()));
-            if (!is_object($conditionsListener)) {
-                $conditionsListener = new listener();
-                $conditionsListener->setClass('shutters');
-                $conditionsListener->setFunction('externalConditionsEvents');
-                $conditionsListener->setOption(array('shutterId' => $eqLogic->getId()));
-                }
-            $conditionsListener->emptyEvent();
-            $conditionsListener->save();
-
-            $cmdListener = listener::byClassAndFunction('shutters', 'externalConditionsCmdEvents', array('shutterId' => $eqLogic->getId()));
-            if (!is_object($cmdListener)) {
-                $cmdListener = new listener();
-                $cmdListener->setClass('shutters');
-                $cmdListener->setFunction('externalConditionsCmdEvents');
-                $cmdListener->setOption(array('shutterId' => $eqLogic->getId()));
-                }
-            $cmdListener->emptyEvent();
-            $cmdListener->save();
+            $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutterId' => $eqLogic->getId()));
+            if (!is_object($listener)) {
+                $listener = new listener();
+                $listener->setClass('shutters');
+                $listener->setFunction('externalConditionsEvents');
+                $listener->setOption(array('shutterId' => $eqLogic->getId()));
+                $listener->emptyEvent();
+                $listener->save();
+                log::add('shutters', 'debug', 'shutters::updateEventsListener() : external conditions events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
+            }
+            $listener->emptyEvent();
 
             $externalConditionsId = str_replace('#', '', $eqLogic->getConfiguration('externalConditionsId', null));
             if (!empty($externalConditionsId) && $externalConditionsId !== 'none') {
@@ -174,24 +158,17 @@ class shutters extends eqLogic
                             log::add('shutters', 'debug', 'shutters::updateEventsListener() : cmd  [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsEqLogic->getName() . '] doesn\'t exist');
                             continue;
                         }
-                        $conditionsListener->addEvent($cmdId);
+                        $listener->addEvent($cmdId);
                         log::add('shutters', 'debug', 'shutters::updateEventsListener() : externalConditions [' . $externalConditionsEqLogic->getName() . '] : condition cmd [' . $cmdId  . '] successfully added to listener [' . $conditionsListener->getId() . '] shutter [' . $eqLogicName . ']');
                     }
-                    $conditionsListener->save();
-                    $commandsWithEvent = $externalConditionsEqLogic->getConfiguration('commandsWithEvent', null);
-                    foreach ($commandsWithEvent as $cmdId) {
-                        $cmd = cmd::byId($cmdId);
-                        if (!is_object($cmd)) {
-                            log::add('shutters', 'debug', 'shutters::updateEventsListener() : action cmd  [' . $cmdId  . '] from externalConditions [' . $externalConditionsEqLogic->getName() . '] doesn\'t exist');
-                            continue;
-                        }
-                        $cmdListener->addEvent($cmdId);
-                        log::add('shutters', 'debug', 'shutters::updateEventsListener() : externalConditions [' . $externalConditionsEqLogic->getName() . '] : condition cmd [' . $cmdId  . '] successfully added to listener [' . $conditionsListener->getId() . '] shutter [' . $eqLogicName . ']');
-                    }
-                    $cmdListener->save();
+                    $listener->save();
                 }
             }
+            if (!in_array($eqLogicId, $usedByShutters)) {
+                $usedByShutters[] = $eqLogicId;
+                $externalConditionsEqLogic->setConfiguration('usedByShutters', $usedByShutters)->save();
 
+            }
             
 
 
@@ -227,8 +204,8 @@ class shutters extends eqLogic
 
     public function preInsert()
     {
-        $this->setConfiguration('commandsWithEvent', []);
         $this->setConfiguration('conditionsWithEvent', []);
+        $this->setConfiguration('usedByShutters', []);
     }
 
     public function postInsert()
@@ -340,11 +317,6 @@ class shutters extends eqLogic
 			return;
 		}
 
-        $commandsWithEvent = $this->getConfiguration('commandsWithEvent', null);
-        if (!is_array($commandsWithEvent)) {
-            $commandsWithEvent = [];
-        }
-
         foreach ($device['commands'] as $command) {
 			$cmd = null;
 			foreach ($this->getCmd() as $existingCmd) {
@@ -373,13 +345,7 @@ class shutters extends eqLogic
 				$cmd->save();
                 log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmd [' . $command['logicalId'] . '] successfully added for ['. $eqLogicName . ']');
             }
-
-            $cmdId = $cmd->getId();
-            if ($cmd->getConfiguration('withEvent', null) === true && !in_array($cmdId, $commandsWithEvent)) {
-                $commandsWithEvent[] = $cmdId;
-            }
         }
-        $this->setConfiguration('commandsWithEvent', $commandsWithEvent);
         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmds successfully imported for ['. $eqLogicName . ']');
     }
 
