@@ -237,7 +237,7 @@ class shutters extends eqLogic
 
     public function postSave()
     {
-        shutters::updateEventsListener();
+        //shutters::updateEventsListener();
     }
 
     public function preUpdate()
@@ -341,6 +341,45 @@ class shutters extends eqLogic
             }
         }
         log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmds successfully imported for ['. $eqLogicName . ']');
+    }
+
+    private function updateCrossRef()
+    {
+        $eqType = $this->getConfiguration('eqType', null);
+        if (empty($eqType)) {
+            return;
+        }
+        if ($eqType === 'shutter') {
+            $use = [];
+            $externalConditionsId = $this->getConfiguration('externalConditionsId', null);
+            if (!empty($externalConditionsId) && $externalConditionsId !== 'none') {
+                $use[] = $externalConditionsId;
+            }
+            $heliotropeZoneId = $this->getConfiguration('heliotropeZoneId', null);
+            if (!empty($heliotropeZoneId) && $heliotropeZoneId !== 'none') {
+                $use[] = $heliotropeZoneId;
+            }
+            $shuttersGroupId = $this->getConfiguration('shuttersGroupId', null);
+            if (!empty($shuttersGroupId) && $shuttersGroupId !== 'none') {
+                $use[] = $shuttersGroupId;
+            }
+            $this->setConfiguration('crossRef', ['usedBy' => [], 'use' => $use]);
+        } else {
+            $usedBy = [];
+            foreach (eqLogic::byType('shutters', true) as $eqLogic) {
+                if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
+                    continue;
+                }
+                $crossRef = $eqLogic->getConfiguration('crossRef', null);
+                if (empty($crossRef['use'])) {
+                    continue;
+                }
+                if (in_array($this->getId(), $crossRef['use'])) {
+                    $usedBy[] = $eqLogic->getId();
+                }
+            }
+            $this->setConfiguration('crossRef', ['usedBy' => $usedBy, 'use' => []]);
+        }
     }
 
     /**
