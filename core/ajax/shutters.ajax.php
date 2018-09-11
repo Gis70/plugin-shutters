@@ -22,19 +22,19 @@ try {
     }
 
     if (init('action') === 'getShutterEqLogicByType') {
-        $return['externalConditions'] = array();
-        $return['heliotropeZone'] = array();
-        $return['shuttersGroup'] = array();
-        $return['shutter'] = array();
+        $return['externalConditions'] = [];
+        $return['heliotropeZone'] = [];
+        $return['shuttersGroup'] = [];
+        $return['shutter'] = [];
 		foreach (eqLogic::byType('shutters') as $eqLogic) {
             if (!is_object($eqLogic)) {
                 continue;
             }
-            $eqLogicInfo = array(
+            $eqLogicInfo = [
                 'id' => $eqLogic->getId(),
                 'name' => $eqLogic->getName(),
                 'isEnable' => $eqLogic->getIsEnable(),
-            );
+        ];
             switch ($eqLogic->getConfiguration('eqType')) {
                 case 'externalConditions':
                     $return['externalConditions'][] = $eqLogicInfo;
@@ -54,7 +54,7 @@ try {
     }
 
     if (init('action') === 'getHeliotropeEqLogic') {
-        $return = array();
+        $return = [];
 		if (!class_exists('heliotrope')) {
 			throw new Exception(__('Type eqLogic incorrect (classe équipement inexistante) : ', __FILE__) . $eqLogicType);
 		}
@@ -62,11 +62,11 @@ try {
             if (!is_object($eqLogic)) {
                 continue;
             }
-            $eqLogicInfo = array(
+            $eqLogicInfo = [
                 'id' => $eqLogic->getId(),
                 'name' => $eqLogic->getName(),
                 'isEnable' => $eqLogic->getIsEnable(),
-            );
+            ];
             $return[] = $eqLogicInfo;
         }
 		ajax::success($return);

@@ -135,12 +135,12 @@ class shutters extends eqLogic
             $eqLogicName = $eqLogic->getName();
             $eqLogicId = $eqLogic->getId();
 
-            $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', array('shutterId' => $eqLogic->getId()));
+            $listener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', ['shutterId' => $eqLogic->getId()]);
             if (!is_object($listener)) {
                 $listener = new listener();
                 $listener->setClass('shutters');
                 $listener->setFunction('externalConditionsEvents');
-                $listener->setOption(array('shutterId' => $eqLogic->getId()));
+                $listener->setOption(['shutterId' => $eqLogic->getId()]);
                 $listener->emptyEvent();
                 $listener->save();
                 log::add('shutters', 'debug', 'shutters::updateEventsListener() : external conditions events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
@@ -164,12 +164,6 @@ class shutters extends eqLogic
                     $listener->save();
                 }
             }
-            if (!in_array($eqLogicId, $usedByShutters)) {
-                $usedByShutters[] = $eqLogicId;
-                $externalConditionsEqLogic->setConfiguration('usedByShutters', $usedByShutters)->save();
-
-            }
-            
 
 
 
@@ -205,7 +199,7 @@ class shutters extends eqLogic
     public function preInsert()
     {
         $this->setConfiguration('conditionsWithEvent', []);
-        $this->setConfiguration('usedByShutters', []);
+        $this->setConfiguration('crossRef', ['usedBy' => [], 'use' => []]);
     }
 
     public function postInsert()
