@@ -1,0 +1,83 @@
+        if ($eqType === 'externalConditions') {
+            if (!isCmdExisting($this->getConfiguration('fireCondition', null))) {
+                throw new \Exception (__('[Détection incendie] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                if (empty($this->getConfiguration('fireConditionStatus', null))) {
+                    throw new \Exception (__('[Détection incendie] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('absenceCondition', null))) {
+                throw new \Exception (__('[Absence] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('absenceConditionStatus', null))) {
+                    throw new \Exception (__('[Absence] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('presenceCondition', null))) {
+                throw new \Exception (__('[Présence] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('presenceConditionStatus', null))) {
+                    throw new \Exception (__('[Présence] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('outdoorLuminosityCondition', null))) {
+                throw new \Exception (__('[Luminosité extérieure] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('outdoorLuminosityCmdStatus', null))) {
+                    throw new \Exception (__('[Luminosité extérieure] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('outdoorTemperatureCondition', null))) {
+                throw new \Exception (__('[Température extérieure] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('outdoorTemperatureCmdStatus', null))) {
+                    throw new \Exception (__('[Température extérieure] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('outdoorLuminosityCondition', null))) {
+                throw new \Exception (__('[Luminosité extérieure] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('outdoorLuminosityCmdStatus', null))) {
+                    throw new \Exception (__('[Luminosité extérieure] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('outdoorTemperatureCondition', null))) {
+                throw new \Exception (__('[Température extérieure] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('outdoorTemperatureCmdStatus', null))) {
+                    throw new \Exception (__('[Température extérieure] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('firstUserCondition', null))) {
+                throw new \Exception (__('[Condition 1 utilisateur] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('firstUserConditionStatus', null))) {
+                    throw new \Exception (__('[Condition 1 utilisateur] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+            if (!isCmdExisting($this->getConfiguration('secondUserCondition', null))) {
+                throw new \Exception (__('[Condition 2 utilisateur] La commande d\'information est inconnue!', __FILE__));
+                return;
+            } else {
+                    if (empty($this->getConfiguration('secondUserConditionStatus', null))) {
+                    throw new \Exception (__('[Condition 2 utilisateur] Veuillez valider le statut de la commande d\'information!', __FILE__));
+                    return;
+                }
+            } 
+        }
