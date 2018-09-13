@@ -351,9 +351,31 @@ class shutters extends eqLogic
         }
         if ($eqType === 'shutter') {
             $use = [];
+            $configKey = ['externalConditionsId', 'heliotropeZoneId', 'shuttersGroupId'];
+            foreach ($configKey as $key) {
+                $eqLogicId = $this->getConfiguration($key, null);
+                if (!empty($eqLogicId) && $eqLogicId !== 'none') {
+                    $eqLogic = eqLogic::byId($eqLogicId);
+                    if (is_object($eqLogic)) {
+                        $use[] = $eqLogicId;
+                        $crossRef = $eqLogic->getConfiguration('crossRef', null);
+                        if ($eqLogic->getIsEnable()) {
+                            if (in_array($this->getId(), $crossRef['usedBy'])) {
+                                # code...
+                            }
+                        }
+
+
+                    }
+                    
+    
+                }
+            }
             $externalConditionsId = $this->getConfiguration('externalConditionsId', null);
             if (!empty($externalConditionsId) && $externalConditionsId !== 'none') {
+                $externalConditions = shutters::byId($externalConditionsId);
                 $use[] = $externalConditionsId;
+
             }
             $heliotropeZoneId = $this->getConfiguration('heliotropeZoneId', null);
             if (!empty($heliotropeZoneId) && $heliotropeZoneId !== 'none') {
