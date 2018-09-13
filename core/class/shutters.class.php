@@ -126,7 +126,6 @@ class shutters extends eqLogic
 
     private static function updateEventsListener() 
     {
-        $usedByShutters = [];
         foreach (eqLogic::byType('shutters', true) as $eqLogic) {
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
@@ -172,24 +171,24 @@ class shutters extends eqLogic
             $listener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutterId' => $eqLogic->getId()));
             if (!is_object($listener)) {
                 $listener = new listener();
+                $listener->setClass('shutters');
+                $listener->setFunction('heliotropeZoneEvents');
+                $listener->setOption(array('shutterId' => $eqLogic->getId()));
+                $listener->emptyEvent();
+                $listener->save();
+                log::add('shutters', 'debug', 'shutters::updateEventsListener() : heliotrope events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
             }
-            $listener->setClass('shutters');
-            $listener->setFunction('heliotropeZoneEvents');
-            $listener->setOption(array('shutterId' => $eqLogic->getId()));
-            $listener->emptyEvent();
-            $listener->save();
-            log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : heliotropeZone events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
     
             $listener = listener::byClassAndFunction('shutters', 'shuttersGroupEvents', array('shutterId' => $eqLogic->getId()));
             if (!is_object($listener)) {
                 $listener = new listener();
+                $listener->setClass('shutters');
+                $listener->setFunction('shuttersGroupEvents');
+                $listener->setOption(array('shutterId' => $eqLogic->getId()));
+                $listener->emptyEvent();
+                $listener->save();
+                log::add('shutters', 'debug', 'shutters::updateEventsListener() : shutters group events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
             }
-            $listener->setClass('shutters');
-            $listener->setFunction('shuttersGroupEvents');
-            $listener->setOption(array('shutterId' => $eqLogic->getId()));
-            $listener->emptyEvent();
-            $listener->save();
-            log::add('shutters', 'debug', 'shutters::updateShutterEventsListener() : shuttersGroup events listener [' . $listener->getId() . ']  successfully added for shutter [' . $eqLogicName . ']');
     
         }
     }
@@ -233,6 +232,7 @@ class shutters extends eqLogic
                 # code...
                 break;
         }
+        $this->updateCrossRef();
     }
 
     public function postSave()
@@ -340,7 +340,7 @@ class shutters extends eqLogic
                 log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmd [' . $command['logicalId'] . '] successfully added for ['. $eqLogicName . ']');
             }
         }
-        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : cmds successfully imported for ['. $eqLogicName . ']');
+        log::add('shutters', 'debug', 'shutters::loadCmdFromConfFile() : commands successfully imported for ['. $eqLogicName . ']');
     }
 
     private function updateCrossRef()
@@ -353,61 +353,35 @@ class shutters extends eqLogic
             $use = [];
             $configKey = ['externalConditionsId', 'heliotropeZoneId', 'shuttersGroupId'];
             foreach ($configKey as $key) {
-                $eqLogicId = $this->getConfiguration($key, null);
+                $eqLogicId = str_replace('#', '', $this->getConfiguration($key, null));
                 if (!empty($eqLogicId) && $eqLogicId !== 'none') {
                     $eqLogic = eqLogic::byId($eqLogicId);
                     if (is_object($eqLogic)) {
-                        $use[] = $eqLogicId;
-                        $crossRef = $eqLogic->getConfiguration('crossRef', null);
                         if ($eqLogic->getIsEnable()) {
-                            if (in_array($this->getId(), $crossRef['usedBy'])) {
-                                # code...
+                            $use[] = $eqLogicId;
+                            $crossRef = $eqLogic->getConfiguration('crossRef', null);
+                            $search = array_search($this->getId(), $crossRef['usedBy']);
+                            if ($search === false && $this->getIsEnable()) {
+                                $crossRef['usedBy'][] = $this->getId();
                             }
+                            if ($search !== false && !$this->getIsEnable()) {
+                                unset($crossRef['usedBy'][$search]);
+                            }
+                            $eqLogic->setConfiguration('crossRef', $crossRef);
+                            $eqLogic->save(true);
                         }
-
-
                     }
-                    
-    
                 }
-            }
-            $externalConditionsId = $this->getConfiguration('externalConditionsId', null);
-            if (!empty($externalConditionsId) && $externalConditionsId !== 'none') {
-                $externalConditions = shutters::byId($externalConditionsId);
-                $use[] = $externalConditionsId;
-
-            }
-            $heliotropeZoneId = $this->getConfiguration('heliotropeZoneId', null);
-            if (!empty($heliotropeZoneId) && $heliotropeZoneId !== 'none') {
-                $use[] = $heliotropeZoneId;
-            }
-            $shuttersGroupId = $this->getConfiguration('shuttersGroupId', null);
-            if (!empty($shuttersGroupId) && $shuttersGroupId !== 'none') {
-                $use[] = $shuttersGroupId;
             }
             $this->setConfiguration('crossRef', ['usedBy' => [], 'use' => $use]);
-        } else {
-            $usedBy = [];
-            foreach (eqLogic::byType('shutters', true) as $eqLogic) {
-                if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
-                    continue;
-                }
-                $crossRef = $eqLogic->getConfiguration('crossRef', null);
-                if (empty($crossRef['use'])) {
-                    continue;
-                }
-                if (in_array($this->getId(), $crossRef['use'])) {
-                    $usedBy[] = $eqLogic->getId();
-                }
-            }
-            $this->setConfiguration('crossRef', ['usedBy' => $usedBy, 'use' => []]);
         }
     }
 
     /**
      * 
      */
-    private function getConditionWithEvent() {
+    private function getConditionWithEvent()
+    {
         $conditionsWithEvent = $this->getConfiguration('conditionsWithEvent', null);
         if (!is_array($conditionsWithEvent)) {
             $conditionsWithEvent = [];
@@ -621,11 +595,6 @@ class shutters extends eqLogic
             }
         }
     }
-
-
-
-
-
 
 
 
