@@ -25,7 +25,7 @@ class shutters extends eqLogic
 {
     /*     * *************************Attributs****************************** */
 
-    public static $_externalConditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
+    private static $_externalConditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
 
     /*     * ***********************Methode static*************************** */
 
@@ -52,7 +52,7 @@ class shutters extends eqLogic
     public static function start()
     {
         log::add('shutters', 'debug', 'shutters::start()');
-        shutters::updateEventsListener();
+        self::updateEventsListener();
     }
 
     public static function stop()
@@ -215,7 +215,6 @@ class shutters extends eqLogic
         if (!is_object($shutter)) {
             return;
         }
-        $main= [];
         $primaryConditions = explode(',', $shutter->getConfiguration('primaryConditionsPriority', null));
 
     }
@@ -265,15 +264,15 @@ class shutters extends eqLogic
 
         switch ($thisEqType) {
             case 'externalConditions':
-                shutters::updateEventsListener();
+                self::updateEventsListener();
                 break;
             case 'heliotropeZone':
-                shutters::updateEventsListener();
+                self::updateEventsListener();
                 break;
             case 'shuttersGroup':
                 break;
             case 'shutter':
-                shutters::updateEventsListener();
+                self::updateEventsListener();
                 break;
             default:
                 break;
@@ -393,7 +392,7 @@ class shutters extends eqLogic
         if (!is_array($conditionsWithEvent)) {
             $conditionsWithEvent = [];
         }
-        foreach ($_externalConditions as $condition) {
+        foreach ($this->_externalConditions as $condition) {
             $cmdId = str_replace('#', '', $this->getConfiguration($condition, null));
             if (empty($cmdId)) {
                 continue;
@@ -478,4 +477,5 @@ class shutters extends eqLogic
      */
 
     /*     * **********************Getteur Setteur*************************** */
+
 }
