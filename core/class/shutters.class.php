@@ -25,8 +25,8 @@ class shutters extends eqLogic
 {
     /*     * *************************Attributs****************************** */
 
-    private static $_externalConditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
-
+    private $_externalConditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
+	protected $_test;
     /*     * ***********************Methode static*************************** */
 
     /*
@@ -62,14 +62,18 @@ class shutters extends eqLogic
 
     private static function updateEventsListener() 
     {
-        foreach (eqLogic::byType('shutters', false) as $eqLogic) {
+ 
+      foreach (eqLogic::byType('shutters', false) as $eqLogic) {
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
+      log::add('shutters', 'debug', 'shutters::updateEventsListener() : '.print_r($eqLogic->test(),true));
         
             $eqLogicName = $eqLogic->getName();
             $eqLogicId = $eqLogic->getId();
-
+			$testEqlogic= shutters::byId($eqLogicId);
+        log::add('shutters', 'debug', 'shutters::updateEventsListener() : '.print_r($testEqlogic->test(),true));
+      
             $conditionsEventListener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', ['shutterId' => $eqLogic->getId()]);
             if (!is_object($conditionsEventListener)) {
                 $conditionsEventListener = new listener();
@@ -185,11 +189,13 @@ class shutters extends eqLogic
     public static function externalConditionsEvents($_option)
     {
         $shutterId = $_option['shutterId'];
-        $shutter = eqlogic::byId($shutterId);
+        $shutter = shutters::byId($_option['shutterId']);
         $cmdId = $_option['event_id'];
         $cmdValue = $_option['value'];
         log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : event received for shutter [' . $shutterId . '] from cmd [' . $cmdId . '] cmd value => ' . $cmdValue);
-
+      log::add('shutters', 'debug', 'shutters::test() : '.print_r($shutter, true));
+      log::add('shutters', 'debug', 'shutters::test() : '.$shutter->test());
+		$shutter->toto();
         if (!is_object($shutter)) {
             log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : shutter [' . $shutterId . '] doesn\'t exist');
             return;
@@ -215,6 +221,7 @@ class shutters extends eqLogic
         if (!is_object($shutter)) {
             return;
         }
+        $main= [];
         $primaryConditions = explode(',', $shutter->getConfiguration('primaryConditionsPriority', null));
 
     }
@@ -236,6 +243,11 @@ class shutters extends eqLogic
         $thisEqType = $this->getConfiguration('eqType', null);
         $thisName = $this->getName();
         log::add('shutters', 'debug', 'shutters::preSave() : eqLogic[' . $thisName . '] eqType [' . $thisEqType . ']');
+        log::add('shutters', 'debug', 'shutters::preSave() : '.$this->test());
+      	$this->initTest();
+        log::add('shutters', 'debug', 'shutters::preSave() : '.$this->test());
+	$this->setTest('enable');
+        log::add('shutters', 'debug', 'shutters::preSave() : '.$this->test());
 
         switch ($thisEqType) {
             case 'externalConditions':
@@ -257,7 +269,9 @@ class shutters extends eqLogic
         $thisEqType = $this->getConfiguration('eqType', null);
         $thisName = $this->getName();
         log::add('shutters', 'debug', 'shutters::postSave() : eqLogic[' . $thisName . '] eqType [' . $thisEqType . ']');
-
+         //log::add('shutters', 'debug', 'shutters::postSave() : '.print_r($this->_test,true));
+           log::add('shutters', 'debug', 'shutters::postSave() : '.print_r($this->test(),true));
+ 
         if(!empty($thisEqType)) {
             $this->loadCmdFromConfFile($thisEqType);
         }
@@ -316,6 +330,10 @@ class shutters extends eqLogic
         
     }
 
+  public function toto() {
+  	           log::add('shutters', 'debug', 'shutters::toto() : '.$this->test());
+
+  }
 
     private function checkSettings()
     {
@@ -477,5 +495,25 @@ class shutters extends eqLogic
      */
 
     /*     * **********************Getteur Setteur*************************** */
+  
+  
+  public function test() {
+                log::add('shutters', 'debug', 'shutters::test() : test => ' .$this->_test);
+                log::add('shutters', 'debug', 'shutters::test() : test => ' .print_r($this, true));
+
+  return $this->_test;
+}
+  
+  public function initTest(){
+    //$this->_test['absenceCondition']['condition'] = ['cmdId' => '', 'status' => ''];
+    $this->_test= 'inhibited';
+    return $this;
+  
+  }
+  
+  public function setTest($_status){
+    $this->_test = $_status;
+    return $this;
+  }
 
 }
