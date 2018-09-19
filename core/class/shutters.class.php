@@ -25,8 +25,8 @@ class shutters extends eqLogic
 {
     /*     * *************************Attributs****************************** */
 
-    private $_externalConditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
-	protected $_test;
+    private static $_externalConditions = ['fireCondition', 'absenceCondition', 'presenceCondition', 'outdoorLuminosityCondition', 'outdoorTemperatureCondition', 'firstUserCondition', 'secondUserCondition'];
+
     /*     * ***********************Methode static*************************** */
 
     /*
@@ -62,18 +62,16 @@ class shutters extends eqLogic
 
     private static function updateEventsListener() 
     {
- 
-      foreach (eqLogic::byType('shutters', false) as $eqLogic) {
+        foreach (eqLogic::byType('shutters', false) as $eqLogic) {
             if (!is_object($eqLogic) || $eqLogic->getConfiguration('eqType', null) !== 'shutter') {
                 continue;
             }
-      log::add('shutters', 'debug', 'shutters::updateEventsListener() : '.print_r($eqLogic->test(),true));
         
             $eqLogicName = $eqLogic->getName();
             $eqLogicId = $eqLogic->getId();
-			$testEqlogic= shutters::byId($eqLogicId);
-        log::add('shutters', 'debug', 'shutters::updateEventsListener() : '.print_r($testEqlogic->test(),true));
-      
+
+            $conditionsWithEvent = [];
+
             $conditionsEventListener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', ['shutterId' => $eqLogic->getId()]);
             if (!is_object($conditionsEventListener)) {
                 $conditionsEventListener = new listener();
@@ -112,18 +110,21 @@ class shutters extends eqLogic
             } else {
                 $externalConditionsId = str_replace('#', '', $eqLogic->getConfiguration('externalConditionsId', null));
                 if (!empty($externalConditionsId) && $externalConditionsId !== 'none') {
-                    $externalConditionsEqLogic = eqLogic::byId($externalConditionsId);
+                    $externalConditionsEqLogic = shutters::byId($externalConditionsId);
                     if (is_object($externalConditionsEqLogic)) {
                         if ($externalConditionsEqLogic->getIsEnable()) {
-                            $conditionsWithEvent = $externalConditionsEqLogic->getConfiguration('conditionsWithEvent', null);
-                            foreach ($conditionsWithEvent as $cmdId) {
-                                $cmd = cmd::byId($cmdId);
-                                if (!is_object($cmd)) {
-                                    log::add('shutters', 'debug', 'shutters::updateEventsListener() : cmd  [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] doesn\'t exist');
-                                    continue;
+                            foreach (self::$_externalConditions as $condition) {
+                                $cmdId = str_replace('#', '', $externalConditionsEqLogic->getConfiguration($condition, null));
+                                if (!empty($cmdId)) {
+                                    $cmd = cmd::byId($cmdId);
+                                    if (is_object($cmd)) {
+                                        $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
+                                        $conditionsEventListener->addEvent($cmdId);
+                                        log::add('shutters', 'debug', 'shutters::updateEventsListener() : cmd [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] successfully added to listener [' . $conditionsEventListenerId . '] for shutter [' . $eqLogicName . ']');
+                                    } else {
+                                        log::add('shutters', 'debug', 'shutters::updateEventsListener() : cmd  [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] doesn\'t exist');
+                                    }
                                 }
-                                $conditionsEventListener->addEvent($cmdId);
-                                log::add('shutters', 'debug', 'shutters::updateEventsListener() : cmd [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] successfully added to listener [' . $conditionsEventListenerId . '] for shutter [' . $eqLogicName . ']');
                             }
                             $conditionsEventListener->save();
                         } else {
@@ -140,7 +141,7 @@ class shutters extends eqLogic
 
                 $heliotropeZoneId = str_replace('#', '', $eqLogic->getConfiguration('heliotropeZoneId', null));
                 if (!empty($heliotropeZoneId) && $heliotropeZoneId !== 'none') {
-                    $heliotropeZoneEqLogic = eqLogic::byId($heliotropeZoneId);
+                    $heliotropeZoneEqLogic = shutters::byId($heliotropeZoneId);
                     if (is_object($heliotropeZoneEqLogic)) {
                         if ($heliotropeZoneEqLogic->getIsEnable()) {
 
@@ -153,6 +154,7 @@ class shutters extends eqLogic
                                         $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, $cmdLogicalId);
                                         if(is_object($cmd)) {
                                             $cmdId = $cmd->getId();
+                                            $conditionsWithEvent[$cmdLogicalId] = ['cmdId' => $cmdId, 'status' => null];
                                             $heliotropeEventListener->addEvent($cmdId);
                                             log::add('shutters', 'debug', 'shutters::updateEventsListener() : cmd [' . $cmdId  . '] from heliotrope [' . $heliotropeId . '] successfully added to listener [' . $heliotropeEventListenerId . '] for shutter [' . $eqLogicName . ']');
                                         } else {
@@ -181,25 +183,19 @@ class shutters extends eqLogic
                         log::add('shutters', 'debug', 'shutters::updateEventsListener() : heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 }
-    
             }
+            $eqLogic->setConfiguration('conditionsWithEvent', $conditionsWithEvent);
+            $eqLogic->save(true);
         }
     }
 
     public static function externalConditionsEvents($_option)
     {
         $shutterId = $_option['shutterId'];
-        $shutter = shutters::byId($_option['shutterId']);
+        $shutter = shutters::byId($shutterId);
         $cmdId = $_option['event_id'];
         $cmdValue = $_option['value'];
         log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : event received for shutter [' . $shutterId . '] from cmd [' . $cmdId . '] cmd value => ' . $cmdValue);
-      log::add('shutters', 'debug', 'shutters::test() : '.print_r($shutter, true));
-      log::add('shutters', 'debug', 'shutters::test() : '.$shutter->test());
-		$shutter->toto();
-        if (!is_object($shutter)) {
-            log::add('shutters', 'debug', 'shutters::externalConditionsEvents() : shutter [' . $shutterId . '] doesn\'t exist');
-            return;
-        }
 
    }
 
@@ -217,12 +213,59 @@ class shutters extends eqLogic
         if (empty($_shutterId)) {
             return;
         }
-        $shutter = eqLogic::byId($_shutterId);
+        $shutter = shutters::byId($_shutterId);
         if (!is_object($shutter)) {
+            log::add('shutters', 'debug', 'shutters::main() : shutter [' . $_shutterId . '] doesn\'t exist');
             return;
         }
-        $main= [];
-        $primaryConditions = explode(',', $shutter->getConfiguration('primaryConditionsPriority', null));
+
+        $externalConditionsId = str_replace('#', '', $_shutterId->getConfiguration('externalConditionsId', null));
+        self::checkPrimaryConditions($externalConditionsId);
+
+
+    }
+
+    private static function checkPrimaryConditions($_eqLogicId)
+    {
+        $return = ['condition' => '', 'positionSetpoint' => 0];
+        if (!empty($_eqLogicId) && $_eqLogicId !== 'none') {
+            $_eqLogic = shutters::byId($_eqLogicId);
+            if (is_object($_eqLogic)) {
+                $primaryConditions = explode(',', $_eqLogic->getConfiguration('primaryConditionsPriority', null));
+                foreach ($primaryConditions as $condition) {
+                    $cmdId = str_replace('#', '', $_eqLogic->getConfiguration($condition, null));
+                    if (!empty($cmdId)) {
+                        $cmd = cmd::byId($cmdId);
+                        if (is_object($cmd)) {
+                            $status = $_eqLogic->getConfiguration($condition . 'Status', null);
+                            if ($cmd->execCmd() === $status) {
+                                switch ($condition) {
+                                    case 'fireCondition':
+                                        $positionSetpoint = 100;
+                                        break;
+                                    case 'absenceCondition':
+                                        $positionSetpoint = 0;
+                                        break;
+                                    case 'firstUserCondition':
+                                        if ($_eqLogic->getConfiguration('firstUserConditionAction', null) === 'closeShutter') {
+                                            $positionSetpoint = 0;
+                                        }
+                                        $positionSetpoint = 100;
+                                        break;
+                                    case 'secondUserCondition':
+                                        $positionSetpoint = 100;
+                                        break;
+                                    
+                                    default:
+                                        # code...
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
@@ -243,15 +286,10 @@ class shutters extends eqLogic
         $thisEqType = $this->getConfiguration('eqType', null);
         $thisName = $this->getName();
         log::add('shutters', 'debug', 'shutters::preSave() : eqLogic[' . $thisName . '] eqType [' . $thisEqType . ']');
-        log::add('shutters', 'debug', 'shutters::preSave() : '.$this->test());
-      	$this->initTest();
-        log::add('shutters', 'debug', 'shutters::preSave() : '.$this->test());
-	$this->setTest('enable');
-        log::add('shutters', 'debug', 'shutters::preSave() : '.$this->test());
 
         switch ($thisEqType) {
             case 'externalConditions':
-                $this->getConditionWithEvent();
+                //$this->getConditionWithEvent();
                 break;
             case 'heliotropeZone':
                break;
@@ -269,9 +307,7 @@ class shutters extends eqLogic
         $thisEqType = $this->getConfiguration('eqType', null);
         $thisName = $this->getName();
         log::add('shutters', 'debug', 'shutters::postSave() : eqLogic[' . $thisName . '] eqType [' . $thisEqType . ']');
-         //log::add('shutters', 'debug', 'shutters::postSave() : '.print_r($this->_test,true));
-           log::add('shutters', 'debug', 'shutters::postSave() : '.print_r($this->test(),true));
- 
+
         if(!empty($thisEqType)) {
             $this->loadCmdFromConfFile($thisEqType);
         }
@@ -300,6 +336,7 @@ class shutters extends eqLogic
 
     public function postUpdate()
     {
+
     }
 
     public function preRemove()
@@ -329,11 +366,6 @@ class shutters extends eqLogic
     {
         
     }
-
-  public function toto() {
-  	           log::add('shutters', 'debug', 'shutters::toto() : '.$this->test());
-
-  }
 
     private function checkSettings()
     {
@@ -410,7 +442,7 @@ class shutters extends eqLogic
         if (!is_array($conditionsWithEvent)) {
             $conditionsWithEvent = [];
         }
-        foreach ($this->_externalConditions as $condition) {
+        foreach (self::$_externalConditions as $condition) {
             $cmdId = str_replace('#', '', $this->getConfiguration($condition, null));
             if (empty($cmdId)) {
                 continue;
@@ -495,25 +527,5 @@ class shutters extends eqLogic
      */
 
     /*     * **********************Getteur Setteur*************************** */
-  
-  
-  public function test() {
-                log::add('shutters', 'debug', 'shutters::test() : test => ' .$this->_test);
-                log::add('shutters', 'debug', 'shutters::test() : test => ' .print_r($this, true));
-
-  return $this->_test;
-}
-  
-  public function initTest(){
-    //$this->_test['absenceCondition']['condition'] = ['cmdId' => '', 'status' => ''];
-    $this->_test= 'inhibited';
-    return $this;
-  
-  }
-  
-  public function setTest($_status){
-    $this->_test = $_status;
-    return $this;
-  }
 
 }
