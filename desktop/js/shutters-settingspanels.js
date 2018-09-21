@@ -337,10 +337,12 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Héliotrope}}</label>';
             div += '<div class="col-sm-5">';
-            div += '<select class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="heliotrope">';
+            div += '<select class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="heliotrope" data-displaygroup="heliotrope">';
             div += '</select>';
             div += '</div>';
             div += '</div>';
+
+            div += '<fieldset data-displaygroup="heliotrope" data-displayvalue="heliotrope">';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Lever du soleil}}</label>';
             div += '<div class="col-sm-5">';
@@ -352,6 +354,26 @@ function displaySettingsPanels(_eqLogic) {
             div += '</select>';
             div += '</div>';
             div += '</div>';
+            div += '</fieldset>';
+
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Heure lever}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<div class="input-group">';
+            div += '<span class="input-group-addon">0600</span>';
+            div += '<input type="number" min="0600" max="1200" value="0600" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="sunriseHour" placeholder="hhmm"/>';
+            div += '<span class="input-group-addon">1200</span>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-2">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="sunriseHourType">';
+            div += '<option value="min" selected>{{mini}}</option>';
+            div += '<option value="fixed">{{fixe}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+
+            div += '<fieldset data-displaygroup="heliotrope" data-displayvalue="heliotrope">';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Coucher du soleil}}</label>';
             div += '<div class="col-sm-5">';
@@ -363,19 +385,51 @@ function displaySettingsPanels(_eqLogic) {
             div += '</select>';
             div += '</div>';
             div += '</div>';
+            div += '</fieldset>';
+
+            div += '<div class="form-group">';
+            div += '<label class="col-sm-3 control-label">{{Heure coucher}}</label>';
+            div += '<div class="col-sm-5">';
+            div += '<div class="input-group">';
+            div += '<span class="input-group-addon">1800</span>';
+            div += '<input type="number" min="1800" max="2359" value="2359" class="eqLogicAttr form-control text-center" data-l1key="configuration" data-l2key="sunsetHour" placeholder="hhmm"/>';
+            div += '<span class="input-group-addon">2359</span>';
+            div += '</div>';
+            div += '</div>';
+            div += '<div class="col-sm-2">';
+            div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="sunsetHourType">';
+            div += '<option value="max" selected>{{max}}</option>';
+            div += '<option value="fixed">{{fixe}}</option>';
+            div += '</select>';
+            div += '</div>';
+            div += '</div>';
+
+            div += '<fieldset data-displaygroup="heliotrope" data-displayvalue="heliotrope">';
             div += '<div class="form-group">';
             div += '<div class="col-sm-5 col-sm-offset-3">';
             div += '<canvas id="heliotropePlan" width="400" height="400"></canvas>';
             div += '</div>';
             div += '</div>';
+            div += '</fieldset>';
+
             div += '</div>';
             div += '<div class="col-sm-6">';               
+
             div += '<div class="form-group">';
             div += '<input class="form-control invisible"/>';
             div += '</div>';
             div += '<div class="form-group">';
             div += '<input class="form-control invisible"/>';
             div += '</div>';
+            div += '<div class="form-group">';
+            div += '<input class="form-control invisible"/>';
+            div += '</div>';
+            div += '<div class="form-group">';
+            div += '<input class="form-control invisible"/>';
+            div += '</div>';
+
+
+            div += '<fieldset data-displaygroup="heliotrope" data-displayvalue="heliotrope">';
             div += '<div class="form-group">';
             div += '<label class="col-sm-3 control-label">{{Angle façade / Nord}}</label>';
             div += '<div class="col-sm-5">';
@@ -397,6 +451,8 @@ function displaySettingsPanels(_eqLogic) {
             div += '<canvas id="wallPlan" width="400" height="400"></canvas>'; 
             div += '</div>';
             div += '</div>';
+            div += '</fieldset>';
+
             div += '</div>';
             div += '</form>';
             div += '</div>';

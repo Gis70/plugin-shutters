@@ -64,6 +64,17 @@ function initEvents () {
     /**
      *  Heliotrope zone settings events
      */
+    $('[data-l1key=configuration][data-l2key=heliotrope]').off('change').on('change', function () {
+        if ($(this).val() !== 'none') {
+            displaySettingsFieldset($(this).attr('data-displaygroup'), 'heliotrope');
+            $('[data-l1key=configuration][data-l2key=sunriseHourType]').attr('disabled', false);
+            $('[data-l1key=configuration][data-l2key=sunsetHourType]').attr('disabled', false);
+        } else {
+            displaySettingsFieldset($(this).attr('data-displaygroup'), 'none');
+            $('[data-l1key=configuration][data-l2key=sunriseHourType]').attr('disabled', true).val('fixed');
+            $('[data-l1key=configuration][data-l2key=sunsetHourType]').attr('disabled', true).val('fixed');
+        }
+    });
     $('[data-l1key=configuration][data-l2key=dawnType]').off('change').on('change', function () {
         displaySelectedDawnOrDusk($(this).val());
     });
