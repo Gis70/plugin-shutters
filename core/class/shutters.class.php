@@ -91,7 +91,7 @@ class shutters extends eqLogic
                                 $conditionsEventListener->emptyEvent();
                                 $conditionsEventListener->save();
                                 $conditionsEventListenerId = $conditionsEventListener->getId();
-                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : external conditions events listener [' . $conditionsEventListenerId . ']  successfully created for shutter [' . $eqLogicName . ']');
+                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : external conditions events listener [' . $conditionsEventListenerId . '] successfully created for shutter [' . $eqLogicName . ']');
                             } else {
                                 $conditionsEventListener->emptyEvent();
                                 $conditionsEventListener->save();
@@ -123,8 +123,10 @@ class shutters extends eqLogic
                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : externalConditions [' . $externalConditionsId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 } else {
-                    $conditionsEventListener->emptyEvent();
-                    $conditionsEventListener->save();
+                    if (is_object($conditionsEventListener)) {
+                        $conditionsEventListener->emptyEvent();
+                        $conditionsEventListener->save();
+                    }
                 }
 
                 $heliotropeZoneId = str_replace('#', '', $eqLogic->getConfiguration('heliotropeZoneId', null));
@@ -140,7 +142,7 @@ class shutters extends eqLogic
                                 $heliotropeEventListener->emptyEvent();
                                 $heliotropeEventListener->save();
                                 $heliotropeEventListenerId = $heliotropeEventListener->getId();
-                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotrope events listener [' . $heliotropeEventListenerId . ']  successfully created for shutter [' . $eqLogicName . ']');
+                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotrope events listener [' . $heliotropeEventListenerId . '] successfully created for shutter [' . $eqLogicName . ']');
                             } else {
                                 $heliotropeEventListener->emptyEvent();
                                 $heliotropeEventListener->save();
@@ -151,14 +153,13 @@ class shutters extends eqLogic
                                 $sunriseCron->setClass('shutters');
                                 $sunriseCron->setFunction('sunriseEvent');
                                 $sunriseCron->setOption(array('shutterId' => $eqLogic->getId()));
-                                $sunriseCron->setEnable(true);
                                 $sunriseCron->setDeamon(0);
-                                $sunriseCron->setOnce(false);
+                                $sunriseCron->setOnce(0);
                                 $sunriseCron->setTimeout(2);
                                 $sunriseCron->setSchedule('* * * * * *');
                                 $sunriseCron->save();
                                 $sunriseCronId = $sunriseCron->getId();
-                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunrise cron [' . $sunriseCronId . ']  successfully created for shutter [' . $eqLogicName . ']');
+                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunrise cron [' . $sunriseCronId . '] successfully created for shutter [' . $eqLogicName . ']');
                             }else{
                                 $sunriseCron->setSchedule('* * * * * *');
                                 $sunriseCron->save();
@@ -169,14 +170,13 @@ class shutters extends eqLogic
                                 $sunsetCron->setClass('shutters');
                                 $sunsetCron->setFunction('sunsetEvent');
                                 $sunsetCron->setOption(array('shutterId' => $eqLogic->getId()));
-                                $sunsetCron->setEnable(true);
                                 $sunsetCron->setDeamon(0);
-                                $sunsetCron->setOnce(false);
-                                $sunriseCron->setTimeout(2);
+                                $sunsetCron->setOnce(0);
+                                $sunsetCron->setTimeout(2);
                                 $sunsetCron->setSchedule('* * * * * *');
                                 $sunsetCron->save();
                                 $sunsetCronId = $sunsetCron->getId();
-                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunset cron [' . $sunsetCronId . ']  successfully created for shutter [' . $eqLogicName . ']');
+                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunset cron [' . $sunsetCronId . '] successfully created for shutter [' . $eqLogicName . ']');
                             }else{
                                 $sunsetCron->setSchedule('* * * * * *');
                                 $sunsetCron->save();
@@ -199,7 +199,7 @@ class shutters extends eqLogic
                                         }
                                     }
                                     $heliotropeEventListener->save();
-                                    switch ($eqLogic->getConfiguration('dawnType', null)) {
+                                    switch ($$heliotropeZoneEqLogic->getConfiguration('dawnType', null)) {
                                         case 'astronomicalDawn':
                                             $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'aubeast');
                                             break;
@@ -213,6 +213,7 @@ class shutters extends eqLogic
                                             $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'sunrise');
                                             break;
                                         default:
+                                            $cmd = null;
                                             break;
                                     }
                                     if (is_object($cmd)) {
@@ -227,23 +228,25 @@ class shutters extends eqLogic
                                     }
                                     $schedule = substr($sunriseHour, -2) . ' ' . substr($sunriseHour, 0, -2) . ' * * * *';
                                     $sunriseCron->setSchedule($schedule);
+                                    $sunriseCron->setEnable(1);
                                     $sunriseCron->save();
                                     log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunrise cron [' . $sunriseCronId . '] set to  [' . $schedule . '] for shutter [' . $eqLogicName . ']');
                     
-                                    switch ($eqLogic->getConfiguration('dawnType', null)) {
-                                        case 'astronomicalDawn':
-                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'aubeast');
+                                    switch ($heliotropeZoneEqLogic->getConfiguration('duskType', null)) {
+                                        case 'astronomicalDusk':
+                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'crepast');
                                             break;
-                                        case 'nauticalDawn':
-                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'aubenau');
+                                        case 'nauticalDusk':
+                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'crepnau');
                                             break;
-                                        case 'civilDawn':
-                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'aubeciv');
+                                        case 'civilDusk':
+                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'crepciv');
                                             break;
-                                        case 'sunrise':
-                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'sunrise');
+                                        case 'sunset':
+                                            $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'sunset');
                                             break;
                                         default:
+                                            $cmd = null;
                                             break;
                                     }
                                     if (is_object($cmd)) {
@@ -258,6 +261,7 @@ class shutters extends eqLogic
                                     }
                                     $schedule = substr($sunsetHour, -2) . ' ' . substr($sunsetHour, 0, -2) . ' * * * *';
                                     $sunsetCron->setSchedule($schedule);
+                                    $sunsetCron->setEnable(1);
                                     $sunsetCron->save();
                                     log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunset cron [' . $sunsetCronId . '] set to  [' . $schedule . '] for shutter [' . $eqLogicName . ']');
                                 } else {
@@ -283,10 +287,16 @@ class shutters extends eqLogic
                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 } else {
-                    $heliotropeEventListener->emptyEvent();
-                    $heliotropeEventListener->save();
-                    $sunriseCron->remove();
-                    $sunsetCron->remove();
+                    if (is_object($heliotropeEventListener)) {
+                        $heliotropeEventListener->emptyEvent();
+                        $heliotropeEventListener->save();
+                    }
+                    if (is_object($sunriseCron)) {
+                        $sunriseCron->remove();
+                    }
+                    if (is_object($sunsetCron)) {
+                        $sunsetCron->remove();
+                    }
                 }
             } else {
                 $conditionsEventListener->emptyEvent();
@@ -579,16 +589,16 @@ class shutters extends eqLogic
             log::add('shutters', 'debug', 'shutters::removeEventListener() : heliotrope events listener [' . $listener->getId() . '] successfully removed for shutter [' . $thisName . ']');
         }
 
-        $sunriseCron =cron::byClassAndFunction('shutters', 'sunriseEvent', array('shutterId' => $eqLogic->getId()));
-        if (!is_object($sunriseCron)) {
-            $sunriseCron->remove();
-            log::add('shutters', 'debug', 'shutters::removeEventListener() : sunrise cron [' . $sunriseCron->getId() . '] successfully removed for shutter [' . $thisName . ']');
+        $cron = cron::byClassAndFunction('shutters', 'sunriseEvent', array('shutterId' => $this->getId()));
+        if (is_object($cron)) {
+            $cron->remove();
+            log::add('shutters', 'debug', 'shutters::removeEventListener() : sunrise cron [' . $cron->getId() . '] successfully removed for shutter [' . $thisName . ']');
         }
 
-        $sunsetCron =cron::byClassAndFunction('shutters', 'sunsetEvent', array('shutterId' => $eqLogic->getId()));
-        if (!is_object($sunsetCron)) {
-            $sunsetCron->remove();
-            log::add('shutters', 'debug', 'shutters::removeEventListener() : sunset cron [' . $sunsetCron->getId() . '] successfully removed for shutter [' . $thisName . ']');
+        $cron = cron::byClassAndFunction('shutters', 'sunsetEvent', array('shutterId' => $this->getId()));
+        if (is_object($cron)) {
+            $cron->remove();
+            log::add('shutters', 'debug', 'shutters::removeEventListener() : sunset cron [' . $cron->getId() . '] successfully removed for shutter [' . $thisName . ']');
         }
     }
 
