@@ -10,8 +10,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition incendie.",
-                "condition": "fireCondition",
-                "withEvent": false
+                "condition": "fireCondition"
             },
             "logicalId": "shutter:fireCondition",
             "isVisible": false,
@@ -26,8 +25,7 @@
                 "cmdGroup": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition absence.",
-                "condition": "absenceCondition",
-                "withEvent": false
+                "condition": "absenceCondition"
             },
             "logicalId": "shutter:absenceCondition",
             "isVisible": false,
@@ -42,8 +40,7 @@
                 "cmdGroup": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition présence.",
-                "condition": "presenceCondition",
-                "withEvent": false
+                "condition": "presenceCondition"
             },
             "logicalId": "shutter:presenceCondition",
             "isVisible": false,
@@ -58,8 +55,7 @@
                 "cmdGroup": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition luminosité extérieure.",
-                "condition": "outdoorLuminosityCondition",
-                "withEvent": false
+                "condition": "outdoorLuminosityCondition"
             },
             "logicalId": "shutter:outdoorLuminosityCondition",
             "isVisible": false,
@@ -74,8 +70,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition température extérieure.",
-                "condition": "outdoorTemperatureCondition",
-                "withEvent": false
+                "condition": "outdoorTemperatureCondition"
             },
             "logicalId": "shutter:outdoorTemperatureCondition",
             "isVisible": false,
@@ -90,8 +85,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition 1 utilisateur.",
-                "condition": "firstUserCondition",
-                "withEvent": false
+                "condition": "firstUserCondition"
             },
             "logicalId": "shutter:firstUserCondition",
             "isVisible": false,
@@ -106,8 +100,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition 2 utilisateur.",
-                "condition": "secondUserCondition",
-                "withEvent": false
+                "condition": "secondUserCondition"
             },
             "logicalId": "shutter:secondUserCondition",
             "isVisible": false,
@@ -122,8 +115,7 @@
                 "eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition incendie.",
-                "condition": "fireCondition",
-                "withEvent": false
+                "condition": "fireCondition"
             },
             "logicalId": "shutter:fireConditionStatusStatus",
             "isVisible": false,
@@ -137,8 +129,7 @@
 				"eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition absence.",
-                "condition": "absenceCondition",
-                "withEvent": false
+                "condition": "absenceCondition"
             },
             "logicalId": "shutter:absenceConditionStatus",
             "isVisible": false,
@@ -152,8 +143,7 @@
 				"eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition présence.",
-                "condition": "presenceCondition",
-                "withEvent": false
+                "condition": "presenceCondition"
             },
             "logicalId": "shutter:presenceConditionStatus",
             "isVisible": false,
@@ -167,8 +157,7 @@
 				"eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition luminosité extérieure.",
-                "condition": "outdoorLuminosityCondition",
-                "withEvent": false
+                "condition": "outdoorLuminosityCondition"
             },
             "logicalId": "shutter:outdoorLuminosityConditionStatus",
             "isVisible": false,
@@ -182,8 +171,7 @@
                 "eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition température extérieure.",
-                "condition": "outdoorTemperatureCondition",
-                "withEvent": false
+                "condition": "outdoorTemperatureCondition"
             },
             "logicalId": "shutter:outdoorTemperatureConditionStatus",
             "isVisible": false,
@@ -197,8 +185,7 @@
                 "eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition 1 utilisateur.",
-                "condition": "firstUserCondition",
-                "withEvent": false
+                "condition": "firstUserCondition"
             },
             "logicalId": "shutter:firstUserConditionStatus",
             "isVisible": false,
@@ -212,8 +199,7 @@
                 "eqType": "shutter",
                 "cmdGroup": "externalConditions",
                 "description": "Statut de la gestion des volets sur condition 2 utilisateur.",
-                "condition": "secondUserCondition",
-                "withEvent": false
+                "condition": "secondUserCondition"
             },
             "logicalId": "shutter:secondUserConditionStatus",
             "isVisible": false,
@@ -231,8 +217,7 @@
                 "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition coucher du soleil.",   
-                "condition": "sunsetCondition",
-                "withEvent": false
+                "condition": "sunsetCondition"
             },
             "logicalId": "shutter:sunsetCondition",
             "isVisible": false,
@@ -247,8 +232,7 @@
                 "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition lever du jour.",   
-                "condition": "sunriseCondition",
-                "withEvent": false
+                "condition": "sunriseCondition"
             },
             "logicalId": "shutter:sunriseCondition",
             "isVisible": false,
@@ -263,8 +247,7 @@
                 "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition azimut (jour uniquement).",   
-                "condition": "azimutCondition",
-                "withEvent": false
+                "condition": "azimutCondition"
             },
             "logicalId": "shutter:azimutCondition",
             "isVisible": false,
@@ -278,8 +261,7 @@
 				"eqType": "shutter",
                 "cmdGroup": "heliotropeZone",
                 "description": "Statut de la gestion des volets sur condition coucher du soleil.",   
-                "condition": "sunsetCondition",
-                "withEvent": false
+                "condition": "sunsetCondition"
             },
             "logicalId": "shutter:sunsetConditionStatus",
             "isVisible": false,
@@ -293,8 +275,7 @@
 				"eqType": "shutter",
                 "cmdGroup": "heliotropeZone",
                 "description": "Statut de la gestion des volets sur condition lever du jour.",   
-                "condition": "sunriseCondition",
-                "withEvent": false
+                "condition": "sunriseCondition"
             },
             "logicalId": "shutter:sunriseConditionStatus",
             "isVisible": false,
@@ -308,14 +289,11 @@
 				"eqType": "shutter",
                 "cmdGroup": "heliotropeZone",
                 "description": "Statut de la gestion des volets sur condition azimut (jour uniquement).",   
-                "condition": "azimutCondition",
-                "withEvent": false
+                "condition": "azimutCondition"
             },
             "logicalId": "shutter:azimutConditionStatus",
             "isVisible": false,
             "isHistorized": false
         }
-
-
     ]
 }

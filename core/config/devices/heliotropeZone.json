@@ -10,24 +10,22 @@
                 "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition coucher du soleil.",   
-                "condition": "sunsetCondition",
-                "withEvent": true
+                "condition": "sunsetCondition"
             },
             "logicalId": "heliotropeZone:sunsetCondition",
             "isVisible": false,
             "isHistorized": false
         },
         {
-            "name": "Gestion condition lever du jour",
+            "name": "Gestion condition lever du soleil",
             "type": "action",
             "subType": "select",
             "configuration": {
 				"eqType": "heliotropeZone",
                 "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets sur condition lever du jour.",   
-                "condition": "sunriseCondition",
-                "withEvent": true
+                "description": "Activer ou désactiver la gestion des volets sur condition lever du soleil.",   
+                "condition": "sunriseCondition"
             },
             "logicalId": "heliotropeZone:sunriseCondition",
             "isVisible": false,
@@ -42,13 +40,37 @@
                 "cmdGroup": "heliotropeZone",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition azimut (jour uniquement).",   
-                "condition": "azimutCondition",
-                "withEvent": true
+                "condition": "azimutCondition"
             },
             "logicalId": "heliotropeZone:azimutCondition",
             "isVisible": false,
             "isHistorized": false
+        },
+        {
+            "name": "Heure gestion jour",
+            "type": "action",
+            "subType": "slider",
+            "configuration": {
+				"eqType": "heliotropeZone",
+                "cmdGroup": "heliotropeZone",
+                "description": "Heure minimale ou fixe de passage en gestion jour ."  
+            },
+            "logicalId": "heliotropeZone:dayModeHour",
+            "isVisible": false,
+            "isHistorized": false
+        },
+              {
+            "name": "Heure gestion nuit",
+            "type": "action",
+            "subType": "slider",
+            "configuration": {
+				"eqType": "heliotropeZone",
+                "cmdGroup": "heliotropeZone",
+                "description": "Heure maximale ou fixe de passage en gestion nuit ."  
+            },
+            "logicalId": "heliotropeZone:nightModeHour",
+            "isVisible": false,
+            "isHistorized": false
         }
-
     ]
 }

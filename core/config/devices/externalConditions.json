@@ -10,8 +10,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition incendie.",
-                "condition": "fireCondition",
-                "withEvent": true
+                "condition": "fireCondition"
             },
             "logicalId": "externalConditions:fireCondition",
             "isVisible": false,
@@ -26,8 +25,7 @@
                 "cmdGroup": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition absence.",
-                "condition": "absenceCondition",
-                "withEvent": true
+                "condition": "absenceCondition"
             },
             "logicalId": "externalConditions:absenceCondition",
             "isVisible": false,
@@ -42,8 +40,7 @@
                 "cmdGroup": "externalConditions",
               	"listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition présence.",
-                "condition": "presenceCondition",
-                "withEvent": true
+                "condition": "presenceCondition"
             },
             "logicalId": "externalConditions:presenceCondition",
             "isVisible": false,
@@ -58,8 +55,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition luminosité extérieure.",
-                "condition": "outdoorLuminosityCondition",
-                "withEvent": true
+                "condition": "outdoorLuminosityCondition"
             },
             "logicalId": "externalConditions:outdoorLuminosityCondition",
             "isVisible": false,
@@ -74,8 +70,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition température extérieure.",
-                "condition": "outdoorTemperatureCondition",
-                "withEvent": true
+                "condition": "outdoorTemperatureCondition"
             },
             "logicalId": "externalConditions:outdoorTemperatureCondition",
             "isVisible": false,
@@ -90,8 +85,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition 1 utilisateur.",
-                "condition": "firstUserCondition",
-                "withEvent": true
+                "condition": "firstUserCondition"
             },
             "logicalId": "externalConditions:firstUserCondition",
             "isVisible": false,
@@ -106,8 +100,7 @@
                 "cmdGroup": "externalConditions",
                 "listValue": "Enable|Active;Disable|Inactive",
                 "description": "Activer ou désactiver la gestion des volets sur condition 2 utilisateur.",
-                "condition": "secondUserCondition",
-                "withEvent": true
+                "condition": "secondUserCondition"
             },
             "logicalId": "externalConditions:secondUserCondition",
             "isVisible": false,
