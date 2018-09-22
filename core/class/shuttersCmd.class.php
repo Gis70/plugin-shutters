@@ -34,10 +34,23 @@ class shuttersCmd extends cmd
 		$thisId = $this->getId();
 		$thisLogicalId = $this->getLogicalId();
 		$thisEqLogicId = $this->getEqLogic_id();
-		
+		$thisEqLogic = shutters::byId($thisEqLogicId);
 		log::add('shutters', 'debug', 'shutters::execute() : receive cmd [' . $thisId . '][' . $thisLogicalId . '] from eqLogic [' . $thisEqLogicId . ']');
 
-		
+		switch ($thisLogicalId) {
+			case 'heliotropeZone:dayModeHour':
+				$thisEqLogic->setConfiguration('sunriseHour', $_options['slider']);
+				$thisEqLogic->save();
+				break;
+				case 'heliotropeZone:nightModeHour':
+				$thisEqLogic->setConfiguration('sunsetHour', $_options['slider']);
+				$thisEqLogic->save();
+				break;
+			
+			default:
+				# code...
+				break;
+		}
 	}
 
     /*     * **********************Getteur Setteur*************************** */
