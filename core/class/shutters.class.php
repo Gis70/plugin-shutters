@@ -201,6 +201,10 @@ class shutters extends eqLogic
                                 $sunsetCron->save();
                                 $sunsetCronId = $sunsetCron->getId();
                             }
+
+                            $heliotropeSunriseHour = 0000;
+                            $heliotropeSunsetHour = 2400;
+
                             $heliotropeId = str_replace('#', '', $heliotropeZoneEqLogic->getConfiguration('heliotrope', null));
                             if(!empty($heliotropeId) && $heliotropeId !== 'none'){
                                 $heliotrope=eqlogic::byId($heliotropeId);
@@ -212,6 +216,21 @@ class shutters extends eqLogic
                                             $cmdId = $cmd->getId();
                                             $conditionsWithEvent[$cmdLogicalId] = ['cmdId' => $cmdId, 'status' => null];
                                             $heliotropeEventListener->addEvent($cmdId);
+                                            $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunriseCondition')->execCmd();
+                                            if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
+                                                $eqLogic->checkAndUpdateCmd('shutter:sunriseCondition', 'Enable');
+                                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunriseCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
+                                            }
+                                            $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunsetCondition')->execCmd();
+                                            if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
+                                                $eqLogic->checkAndUpdateCmd('shutter:sunsetCondition', 'Enable');
+                                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunsetCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
+                                            }
+                                            $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:azimutCondition')->execCmd();
+                                            if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
+                                                $eqLogic->checkAndUpdateCmd('shutter:azimutCondition', 'Enable');
+                                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[azimutCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
+                                            }
                                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd [' . $cmdId  . '] from heliotrope [' . $heliotropeId . '] successfully added to listener [' . $heliotropeEventListenerId . '] for shutter [' . $eqLogicName . ']');
                                         } else {
                                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd [' . $cmdId  . '] from heliotrope [' . $heliotropeId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
@@ -238,18 +257,6 @@ class shutters extends eqLogic
                                     if (is_object($cmd)) {
                                         $heliotropeSunriseHour = $cmd->execCmd();
                                     }
-                                    $sunriseHour = $heliotropeZoneEqLogic->getConfiguration('sunriseHour', null);
-                                    if (!is_numeric($sunriseHour) || $sunriseHour < self::$_heliotropeHours['minSunriseHour'] || $sunriseHour > self::$_heliotropeHours['maxSunriseHour']) {
-                                        $sunriseHour = self::$_heliotropeHours['maxSunriseHour'];
-                                    }
-                                    if ($heliotropeZoneEqLogic->getConfiguration('sunriseHourType', null) === 'min' && $heliotropeSunriseHour > $sunriseHour) {
-                                            $sunriseHour = $heliotropeSunriseHour;
-                                    }
-                                    $schedule = substr($sunriseHour, -2) . ' ' . substr($sunriseHour, 0, -2) . ' * * * *';
-                                    $sunriseCron->setSchedule($schedule);
-                                    $sunriseCron->setEnable(1);
-                                    $sunriseCron->save();
-                                    log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunrise cron [' . $sunriseCronId . '] set to  [' . $schedule . '] for shutter [' . $eqLogicName . ']');
                                     
                                     switch ($heliotropeZoneEqLogic->getConfiguration('duskType', null)) {
                                         case 'astronomicalDusk':
@@ -271,55 +278,82 @@ class shutters extends eqLogic
                                     if (is_object($cmd)) {
                                         $heliotropeSunsetHour = $cmd->execCmd();
                                     }
-                                    $sunsetHour = $heliotropeZoneEqLogic->getConfiguration('sunsetHour', null);
-                                    if (!is_numeric($sunsetHour) || $sunsetHour < self::$_heliotropeHours['minSunsetHour'] || $sunsetHour > self::$_heliotropeHours['maxSunsetHour']) {
-                                        $sunsetHour = self::$_heliotropeHours['minSunsetHour'];
-                                    }
-                                    if ($heliotropeZoneEqLogic->getConfiguration('sunsetHourType', null) === 'max' && $heliotropeSunsetHour < $sunsetHour) {
-                                            $sunsetHour = $heliotropeSunsetHour;
-                                    }
-                                    $schedule = substr($sunsetHour, -2) . ' ' . substr($sunsetHour, 0, -2) . ' * * * *';
-                                    $sunsetCron->setSchedule($schedule);
-                                    $sunsetCron->setEnable(1);
-                                    $sunsetCron->save();
-                                    log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunset cron [' . $sunsetCronId . '] set to  [' . $schedule . '] for shutter [' . $eqLogicName . ']');
-
-                                    $hour = date("Hi");
-                                    if ($hour > $sunriseHour && $hour < $sunsetHour) {
-                                        $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', 'Day');
-                                        log::add('shutters', 'info', 'shutters::updateEventsManagement() : day management activated for shutter [' . $eqLogicName . ']');
-                                    } else {
-                                        $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', 'Night');
-                                        log::add('shutters', 'info', 'shutters::updateEventsManagement() : night management activated for shutter [' . $eqLogicName . ']');
-                                    }
-
                                 } else {
                                     $sunriseCron->remove();
                                     log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotrope [' . $heliotropeId . '] configured in heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                                 }
                             } else {
-                                $sunriseCron->remove();
+                                self::removeEventsHandler(['heliotropeEventListener' => $heliotropeEventListener]);
+                                $eqLogic->checkAndUpdateCmd('shutter:azimutCondition', '');
                                 log::add('shutters', 'debug', 'shutters::updateEventsManagement() : no heliotrope configured in heliotropeZone [' . $heliotropeZoneId . '] for shutter [' . $eqLogicName . ']');
                             }
+
+                            $sunriseHour = $heliotropeZoneEqLogic->getConfiguration('sunriseHour', null);
+                            if (!is_numeric($sunriseHour) || $sunriseHour < self::$_heliotropeHours['minSunriseHour'] || $sunriseHour > self::$_heliotropeHours['maxSunriseHour']) {
+                                $sunriseHour = self::$_heliotropeHours['maxSunriseHour'];
+                            }
+                            if ($heliotropeZoneEqLogic->getConfiguration('sunriseHourType', null) === 'min' && $heliotropeSunriseHour > $sunriseHour) {
+                                    $sunriseHour = $heliotropeSunriseHour;
+                            }
+                            $schedule = substr($sunriseHour, -2) . ' ' . substr($sunriseHour, 0, -2) . ' * * * *';
+                            $sunriseCron->setSchedule($schedule);
+                            $sunriseCron->setEnable(1);
+                            $sunriseCron->save();
+                            log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunrise cron [' . $sunriseCronId . '] set to  [' . $schedule . '] for shutter [' . $eqLogicName . ']');
+
+                            $sunsetHour = $heliotropeZoneEqLogic->getConfiguration('sunsetHour', null);
+                            if (!is_numeric($sunsetHour) || $sunsetHour < self::$_heliotropeHours['minSunsetHour'] || $sunsetHour > self::$_heliotropeHours['maxSunsetHour']) {
+                                $sunsetHour = self::$_heliotropeHours['minSunsetHour'];
+                            }
+                            if ($heliotropeZoneEqLogic->getConfiguration('sunsetHourType', null) === 'max' && $heliotropeSunsetHour < $sunsetHour) {
+                                $sunsetHour = $heliotropeSunsetHour;
+                            }
+                            $schedule = substr($sunsetHour, -2) . ' ' . substr($sunsetHour, 0, -2) . ' * * * *';
+                            $sunsetCron->setSchedule($schedule);
+                            $sunsetCron->setEnable(1);
+                            $sunsetCron->save();
+                            log::add('shutters', 'debug', 'shutters::updateEventsManagement() : sunset cron [' . $sunsetCronId . '] set to  [' . $schedule . '] for shutter [' . $eqLogicName . ']');
+
+                            $hour = date("Hi");
+                            if ($hour > $sunriseHour && $hour < $sunsetHour) {
+                                $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', 'Day');
+                                log::add('shutters', 'info', 'shutters::updateEventsManagement() : day management activated for shutter [' . $eqLogicName . ']');
+                            } else {
+                                $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', 'Night');
+                                log::add('shutters', 'info', 'shutters::updateEventsManagement() : night management activated for shutter [' . $eqLogicName . ']');
+                            }
+
                         } else {
                             self::removeEventsHandler($heliotropeEventsHandler);
+                            $eqLogic->checkAndUpdateCmd('shutter:sunriseCondition', '');
+                            $eqLogic->checkAndUpdateCmd('shutter:sunsetCondition', '');
+                            $eqLogic->checkAndUpdateCmd('shutter:azimutCondition', '');
                             $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotropeZone [' . $heliotropeZoneId . '] isn\'t activated for shutter [' . $eqLogicName . ']');
                         } 
                     } else {
                         self::removeEventsHandler($heliotropeEventsHandler);
+                        $eqLogic->checkAndUpdateCmd('shutter:sunriseCondition', '');
+                        $eqLogic->checkAndUpdateCmd('shutter:sunsetCondition', '');
+                        $eqLogic->checkAndUpdateCmd('shutter:azimutCondition', '');
                         $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 } else {
                     self::removeEventsHandler($heliotropeEventsHandler);
                     $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
-                }
+                    $eqLogic->checkAndUpdateCmd('shutter:sunriseCondition', '');
+                    $eqLogic->checkAndUpdateCmd('shutter:sunsetCondition', '');
+                    $eqLogic->checkAndUpdateCmd('shutter:azimutCondition', '');
+             }
             } else {
                 self::removeEventsHandler($heliotropeEventsHandler);
                 foreach (self::$_externalConditions as $condition) {
                     $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
                 }    
+                $eqLogic->checkAndUpdateCmd('shutter:sunriseCondition', '');
+                $eqLogic->checkAndUpdateCmd('shutter:sunsetCondition', '');
+                $eqLogic->checkAndUpdateCmd('shutter:azimutCondition', '');
                 $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                 log::add('shutters', 'debug', 'shutters::updateEventsManagement() : shutter [' . $eqLogicName . '] isn\'t activated');
             } 
