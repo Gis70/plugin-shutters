@@ -31,6 +31,13 @@ class shuttersCmd extends cmd
 	public function execute($_options = array())
 	{
 		log::add('shutters', 'debug', 'shuttersCmd::execute() : ' . print_r($_options, true));
+		$thisId = $this->getId();
+		$thisLogicalId = $this->getLogicalId();
+		$thisEqLogicId = $this->getEqLogic_id();
+		
+		log::add('shutters', 'debug', 'shutters::execute() : receive cmd [' . $thisId . '][' . $thisLogicalId . '] from eqLogic [' . $thisEqLogicId . ']');
+
+		
 	}
 
     /*     * **********************Getteur Setteur*************************** */

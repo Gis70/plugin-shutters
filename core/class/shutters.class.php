@@ -72,6 +72,7 @@ class shutters extends eqLogic
             $eqLogicId = $eqLogic->getId();
 
             $conditionsWithEvent = [];
+            $crossRef = [];
 
             $conditionsEventListener = listener::byClassAndFunction('shutters', 'externalConditionsEvents', ['shutterId' => $eqLogic->getId()]);
             $heliotropeEventListener = listener::byClassAndFunction('shutters', 'heliotropeZoneEvents', array('shutterId' => $eqLogic->getId()));
@@ -84,6 +85,7 @@ class shutters extends eqLogic
                     $externalConditionsEqLogic = shutters::byId($externalConditionsId);
                     if (is_object($externalConditionsEqLogic)) {
                         if ($externalConditionsEqLogic->getIsEnable()) {
+                            $crossRef[$externalConditionsId][] = $eqLogicId;
                             if (!is_object($conditionsEventListener)) {
                                 $conditionsEventListener = new listener();
                                 $conditionsEventListener->setClass('shutters');
@@ -135,6 +137,7 @@ class shutters extends eqLogic
                    $heliotropeZoneEqLogic = shutters::byId($heliotropeZoneId);
                     if (is_object($heliotropeZoneEqLogic)) {
                         if ($heliotropeZoneEqLogic->getIsEnable()) {
+                            $crossRef[$heliotropeZoneId][] = $eqLogicId;
                             if (!is_object($heliotropeEventListener)) {
                                 $heliotropeEventListener = new listener();
                                 $heliotropeEventListener->setClass('shutters');
@@ -200,7 +203,7 @@ class shutters extends eqLogic
                                         }
                                     }
                                     $heliotropeEventListener->save();
-                                    switch ($$heliotropeZoneEqLogic->getConfiguration('dawnType', null)) {
+                                    switch ($heliotropeZoneEqLogic->getConfiguration('dawnType', null)) {
                                         case 'astronomicalDawn':
                                             $cmd = cmd::byEqLogicIdAndLogicalId($heliotropeId, 'aubeast');
                                             break;
@@ -309,6 +312,11 @@ class shutters extends eqLogic
                 log::add('shutters', 'debug', 'shutters::updateEventsManagement() : shutter [' . $eqLogicName . '] isn\'t activated');
             } 
             $eqLogic->setConfiguration('conditionsWithEvent', $conditionsWithEvent);
+            $eqLogic->save(true);
+        }
+        foreach ($crossRef as $eqLogicId => $usedBy) {
+            $eqLogic = shutters::byId($eqLogicId);
+            $eqLogic->setConfiguration('usedBy', $usedBy);
             $eqLogic->save(true);
         }
     }
