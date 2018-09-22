@@ -209,21 +209,6 @@
 
 
         {
-            "name": "Gestion condition coucher du soleil",
-            "type": "action",
-            "subType": "select",
-            "configuration": {
-				"eqType": "shutter",
-                "cmdGroup": "heliotropeZone",
-              	"listValue": "Enable|Active;Disable|Inactive",
-                "description": "Activer ou désactiver la gestion des volets sur condition coucher du soleil.",   
-                "condition": "sunsetCondition"
-            },
-            "logicalId": "shutter:sunsetCondition",
-            "isVisible": false,
-            "isHistorized": false
-        },
-        {
             "name": "Gestion condition lever du jour",
             "type": "action",
             "subType": "select",
@@ -235,6 +220,21 @@
                 "condition": "sunriseCondition"
             },
             "logicalId": "shutter:sunriseCondition",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Gestion condition coucher du soleil",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "heliotropeZone",
+              	"listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion des volets sur condition coucher du soleil.",   
+                "condition": "sunsetCondition"
+            },
+            "logicalId": "shutter:sunsetCondition",
             "isVisible": false,
             "isHistorized": false
         },
@@ -254,20 +254,6 @@
             "isHistorized": false
         },
         {
-            "name": "Statut gestion condition coucher du soleil",
-            "type": "info",
-            "subType": "string",
-            "configuration": {
-				"eqType": "shutter",
-                "cmdGroup": "heliotropeZone",
-                "description": "Statut de la gestion des volets sur condition coucher du soleil.",   
-                "condition": "sunsetCondition"
-            },
-            "logicalId": "shutter:sunsetConditionStatus",
-            "isVisible": false,
-            "isHistorized": false
-        },
-        {
             "name": "Statut gestion condition lever du jour",
             "type": "info",
             "subType": "string",
@@ -278,6 +264,20 @@
                 "condition": "sunriseCondition"
             },
             "logicalId": "shutter:sunriseConditionStatus",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Statut gestion condition coucher du soleil",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "heliotropeZone",
+                "description": "Statut de la gestion des volets sur condition coucher du soleil.",   
+                "condition": "sunsetCondition"
+            },
+            "logicalId": "shutter:sunsetConditionStatus",
             "isVisible": false,
             "isHistorized": false
         },
@@ -294,6 +294,20 @@
             "logicalId": "shutter:azimutConditionStatus",
             "isVisible": false,
             "isHistorized": false
+        },
+        {
+            "name": "Cycle jour-nuit",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "heliotropeZone",
+                "description": "Statut du cycle jour-nuit."
+            },
+            "logicalId": "shutter:cycleDayNight",
+            "isVisible": false,
+            "isHistorized": false
         }
+
     ]
 }
