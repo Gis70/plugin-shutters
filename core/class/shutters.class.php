@@ -112,7 +112,7 @@ class shutters extends eqLogic
                                         $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
                                         $conditionsEventListener->addEvent($cmdId);
                                         $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:' . $condition . 'Status')->execCmd();
-                                        if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
+                                        if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
                                             $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'Enable');
                                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[' . $condition  . '] management set to [Enable] for shutter [' . $eqLogicName . ']');
                                         }
@@ -216,21 +216,6 @@ class shutters extends eqLogic
                                             $cmdId = $cmd->getId();
                                             $conditionsWithEvent[$cmdLogicalId] = ['cmdId' => $cmdId, 'status' => null];
                                             $heliotropeEventListener->addEvent($cmdId);
-                                            $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunriseConditionStatus')->execCmd();
-                                            if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
-                                                $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', 'Enable');
-                                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunriseCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                            }
-                                            $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunsetConditionStatus')->execCmd();
-                                            if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
-                                                $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', 'Enable');
-                                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunsetCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                            }
-                                            $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:azimutConditionStatus')->execCmd();
-                                            if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
-                                                $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', 'Enable');
-                                                log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[azimutCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                            }
                                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd [' . $cmdId  . '] from heliotrope [' . $heliotropeId . '] successfully added to listener [' . $heliotropeEventListenerId . '] for shutter [' . $eqLogicName . ']');
                                         } else {
                                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd [' . $cmdId  . '] from heliotrope [' . $heliotropeId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
@@ -277,6 +262,22 @@ class shutters extends eqLogic
                                     }
                                     if (is_object($cmd)) {
                                         $heliotropeSunsetHour = $cmd->execCmd();
+                                    }
+
+                                    $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunriseConditionStatus')->execCmd();
+                                    if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
+                                        $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', 'Enable');
+                                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunriseCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
+                                    }
+                                    $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunsetConditionStatus')->execCmd();
+                                    if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
+                                        $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', 'Enable');
+                                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunsetCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
+                                    }
+                                    $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:azimutConditionStatus')->execCmd();
+                                    if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
+                                        $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', 'Enable');
+                                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[azimutCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
                                     }
                                 } else {
                                     $sunriseCron->remove();
