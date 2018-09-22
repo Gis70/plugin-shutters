@@ -111,23 +111,40 @@ class shutters extends eqLogic
                                     if (is_object($cmd)) {
                                         $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
                                         $conditionsEventListener->addEvent($cmdId);
+                                        $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:' . $condition . 'Status')->execCmd();
+                                        if ($conditionManagement !== 'Enable' || $conditionManagement !== 'Disable' ) {
+                                            $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'Enable');
+                                            log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[' . $condition  . '] management set to [Enable] for shutter [' . $eqLogicName . ']');
+                                        }
                                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] successfully added to listener [' . $conditionsEventListenerId . '] for shutter [' . $eqLogicName . ']');
                                     } else {
+                                        $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
                                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd  [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] doesn\'t exist');
                                     }
+                                } else {
+                                    $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
                                 }
                             }
                             $conditionsEventListener->save();
                         } else {
                             self::removeEventsHandler($conditionsEventsHandler);
+                            foreach (self::$_externalConditions as $condition) {
+                                $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
+                            }    
                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : externalConditions [' . $externalConditionsId . '] isn\'t activated for shutter [' . $eqLogicName . ']');
                         } 
                     } else {
                         self::removeEventsHandler($conditionsEventsHandler);
+                        foreach (self::$_externalConditions as $condition) {
+                            $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
+                        }    
                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : externalConditions [' . $externalConditionsId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 } else {
                     self::removeEventsHandler($conditionsEventsHandler);
+                    foreach (self::$_externalConditions as $condition) {
+                        $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
+                    }    
                 }
 
                 $heliotropeZoneId = str_replace('#', '', $eqLogic->getConfiguration('heliotropeZoneId', null));
@@ -300,6 +317,9 @@ class shutters extends eqLogic
                 }
             } else {
                 self::removeEventsHandler($heliotropeEventsHandler);
+                foreach (self::$_externalConditions as $condition) {
+                    $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
+                }    
                 $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                 log::add('shutters', 'debug', 'shutters::updateEventsManagement() : shutter [' . $eqLogicName . '] isn\'t activated');
             } 
