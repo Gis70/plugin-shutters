@@ -109,7 +109,25 @@ class shutters extends eqLogic
                                 if (!empty($cmdId)) {
                                     $cmd = cmd::byId($cmdId);
                                     if (is_object($cmd)) {
-                                        $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
+                                        switch ($condition) {
+                                            case 'fireCondition':
+                                            case 'absenceCondition':
+                                            case 'presenceCondition':
+                                                $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
+                                                break;
+                                            case 'outdoorLuminosityCondition':
+                                            case 'outdoorTemperatureCondition':
+                                                $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'threshold' => $externalConditionsEqLogic->getConfiguration($condition . 'Threshold', null),
+                                                'hysteresis' => $externalConditionsEqLogic->getConfiguration($condition . 'Hysteresis', null)];
+                                                break;
+                                            case 'firstUserCondition':
+                                            case 'secondUserCondition':
+                                                $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null),
+                                                'action' => $externalConditionsEqLogic->getConfiguration($condition . 'Action', null), 'name' => $externalConditionsEqLogic->getConfiguration($condition . 'Name', null)];
+                                                break;
+                                            default:
+                                                break;
+                                        } 
                                         $conditionsEventListener->addEvent($cmdId);
                                         $conditionManagement = $eqLogic->getCmd('info', 'shutter:' . $condition . 'Status')->execCmd();
                                         if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
@@ -415,34 +433,52 @@ class shutters extends eqLogic
         }
         $shutter = shutters::byId($_shutterId);
         if (!is_object($shutter)) {
-            log::add('shutters', 'debug', 'shutters::main() : shutter [' . $_shutterId . '] doesn\'t exist');
-            return;
-        }
-        if (!$shutter->getIsEnable()) {
-            log::add('shutters', 'debug', 'shutters::main() : shutter [' . $_shutterId . '] isn\'t activated');
+            log::add('shutters', 'debug', 'shutters::main() : shutter doesn\'t exist');
             return;
         }
 
+        $shutterName = $shutter->getName();
+
+        if (!$shutter->getIsEnable()) {
+            log::add('shutters', 'debug', 'shutters::main() : shutter [' . $shutterName . '] isn\'t activated');
+            return;
+        }
+
+        $activeCondition = '';
         $cycleDayNight = $shutter->getCmd('info', 'shutter:cycleDayNight')->execCmd();
     
-        $activeCondition = '';
         $conditionsWithEvent = $shutter->getConfiguration('conditionsWithEvent', null);
-        if (is_array($conditionsWithEvent)) {
-            $primaryConditions = explode(',', $conditionsWithEvent['primaryConditionsPriority']);
-            foreach ($primaryConditions as $condition) {
-                if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
-                    $cmdId = str_replace('#', '', $conditionsWithEvent[$condition]['cmdId']);
-                    if (!empty($cmdId)) {
-                        $cmd = cmd::byId($cmdId);
-                        if (is_object($cmd)) {
-                            if ($cmd->execCmd() === $conditionsWithEvent[$condition]['status']) {
-                                $activeCondition = $condition;
-                                break;
-                            }
-                        }
+        if (!is_array($conditionsWithEvent)) {
+            log::add('shutters', 'debug', 'shutters::main() : missing or wrong parameter [conditionsWithEvent] for shutter [' . $shutterName . ']');
+            return;
+        }
+        $primaryConditions = explode(',', $conditionsWithEvent['primaryConditionsPriority']);
+        foreach ($primaryConditions as $condition) {
+            if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
+                if (self::checkCondition($shutter, $condition)) {
+                    switch ($condition) {
+                        case 'fireCondition':
+                            $activeCondition = 'fireCondition';
+                            $positionSetpoint = 100;
+                            break;
+                        case 'absenceCondition':
+                            $activeCondition = 'absenceCondition';
+                            $positionSetpoint = 0;
+                            break;
+                        case 'firstUserCondition':
+                            $activeCondition = 'fireCondition';
+                            $positionSetpoint = 100;
+                            break;
+                        case 'secondUserCondition':
+                            $activeCondition = 'fireCondition';
+                            $positionSetpoint = 100;
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
+        }
             if ($activeCondition === '') {
                 if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
                     $cmdId = str_replace('#', '', $conditionsWithEvent['openingCondition']['cmdId']);
@@ -473,7 +509,7 @@ class shutters extends eqLogic
                 }
             }
     
-        }
+       
     }
 
     private static function removeEventsHandler(Array $_EventsHandler = []) {
@@ -503,6 +539,32 @@ class shutters extends eqLogic
         }
     }
 
+    private static function checkCondition(object $_shutter, string $_condition = '')
+    {
+        $return = false;
+
+        if (!is_object($_shutter)) {
+            log::add('shutters', 'debug', 'shutters::checkCondition() : shutter doesn\'t exist');
+            return $return;
+        }
+        
+        $conditionsWithEvent = $_shutter->getConfiguration('conditionsWithEvent', null);
+        if (!is_array($conditionsWithEvent)) {
+            log::add('shutters', 'debug', 'shutters::checkCondition() : missing or wrong parameter [conditionsWithEvent] for shutter [' . $_shutter->getName() . ']');
+            return $return;
+        }
+        $cmdId = str_replace('#', '', $conditionsWithEvent[$_condition]['cmdId']);
+        if (!empty($cmdId)) {
+            $cmd = cmd::byId($cmdId);
+            if (is_object($cmd)) {
+                if ($cmd->execCmd() === $conditionsWithEvent[$_condition]['status']) {
+                    $return = true;
+                }
+            }
+        }
+
+        return $return;
+    }
     /*     * *********************Méthodes d'instance************************* */
 
     public function preInsert()
