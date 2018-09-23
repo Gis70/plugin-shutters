@@ -111,7 +111,7 @@ class shutters extends eqLogic
                                     if (is_object($cmd)) {
                                         $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
                                         $conditionsEventListener->addEvent($cmdId);
-                                        $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:' . $condition . 'Status')->execCmd();
+                                        $conditionManagement = $eqLogic->getCmd('info', 'shutter:' . $condition . 'Status')->execCmd();
                                         if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
                                             $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'Enable');
                                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[' . $condition  . '] management set to [Enable] for shutter [' . $eqLogicName . ']');
@@ -264,17 +264,17 @@ class shutters extends eqLogic
                                         $heliotropeSunsetHour = $cmd->execCmd();
                                     }
 
-                                    $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunriseConditionStatus')->execCmd();
+                                    $conditionManagement = $eqLogic->getCmd('info', 'shutter:sunriseConditionStatus')->execCmd();
                                     if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
                                         $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', 'Enable');
                                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunriseCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
                                     }
-                                    $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:sunsetConditionStatus')->execCmd();
+                                    $conditionManagement = $eqLogic->getCmd('info', 'shutter:sunsetConditionStatus')->execCmd();
                                     if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
                                         $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', 'Enable');
                                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunsetCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
                                     }
-                                    $conditionManagement = shuttersCmd::byEqLogicIdAndLogicalId($eqLogicId, 'shutter:azimutConditionStatus')->execCmd();
+                                    $conditionManagement = $eqLogic->getCmd('info', 'shutter:azimutConditionStatus')->execCmd();
                                     if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
                                         $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', 'Enable');
                                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[azimutCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
@@ -358,6 +358,13 @@ class shutters extends eqLogic
                 $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                 log::add('shutters', 'debug', 'shutters::updateEventsManagement() : shutter [' . $eqLogicName . '] isn\'t activated');
             } 
+            $cmdId = str_replace('#', '', $eqLogic->getConfiguration('openingCondition', null));
+            if (!empty($cmdId)) {
+                $cmd = cmd::byId($cmdId);
+                if (is_object($cmd)) {
+                    $conditionsWithEvent['openingCondition'] = ['cmdId' => $cmdId, 'status' => $eqLogic->getConfiguration('openingConditionStatus', null), 'openingType' => $eqLogic->getConfiguration('openingType', null)];
+                }
+            }
             $eqLogic->setConfiguration('conditionsWithEvent', $conditionsWithEvent);
             $eqLogic->save(true);
         }
@@ -416,22 +423,55 @@ class shutters extends eqLogic
             return;
         }
 
+        $cycleDayNight = $shutter->getCmd('info', 'shutter:cycleDayNight')->execCmd();
+    
         $activeCondition = '';
         $conditionsWithEvent = $shutter->getConfiguration('conditionsWithEvent', null);
-        $primaryConditions = explode(',', $conditionsWithEvent['primaryConditionsPriority']);
-        foreach ($primaryConditions as $condition) {
-            if (shuttersCmd::byEqLogicIdAndLogicalId($_shutterId, 'shutter::' . $condition . 'Status')->execCmd() === 'enable') {
-                $cmdId = str_replace('#', '', $conditionsWithEvent[$condition]['cmdId']);
-                if (!empty($cmdId)) {
-                    $cmd = cmd::byId($cmdId);
-                    if (is_object($cmd)) {
-                        if ($cmd->execCmd() === $conditionsWithEvent[$condition]['status']) {
-                            $activeCondition = $condition;
-                            break;
+        if (is_array($conditionsWithEvent)) {
+            $primaryConditions = explode(',', $conditionsWithEvent['primaryConditionsPriority']);
+            foreach ($primaryConditions as $condition) {
+                if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
+                    $cmdId = str_replace('#', '', $conditionsWithEvent[$condition]['cmdId']);
+                    if (!empty($cmdId)) {
+                        $cmd = cmd::byId($cmdId);
+                        if (is_object($cmd)) {
+                            if ($cmd->execCmd() === $conditionsWithEvent[$condition]['status']) {
+                                $activeCondition = $condition;
+                                break;
+                            }
                         }
                     }
                 }
             }
+            if ($activeCondition === '') {
+                $cmdId = str_replace('#', '', $conditionsWithEvent['openingCondition']['cmdId']);
+                if (!empty($cmdId)) {
+                    $cmd = cmd::byId($cmdId);
+                    if (is_object($cmd)) {
+                        $cmdStatus = $cmd->execCmd();
+                        if ($cmdStatus === $conditionsWithEvent['openingCondition']['status']) {
+                            $cmdId = str_replace('#', '', $conditionsWithEvent['presenceCondition']['cmdId']);
+                            if (!empty($cmdId)) {
+                                $cmd = cmd::byId($cmdId);
+                                if (is_object($cmd)) {
+                                    $cmdStatus = $cmd->execCmd();
+                                    if ($cmdStatus === $conditionsWithEvent['presenceCondition']['status']) {
+                                        switch ($conditionsWithEvent['openingCondition']['openingType']) {
+                                            case 'door' :
+
+                                        }
+                                    } else {
+                                        $positionSetpoint = 0;
+
+                                    }
+                                    }
+                                }
+            
+                        }
+                    }
+                }
+        }
+    
         }
     }
 

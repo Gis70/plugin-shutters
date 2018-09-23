@@ -53,7 +53,7 @@
             "configuration": {
 				"eqType": "heliotropeZone",
                 "cmdGroup": "heliotropeZone",
-                "description": "Heure minimale ou fixe de passage en gestion jour ."  
+                "description": "Heure minimale ou fixe de passage en gestion jour."  
             },
             "logicalId": "heliotropeZone:dayModeHour",
             "isVisible": false,
@@ -66,7 +66,7 @@
             "configuration": {
 				"eqType": "heliotropeZone",
                 "cmdGroup": "heliotropeZone",
-                "description": "Heure maximale ou fixe de passage en gestion nuit ."  
+                "description": "Heure maximale ou fixe de passage en gestion nuit."  
             },
             "logicalId": "heliotropeZone:nightModeHour",
             "isVisible": false,

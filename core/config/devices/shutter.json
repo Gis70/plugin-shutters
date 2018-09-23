@@ -307,7 +307,74 @@
             "logicalId": "shutter:cycleDayNight",
             "isVisible": false,
             "isHistorized": false
+        },
+
+        {
+            "name": "Consigne de position",
+            "type": "action",
+            "subType": "slider",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Consigne de position du volet."  
+            },
+            "logicalId": "shutter:positionSetpoint",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Commande ouverture",
+            "type": "action",
+            "subType": "other",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Commande ouverture du volet."  
+            },
+            "logicalId": "shutter:openCmd",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Commande fermeture",
+            "type": "action",
+            "subType": "other",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Commande fermeture du volet."  
+            },
+            "logicalId": "shutter:closeCmd",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Commande stop",
+            "type": "action",
+            "subType": "other",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Commande stop du volet."  
+            },
+            "logicalId": "shutter:stopCmd",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
+            "name": "Position du volet",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Position du volet (calculée par le plugin)."
+            },
+            "logicalId": "shutter:shutterPosition",
+            "isVisible": false,
+            "isHistorized": false
         }
+
 
     ]
 }
