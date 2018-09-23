@@ -277,7 +277,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="form-group">';
             div += '<div class="col-sm-3">';
             div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="firstUserConditionAction">';
-            div += '<option value="0">{{Fermer les volets}}</option>';
+            div += '<option value="0" selected>{{Fermer les volets}}</option>';
             div += '<option value="100">{{Ouvrir les volets}}</option>';
             div += '</select>';
             div += '</div>';
@@ -288,7 +288,7 @@ function displaySettingsPanels(_eqLogic) {
             div += '<div class="form-group">';
             div += '<div class="col-sm-3">';
             div += '<select type="text" class="eqLogicAttr form-control cursor" data-l1key="configuration" data-l2key="secondUserConditionAction">';
-            div += '<option value="0">{{Fermer les volets}}</option>';
+            div += '<option value="0" selected>{{Fermer les volets}}</option>';
             div += '<option value="100">{{Ouvrir les volets}}</option>';
             div += '</select>';
             div += '</div>';
