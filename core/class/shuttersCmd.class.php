@@ -46,6 +46,10 @@ class shuttersCmd extends cmd
 				$thisEqLogic->setConfiguration('sunsetHour', $_options['slider']);
 				$thisEqLogic->save();
 				break;
+				case 'heliotropeZone:season':
+				$thisEqLogic->setConfiguration('season', $_options['select']);
+				$thisEqLogic->save();
+				break;
 			
 			default:
 				# code...

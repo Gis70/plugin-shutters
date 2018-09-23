@@ -318,7 +318,7 @@
                 "cmdGroup": "shutter",
                 "description": "Consigne de position du volet (manuel)."  
             },
-            "logicalId": "shutter:positionSetpointManual",
+            "logicalId": "shutter:positionSetPointManual",
             "isVisible": true,
             "isHistorized": false
         },
@@ -331,7 +331,7 @@
                 "cmdGroup": "shutter",
                 "description": "Consigne de position du volet (plugin)."  
             },
-            "logicalId": "shutter:positionSetpoint",
+            "logicalId": "shutter:positionSetPoint",
             "isVisible": false,
             "isHistorized": false
         },

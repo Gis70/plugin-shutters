@@ -20,6 +20,7 @@
 /* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 require_once 'shuttersCmd.class.php';
+if (!class_exists('Season')) { require_once dirname(__FILE__) . '/../../core/php/season.class.php'; }
 
 class shutters extends eqLogic
 {
@@ -116,9 +117,12 @@ class shutters extends eqLogic
                                                 $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'status' => $externalConditionsEqLogic->getConfiguration($condition . 'Status', null)];
                                                 break;
                                             case 'outdoorLuminosityCondition':
+                                                $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'threshold' => $externalConditionsEqLogic->getConfiguration('outdoorLuminosityThreshold', null),
+                                                'hysteresis' => $externalConditionsEqLogic->getConfiguration('outdoorLuminosityHysteresis', null)];
+                                                break;
                                             case 'outdoorTemperatureCondition':
-                                                $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'threshold' => $externalConditionsEqLogic->getConfiguration($condition . 'Threshold', null),
-                                                'hysteresis' => $externalConditionsEqLogic->getConfiguration($condition . 'Hysteresis', null)];
+                                                $conditionsWithEvent[$condition] = ['cmdId' => $cmdId, 'threshold' => $externalConditionsEqLogic->getConfiguration('outdoorTemperatureThreshold', null),
+                                                'hysteresis' => $externalConditionsEqLogic->getConfiguration('outdoorTemperatureHysteresis', null)];
                                                 break;
                                             case 'firstUserCondition':
                                             case 'secondUserCondition':
@@ -445,6 +449,7 @@ class shutters extends eqLogic
         }
 
         $activeCondition = '';
+        $positionSetPoint = $shutter->getCmd('info', 'shutter:positionSetPoint')->execCmd();
         $cycleDayNight = $shutter->getCmd('info', 'shutter:cycleDayNight')->execCmd();
     
         $conditionsWithEvent = $shutter->getConfiguration('conditionsWithEvent', null);
@@ -452,63 +457,55 @@ class shutters extends eqLogic
             log::add('shutters', 'debug', 'shutters::main() : missing or wrong parameter [conditionsWithEvent] for shutter [' . $shutterName . ']');
             return;
         }
+
         $primaryConditions = explode(',', $conditionsWithEvent['primaryConditionsPriority']);
-        foreach ($primaryConditions as $condition) {
-            if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
-                if (self::checkCondition($shutter, $condition)) {
-                    switch ($condition) {
-                        case 'fireCondition':
-                            $activeCondition = 'fireCondition';
-                            $positionSetpoint = 100;
-                            break;
-                        case 'absenceCondition':
-                            $activeCondition = 'absenceCondition';
-                            $positionSetpoint = 0;
-                            break;
-                        case 'firstUserCondition':
-                            $activeCondition = 'fireCondition';
-                            $positionSetpoint = 100;
-                            break;
-                        case 'secondUserCondition':
-                            $activeCondition = 'fireCondition';
-                            $positionSetpoint = 100;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-            if ($activeCondition === '') {
-                if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
-                    $cmdId = str_replace('#', '', $conditionsWithEvent['openingCondition']['cmdId']);
-                    if (!empty($cmdId)) {
-                        $cmd = cmd::byId($cmdId);
-                        if (is_object($cmd)) {
-                            $cmdStatus = $cmd->execCmd();
-                            if ($cmdStatus === $conditionsWithEvent['openingCondition']['status']) {
-                                $cmdId = str_replace('#', '', $conditionsWithEvent['presenceCondition']['cmdId']);
-                                if (!empty($cmdId)) {
-                                    $cmd = cmd::byId($cmdId);
-                                    if (is_object($cmd)) {
-                                        $cmdStatus = $cmd->execCmd();
-                                        if ($cmdStatus === $conditionsWithEvent['presenceCondition']['status']) {
-                                            switch ($conditionsWithEvent['openingCondition']['openingType']) {
-                                                case 'door' :
-
-                                            }
-                                        } else {
-                                            $positionSetpoint = 0;
-
-                                        }
-                                    }
-                                }
-                            }
+        if (!empty($primaryConditions)) {
+            foreach ($primaryConditions as $condition) {
+                if ($shutter->getCmd('info', 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
+                    if (self::checkCondition($shutter, $condition)) {
+                        switch ($condition) {
+                            case 'fireCondition':
+                                $activeCondition = 'fireCondition';
+                                $positionSetPoint = 100;
+                                break;
+                            case 'absenceCondition':
+                                $activeCondition = 'absenceCondition';
+                                $positionSetPoint = 0;
+                                break;
+                            case 'firstUserCondition':
+                                $activeCondition = 'firstUserCondition';
+                                $positionSetPoint = intval($conditionsWithEvent['firstUserCondition']['action']);
+                                break;
+                            case 'secondUserCondition':
+                                $activeCondition = 'fireCondition';
+                                $positionSetPoint = intval($conditionsWithEvent['secondUserCondition']['action']);
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
             }
-    
+        }
+        if ($activeCondition === '' && $shutter->getCmd('info', 'shutter:openingConditionStatus')->execCmd() === 'enable') {
+            if (self::checkCondition($shutter, 'openingCondition')) {
+                if (self::checkCondition($shutter, 'presenceCondition')) {
+                    switch ($conditionsWithEvent['openingCondition']['openingType']) {
+                        case 'door':
+                            $activeCondition = 'antiConfinementSecurity';
+                            $positionSetPoint = 100;
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    $positionSetPoint = 0;
+                }
+            }
+        }
+        if ($activeCondition === '' && $cycleDayNight === 'night') {
+        }
+
        
     }
 
@@ -565,6 +562,12 @@ class shutters extends eqLogic
 
         return $return;
     }
+
+    private static function checkSeason() {
+        $season = new Season();
+        return $season->getSeason();
+    }
+
     /*     * *********************Méthodes d'instance************************* */
 
     public function preInsert()

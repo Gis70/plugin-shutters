@@ -47,6 +47,21 @@
             "isHistorized": false
         },
         {
+            "name": "Sélection saison",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+				"eqType": "heliotropeZone",
+                "cmdGroup": "heliotropeZone",
+              	"listValue": "auto|Automatique;springSummer|Printemps / été;fallWinter|Automne / hiver",
+                "description": "Sélection de la saison pour la gestion azimut.",   
+                "condition": "azimutCondition"
+            },
+            "logicalId": "heliotropeZone:season",
+            "isVisible": false,
+            "isHistorized": false
+        },
+        {
             "name": "Heure gestion jour",
             "type": "action",
             "subType": "slider",
