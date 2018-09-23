@@ -310,13 +310,26 @@
         },
 
         {
-            "name": "Consigne de position",
+            "name": "Consigne de position (manu)",
             "type": "action",
             "subType": "slider",
             "configuration": {
 				"eqType": "shutter",
                 "cmdGroup": "shutter",
-                "description": "Consigne de position du volet."  
+                "description": "Consigne de position du volet (manuel)."  
+            },
+            "logicalId": "shutter:positionSetpointManual",
+            "isVisible": true,
+            "isHistorized": false
+        },
+        {
+            "name": "Consigne de position (plugin)",
+            "type": "action",
+            "subType": "slider",
+            "configuration": {
+				"eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Consigne de position du volet (plugin)."  
             },
             "logicalId": "shutter:positionSetpoint",
             "isVisible": false,
@@ -332,7 +345,7 @@
                 "description": "Commande ouverture du volet."  
             },
             "logicalId": "shutter:openCmd",
-            "isVisible": false,
+            "isVisible": true,
             "isHistorized": false
         },
         {
@@ -345,7 +358,7 @@
                 "description": "Commande fermeture du volet."  
             },
             "logicalId": "shutter:closeCmd",
-            "isVisible": false,
+            "isVisible": true,
             "isHistorized": false
         },
         {
@@ -358,6 +371,21 @@
                 "description": "Commande stop du volet."  
             },
             "logicalId": "shutter:stopCmd",
+            "isVisible": true,
+            "isHistorized": false
+        },
+        {
+            "name": "Gestion capteur ouvrant",
+            "type": "action",
+            "subType": "select",
+            "configuration": {
+                "eqType": "shutter",
+                "cmdGroup": "shutter",
+                "listValue": "Enable|Active;Disable|Inactive",
+                "description": "Activer ou désactiver la gestion du capteur d'ouvrant.",
+                "condition": "openingCondition"
+            },
+            "logicalId": "shutter:openingCondition",
             "isVisible": false,
             "isHistorized": false
         },
@@ -373,7 +401,22 @@
             "logicalId": "shutter:shutterPosition",
             "isVisible": false,
             "isHistorized": false
+        },
+        {
+            "name": "Statut gestion capteur ouvrant",
+            "type": "info",
+            "subType": "string",
+            "configuration": {
+                "eqType": "shutter",
+                "cmdGroup": "shutter",
+                "description": "Statut de la gestion du capteur d'ouvrant.",
+                "condition": "openingCondition"
+            },
+            "logicalId": "shutter:openingConditionStatus",
+            "isVisible": false,
+            "isHistorized": false
         }
+
 
 
     ]

@@ -444,33 +444,34 @@ class shutters extends eqLogic
                 }
             }
             if ($activeCondition === '') {
-                $cmdId = str_replace('#', '', $conditionsWithEvent['openingCondition']['cmdId']);
-                if (!empty($cmdId)) {
-                    $cmd = cmd::byId($cmdId);
-                    if (is_object($cmd)) {
-                        $cmdStatus = $cmd->execCmd();
-                        if ($cmdStatus === $conditionsWithEvent['openingCondition']['status']) {
-                            $cmdId = str_replace('#', '', $conditionsWithEvent['presenceCondition']['cmdId']);
-                            if (!empty($cmdId)) {
-                                $cmd = cmd::byId($cmdId);
-                                if (is_object($cmd)) {
-                                    $cmdStatus = $cmd->execCmd();
-                                    if ($cmdStatus === $conditionsWithEvent['presenceCondition']['status']) {
-                                        switch ($conditionsWithEvent['openingCondition']['openingType']) {
-                                            case 'door' :
+                if ($shutter->getCmd('info', $_shutterId, 'shutter:' . $condition . 'Status')->execCmd() === 'enable') {
+                    $cmdId = str_replace('#', '', $conditionsWithEvent['openingCondition']['cmdId']);
+                    if (!empty($cmdId)) {
+                        $cmd = cmd::byId($cmdId);
+                        if (is_object($cmd)) {
+                            $cmdStatus = $cmd->execCmd();
+                            if ($cmdStatus === $conditionsWithEvent['openingCondition']['status']) {
+                                $cmdId = str_replace('#', '', $conditionsWithEvent['presenceCondition']['cmdId']);
+                                if (!empty($cmdId)) {
+                                    $cmd = cmd::byId($cmdId);
+                                    if (is_object($cmd)) {
+                                        $cmdStatus = $cmd->execCmd();
+                                        if ($cmdStatus === $conditionsWithEvent['presenceCondition']['status']) {
+                                            switch ($conditionsWithEvent['openingCondition']['openingType']) {
+                                                case 'door' :
+
+                                            }
+                                        } else {
+                                            $positionSetpoint = 0;
 
                                         }
-                                    } else {
-                                        $positionSetpoint = 0;
-
-                                    }
                                     }
                                 }
-            
+                            }
                         }
                     }
                 }
-        }
+            }
     
         }
     }
