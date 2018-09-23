@@ -344,6 +344,7 @@ class shutters extends eqLogic
                     $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', '');
              }
             } else {
+                self::removeEventsHandler($conditionsEventsHandler);
                 self::removeEventsHandler($heliotropeEventsHandler);
                 foreach (self::$_externalConditions as $condition) {
                     $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
@@ -481,7 +482,7 @@ class shutters extends eqLogic
         }
     }
 
-    private static function getExternalConditions(object $_shutter)
+    private static function getExternalConditions($_shutter)
     {
         $return = [];
 
@@ -490,6 +491,7 @@ class shutters extends eqLogic
             $eqLogic = shutters::byId($eqLogicId);
             if (is_object($eqLogic)) {
                 if ($eqLogic->getIsEnable()) {
+                    $return['primaryConditionsPriority'] = $eqLogic->getConfiguration('primaryConditionsPriority', null);
                     foreach (self::$_externalConditions as $condition) {
                         $cmdId = str_replace('#', '', $eqLogic->getConfiguration($condition, null));
                         if (!empty($cmdId)) {
@@ -500,23 +502,23 @@ class shutters extends eqLogic
                                     case 'absenceCondition':
                                     case 'presenceCondition':
                                         if ($cmd->execCmd() === $eqLogic->getConfiguration($condition . 'Status', null)) {
-                                            $return[$condition] = ['status' => true];
+                                            $return[$condition] = ['status' => 1];
                                         } else {
-                                            $return[$condition] = ['status' => false];
+                                            $return[$condition] = ['status' => 0];
                                         }
                                         break;
                                     case 'outdoorLuminosityCondition':
                                         $luminosity = intval($cmd->execCmd());
                                         $luminosityMin = intval($eqLogic->getConfiguration('outdoorLuminosityThreshold', 0));
                                         $luminosityMax = $luminosityMin + intval($eqLogic->getConfiguration('outdoorLuminosityHysteresis', 0));
-                                        $luminosityConditionStatus = $eqLogic->getConfiguration('outdoorLuminosityConditionCache', false);
+                                        $luminosityConditionStatus = $eqLogic->getConfiguration('outdoorLuminosityConditionCache', 0);
                                         if ($luminosity < $luminosityMin || ($luminosityConditionStatus && $luminosity <= $luminosityMax)) {
-                                            $return[$condition] = ['status' => true];
-                                            $eqLogic->setConfiguration('outdoorLuminosityConditionCache', true);
+                                            $return[$condition] = ['status' => 1];
+                                            $eqLogic->setConfiguration('outdoorLuminosityConditionCache', 1);
                                             $eqLogic->save(true);
                                         } else {
-                                            $return[$condition] = ['status' => false];
-                                            $eqLogic->setConfiguration('outdoorLuminosityConditionCache', false);
+                                            $return[$condition] = ['status' => 0];
+                                            $eqLogic->setConfiguration('outdoorLuminosityConditionCache', 0);
                                             $eqLogic->save(true);
                                         }
                                         break;
@@ -524,24 +526,24 @@ class shutters extends eqLogic
                                         $temperature = intval($cmd->execCmd());
                                         $temperatureMin = intval($eqLogic->getConfiguration('outdoorTemperatureThreshold', 0));
                                         $temperatureMax = $temperatureMin + intval($eqLogic->getConfiguration('outdoorTemperatureHysteresis', 1));
-                                        $temperatureConditionStatus = $eqLogic->getConfiguration('outdoorTemperatureConditionCache', false);
+                                        $temperatureConditionStatus = $eqLogic->getConfiguration('outdoorTemperatureConditionCache', 0);
                                         if ($temperature < $temperatureMin || ($temperatureConditionStatus && $temperature <= $temperatureMax)) {
-                                            $return[$condition] = ['status' => true];
-                                            $eqLogic->setConfiguration('outdoorTemperatureConditionCache', true);
+                                            $return[$condition] = ['status' => 1];
+                                            $eqLogic->setConfiguration('outdoorTemperatureConditionCache', 1);
                                             $eqLogic->save(true);
                                         } else {
-                                            $return[$condition] = ['status' => false];
-                                            $eqLogic->setConfiguration('outdoorTemperatureConditionCache', false);
+                                            $return[$condition] = ['status' => 0];
+                                            $eqLogic->setConfiguration('outdoorTemperatureConditionCache', 0);
                                             $eqLogic->save(true);
                                         }
                                         break;
                                     case 'firstUserCondition':
                                     case 'secondUserCondition':
                                         if ($cmd->execCmd() === $eqLogic->getConfiguration($condition . 'Status', null)) {
-                                            $return[$condition] = ['status' => true, 'positionSetPoint' => $eqLogic->getConfiguration($condition . 'Action', null),
+                                            $return[$condition] = ['status' => 1, 'positionSetPoint' => $eqLogic->getConfiguration($condition . 'Action', null),
                                             'name' => $eqLogic->getConfiguration($condition . 'Name', null)];
                                         } else {
-                                            $return[$condition] = ['status' => false];
+                                            $return[$condition] = ['status' => 0];
                                         }
                                         break;
                                     default:
@@ -557,7 +559,7 @@ class shutters extends eqLogic
         return $return;
     }
 
-    private static function getHeliotropeConditions(object $_shutter)
+    private static function getHeliotropeConditions($_shutter)
     {
         $return = [];
 
@@ -593,6 +595,11 @@ class shutters extends eqLogic
         return $return;
     }
 
+    private static  function checkEnabledCondition($_shutter)
+    {
+        # code...
+    }
+    
     private static function checkSeason()
     {
         $season = new Season();
