@@ -108,11 +108,6 @@ class shutters extends eqLogic
                                     $cmd = cmd::byId($cmdId);
                                     if (is_object($cmd)) {
                                         $conditionsEventListener->addEvent($cmdId);
-                                        $conditionManagement = $eqLogic->getCmd('info', 'shutter:' . $condition . 'Status')->execCmd();
-                                        if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
-                                            $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'Enable');
-                                            log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[' . $condition  . '] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                        }
                                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : cmd [' . $cmdId  . '] configured in externalConditions [' . $externalConditionsId . '] successfully added to listener [' . $conditionsEventListenerId . '] for shutter [' . $eqLogicName . ']');
                                     } else {
                                         $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
@@ -125,23 +120,14 @@ class shutters extends eqLogic
                             $conditionsEventListener->save();
                         } else {
                             self::removeEventsHandler($conditionsEventsHandler);
-                            foreach (self::$_externalConditions as $condition) {
-                                $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
-                            }    
                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : externalConditions [' . $externalConditionsId . '] isn\'t activated for shutter [' . $eqLogicName . ']');
                         } 
                     } else {
                         self::removeEventsHandler($conditionsEventsHandler);
-                        foreach (self::$_externalConditions as $condition) {
-                            $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
-                        }    
                         log::add('shutters', 'debug', 'shutters::updateEventsManagement() : externalConditions [' . $externalConditionsId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 } else {
                     self::removeEventsHandler($conditionsEventsHandler);
-                    foreach (self::$_externalConditions as $condition) {
-                        $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
-                    }    
                 }
 
                 $heliotropeZoneId = str_replace('#', '', $eqLogic->getConfiguration('heliotropeZoneId', null));
@@ -260,21 +246,6 @@ class shutters extends eqLogic
                                         $heliotropeSunsetHour = $cmd->execCmd();
                                     }
 
-                                    $conditionManagement = $eqLogic->getCmd('info', 'shutter:sunriseConditionStatus')->execCmd();
-                                    if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
-                                        $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', 'Enable');
-                                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunriseCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                    }
-                                    $conditionManagement = $eqLogic->getCmd('info', 'shutter:sunsetConditionStatus')->execCmd();
-                                    if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
-                                        $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', 'Enable');
-                                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[sunsetCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                    }
-                                    $conditionManagement = $eqLogic->getCmd('info', 'shutter:azimutConditionStatus')->execCmd();
-                                    if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
-                                        $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', 'Enable');
-                                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[azimutCondition] management set to [Enable] for shutter [' . $eqLogicName . ']');
-                                    }
                                 } else {
                                     $sunriseCron->remove();
                                     log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotrope [' . $heliotropeId . '] configured in heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
@@ -322,37 +293,18 @@ class shutters extends eqLogic
 
                         } else {
                             self::removeEventsHandler($heliotropeEventsHandler);
-                            $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', '');
-                            $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', '');
-                            $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', '');
-                            $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                             log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotropeZone [' . $heliotropeZoneId . '] isn\'t activated for shutter [' . $eqLogicName . ']');
                         } 
                     } else {
                         self::removeEventsHandler($heliotropeEventsHandler);
-                        $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', '');
-                        $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', '');
-                        $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', '');
-                        $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
-                        log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
+                       log::add('shutters', 'debug', 'shutters::updateEventsManagement() : heliotropeZone [' . $heliotropeZoneId . '] doesn\'t exist for shutter [' . $eqLogicName . ']');
                     }
                 } else {
                     self::removeEventsHandler($heliotropeEventsHandler);
-                    $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
-                    $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', '');
-                    $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', '');
-                    $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', '');
              }
             } else {
                 self::removeEventsHandler($conditionsEventsHandler);
                 self::removeEventsHandler($heliotropeEventsHandler);
-                foreach (self::$_externalConditions as $condition) {
-                    $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', '');
-                }    
-                $eqLogic->checkAndUpdateCmd('shutter:sunriseConditionStatus', '');
-                $eqLogic->checkAndUpdateCmd('shutter:sunsetConditionStatus', '');
-                $eqLogic->checkAndUpdateCmd('shutter:azimutConditionStatus', '');
-                $eqLogic->checkAndUpdateCmd('shutter:cycleDayNight', '');
                 log::add('shutters', 'debug', 'shutters::updateEventsManagement() : shutter [' . $eqLogicName . '] isn\'t activated');
             } 
         }
@@ -597,7 +549,30 @@ class shutters extends eqLogic
 
     private static  function checkEnabledCondition($_shutter)
     {
-        # code...
+        $configuredConditions = [];
+        $eqLogicId = str_replace('#', '', $_shutter->getConfiguration('externalConditionsId', null));
+        if (!empty($eqLogicId) && $eqLogicId !== 'none') {
+            $eqLogic = shutters::byId($eqLogicId);
+            if (is_object($eqLogic)) {
+                if ($eqLogic->getIsEnable()) {
+                    foreach (self::$_externalConditions as $condition) {
+                        $cmdId = str_replace('#', '', $eqLogic->getConfiguration($condition, null));
+                        if (!empty($cmdId)) {
+                            $cmd = cmd::byId($cmdId);
+                            if (is_object($cmd)) {
+                                $configuredConditions[$condition] = 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ($conditionManagement !== 'Enable' && $conditionManagement !== 'Disable' ) {
+            $eqLogic->checkAndUpdateCmd('shutter:' . $condition . 'Status', 'Enable');
+            log::add('shutters', 'debug', 'shutters::updateEventsManagement() :[' . $condition  . '] management set to [Enable] for shutter [' . $eqLogicName . ']');
+        }
+
+
     }
     
     private static function checkSeason()
