@@ -16,46 +16,19 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-/* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class shuttersCmd extends cmd
 {
-	/*     * *************************Attributs****************************** */
+    public function execute($_options = array())
+    {
+        log::add('shutters', 'debug', 'shuttersCmd::execute() : ' . print_r($_options, true));
+        $thisId = $this->getId();
+        $thisLogicalId = $this->getLogicalId();
+        $thisEqLogicId = $this->getEqLogic_id();
+        $thisEqLogic = shutters::byId($thisEqLogicId);
+        log::add('shutters', 'debug', 'shutters::execute() : receive cmd [' . $thisId . '][' . $thisLogicalId . '] from eqLogic [' . $thisEqLogicId . ']');
 
-	/*     * ***********************Methode static*************************** */
+    }
 
-	/*     * *********************Methode d'instance************************* */
-    
-	public function execute($_options = array())
-	{
-		log::add('shutters', 'debug', 'shuttersCmd::execute() : ' . print_r($_options, true));
-		$thisId = $this->getId();
-		$thisLogicalId = $this->getLogicalId();
-		$thisEqLogicId = $this->getEqLogic_id();
-		$thisEqLogic = shutters::byId($thisEqLogicId);
-		log::add('shutters', 'debug', 'shutters::execute() : receive cmd [' . $thisId . '][' . $thisLogicalId . '] from eqLogic [' . $thisEqLogicId . ']');
-
-		switch ($thisLogicalId) {
-			case 'heliotropeZone:dayModeHour':
-				$thisEqLogic->setConfiguration('sunriseHour', $_options['slider']);
-				$thisEqLogic->save();
-				break;
-				case 'heliotropeZone:nightModeHour':
-				$thisEqLogic->setConfiguration('sunsetHour', $_options['slider']);
-				$thisEqLogic->save();
-				break;
-				case 'heliotropeZone:season':
-				$thisEqLogic->setConfiguration('season', $_options['select']);
-				$thisEqLogic->save();
-				break;
-			
-			default:
-				# code...
-				break;
-		}
-	}
-
-    /*     * **********************Getteur Setteur*************************** */
 }

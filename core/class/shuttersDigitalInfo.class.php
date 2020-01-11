@@ -16,13 +16,40 @@
  * along with NextDom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
+require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
-function shutters_install() {
-}
+class shuttersDigitalInfo extends eqLogic
+{
+    public function preInsert()
+    {
+    }
 
-function shutters_update() {
-}
+    public function postInsert()
+    {
+    }
 
-function shutters_remove() {
+    public function preSave()
+    {
+    }
+
+    public function postSave()
+    {
+    }
+
+    public function preUpdate()
+    {
+    }
+
+    public function postUpdate()
+    {
+    }
+
+    public function preRemove()
+    {
+    }
+
+    public function postRemove()
+    {
+    }
+
 }
